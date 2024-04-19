@@ -1,6 +1,6 @@
 import { Session, getSessions } from "@/db/db";
-import { format, isAfter, isBefore, isEqual, isSameDay } from "date-fns";
-import Image from "next/image";
+import { isAfter, isBefore, isEqual } from "date-fns";
+import { DayCol } from "./day";
 
 type Day = {
   start: Date;
@@ -39,29 +39,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {days.map((day) => (
-        <div key={format(day.start, "MM/dd/yyyy")}>
-          <h2 className="text-3xl font-bold">
-            {day.start.toLocaleDateString(undefined, {
-              weekday: "long",
-              month: "long",
-              day: "numeric",
-            })}
-          </h2>
-          <div className="grid grid-cols-1 gap-4">
-            {day.sessions.map((session) => (
-              <div className="flex items-center gap-4" key={session.Title}>
-                <div className="w-24 h-24 relative"></div>
-                <div>
-                  <h3 className="text-xl font-bold">{session.Title}</h3>
-                  <p>
-                    {session["Start time"]} - {session["End time"]}
-                  </p>
-                  <p>{session.Description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <DayCol key={day.start.toISOString()} {...day} />
       ))}
     </main>
   );

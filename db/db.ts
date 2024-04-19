@@ -14,6 +14,9 @@ export type Session = {
   "Host name": string;
   "Host email": string;
   Location: string[];
+  "Location name": string[];
+  Area: string[];
+  Capacity: number[];
 };
 export async function getSessions() {
   const sessions: Session[] = [];
@@ -28,6 +31,9 @@ export async function getSessions() {
         "Host name",
         "Host email",
         "Location",
+        "Location name",
+        "Area",
+        "Capacity",
       ],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
