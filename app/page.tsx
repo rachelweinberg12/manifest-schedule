@@ -1,6 +1,10 @@
-import { getSessions } from "@/db/db";
+import { Session, getSessions } from "@/db/db";
 import Image from "next/image";
 
+type Day = {
+  date: string;
+  sessions: Session[];
+};
 export default async function Home() {
   const sessions = await getSessions();
   console.log(sessions);

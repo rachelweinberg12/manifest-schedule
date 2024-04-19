@@ -5,8 +5,18 @@ Airtable.configure({
 });
 var base = Airtable.base("appklVAIrAhkGj98d");
 
+export type Session = {
+  Title: string;
+  Description: string;
+  "Start time": string;
+  "End time": string;
+  Hosts: string[];
+  "Host name": string;
+  "Host email": string;
+  Location: string[];
+};
 export async function getSessions() {
-  const sessions: any[] = [];
+  const sessions: Session[] = [];
   await base("Sessions")
     .select({
       fields: [
