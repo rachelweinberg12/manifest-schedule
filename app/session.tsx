@@ -1,4 +1,5 @@
 import { Session } from "@/db/db";
+import clsx from "clsx";
 export function SessionCard(props: { session: Session }) {
   const { session } = props;
   const sessionLength =
@@ -7,9 +8,11 @@ export function SessionCard(props: { session: Session }) {
   const numHalfHours = sessionLength / 1000 / 60 / 30;
   return (
     <div
-      className={`flex items-center gap-4 ${rowSpanVars[numHalfHours]} ${
+      className={clsx(
+        "flex items-center gap-4",
+        rowSpanVars[numHalfHours],
         locationColors[session["Location name"][0]]
-      }`}
+      )}
     >
       <div>
         <h3 className="text-xl font-bold">{session.Title}</h3>
