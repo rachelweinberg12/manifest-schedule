@@ -1,5 +1,5 @@
 import { Session, getSessions } from "@/db/db";
-import { format, isAfter, isBefore, isSameDay } from "date-fns";
+import { format, isAfter, isBefore, isEqual, isSameDay } from "date-fns";
 import Image from "next/image";
 
 type Day = {
@@ -12,26 +12,28 @@ export default async function Home() {
   console.log(sessions);
   const days: Day[] = [
     {
-      start: new Date("2024-06-07T09:00:59-07:00"),
-      end: new Date("2024-06-07T20:00:01-07:00"),
+      start: new Date("2024-06-07T10:00-07:00"),
+      end: new Date("2024-06-07T20:00-07:00"),
       sessions: [],
     },
     {
-      start: new Date("2024-06-08T09:00:59-07:00"),
-      end: new Date("2024-06-08T20:00:01-07:00"),
+      start: new Date("2024-06-08T10:00-07:00"),
+      end: new Date("2024-06-08T20:00-07:00"),
       sessions: [],
     },
     {
-      start: new Date("2024-06-09T09:00:59-07:00"),
-      end: new Date("2024-06-09T20:00:01-07:00"),
+      start: new Date("2024-06-09T10:00-07:00"),
+      end: new Date("2024-06-09T20:00-07:00"),
       sessions: [],
     },
   ];
   days.forEach((day) => {
     day.sessions = sessions.filter(
       (session) =>
-        isBefore(day.start, new Date(session["Start time"])) &&
-        isAfter(day.end, new Date(session["End time"]))
+        (isBefore(day.start, new Date(session["Start time"])) ||
+          isEqual(day.start, new Date(session["Start time"]))) &&
+        (isAfter(day.end, new Date(session["End time"])) ||
+          isEqual(day.end, new Date(session["End time"])))
     );
   });
   return (
