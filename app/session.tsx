@@ -11,7 +11,6 @@ export function SessionCard(props: { session: Session }) {
         locationColors[session["Location name"][0]]
       }`}
     >
-      <div className="w-24 h-24 relative"></div>
       <div>
         <h3 className="text-xl font-bold">{session.Title}</h3>
         <p>
@@ -30,10 +29,10 @@ const rowSpanVars = {
   4: "row-span-4",
 } as { [key: number]: string };
 const locationColors = {
-  "Rat Park": "bg-red-500",
-  "1E Main": "bg-orange-500",
-  Gardens: "bg-yellow-500",
-  "2B1": "bg-green-500",
-  "B Ground Floor": "bg-teal-500",
-  "Old Restaurant": "bg-sky-500",
+  "Rat Park": "bg-red-300",
+  "1E Main": "bg-orange-300",
+  Gardens: "bg-yellow-300",
+  "2B1": "bg-green-300",
+  "B Ground Floor": "bg-teal-300",
+  "Old Restaurant": "bg-sky-300",
 } as { [key: string]: string };
