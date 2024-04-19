@@ -1,9 +1,10 @@
 import { Session, getSessions } from "@/db/db";
-import { format, isSameDay } from "date-fns";
+import { format, isAfter, isBefore, isSameDay } from "date-fns";
 import Image from "next/image";
 
 type Day = {
-  date: Date;
+  start: Date;
+  end: Date;
   sessions: Session[];
 };
 export default async function Home() {
@@ -11,29 +12,34 @@ export default async function Home() {
   console.log(sessions);
   const days: Day[] = [
     {
-      date: new Date("2024-06-07"),
+      start: new Date("2024-06-07T09:00:59-07:00"),
+      end: new Date("2024-06-07T20:00:01-07:00"),
       sessions: [],
     },
     {
-      date: new Date("2024-06-08"),
+      start: new Date("2024-06-08T09:00:59-07:00"),
+      end: new Date("2024-06-08T20:00:01-07:00"),
       sessions: [],
     },
     {
-      date: new Date("2024-06-09"),
+      start: new Date("2024-06-09T09:00:59-07:00"),
+      end: new Date("2024-06-09T20:00:01-07:00"),
       sessions: [],
     },
   ];
   days.forEach((day) => {
-    day.sessions = sessions.filter((session) =>
-      isSameDay(new Date(session["Start time"]), day.date)
+    day.sessions = sessions.filter(
+      (session) =>
+        isBefore(day.start, new Date(session["Start time"])) &&
+        isAfter(day.end, new Date(session["End time"]))
     );
   });
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       {days.map((day) => (
-        <div key={format(day.date, "MM/dd/yyyy")}>
+        <div key={format(day.start, "MM/dd/yyyy")}>
           <h2 className="text-3xl font-bold">
-            {day.date.toLocaleDateString(undefined, {
+            {day.start.toLocaleDateString(undefined, {
               weekday: "long",
               month: "long",
               day: "numeric",
@@ -57,4 +63,8 @@ export default async function Home() {
       ))}
     </main>
   );
+}
+
+function removeTimezone(date: string) {
+  return date.split("T")[0];
 }
