@@ -44,3 +44,23 @@ export async function getSessions() {
     });
   return sessions;
 }
+
+export type Location = {
+  Name: string;
+  Area: string;
+  Capacity: number;
+};
+export async function getLocations() {
+  const locations: Location[] = [];
+  await base("Spaces")
+    .select({
+      fields: ["Name", "Area", "Capacity"],
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        locations.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return locations;
+}
