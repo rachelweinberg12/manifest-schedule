@@ -10,16 +10,13 @@ export function SessionCard(props: { session: Session }) {
   return (
     <div
       className={clsx(
-        "flex items-center gap-4 p-4 rounded",
+        "py-1 px-2 rounded",
         rowSpanVars[numHalfHours],
         locationColors[session["Location name"][0]]
       )}
     >
-      <div>
-        <h3 className="font-semibold">{session.Title}</h3>
-        <p className="text-sm">{session["Host name"]}</p>
-        <p className="text-sm line-clamp-3">{session.Description}</p>
-      </div>
+      <p className="font-semibold text-xs">{session.Title}</p>
+      <p className="text-[10px] leading-none">{session["Host name"]}</p>
     </div>
   );
 }
