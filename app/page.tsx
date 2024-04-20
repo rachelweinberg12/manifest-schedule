@@ -9,7 +9,6 @@ type Day = {
 };
 export default async function Home() {
   const sessions = await getSessions();
-  console.log(sessions);
   const days: Day[] = [
     {
       start: new Date("2024-06-07T10:00-07:00"),

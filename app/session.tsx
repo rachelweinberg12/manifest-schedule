@@ -6,20 +6,19 @@ export function SessionCard(props: { session: Session }) {
     new Date(session["End time"]).getTime() -
     new Date(session["Start time"]).getTime();
   const numHalfHours = sessionLength / 1000 / 60 / 30;
+  console.log(session);
   return (
     <div
       className={clsx(
-        "flex items-center gap-4",
+        "flex items-center gap-4 p-4 rounded",
         rowSpanVars[numHalfHours],
         locationColors[session["Location name"][0]]
       )}
     >
       <div>
-        <h3 className="text-xl font-bold">{session.Title}</h3>
-        <p>
-          {session["Start time"]} - {session["End time"]}
-        </p>
-        <p>{session.Description}</p>
+        <h3 className="font-semibold">{session.Title}</h3>
+        <p className="text-sm">{session["Host name"]}</p>
+        <p className="text-sm line-clamp-3">{session.Description}</p>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export async function DayCol(props: {
   return (
     <div>
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
-      <div className="grid grid-cols-6">
+      <div className="grid grid-cols-6 gap-2">
         {locations.map((location) => (
           <LocationCol
             key={location.Name}
@@ -22,6 +22,8 @@ export async function DayCol(props: {
             sessions={sessions.filter(
               (session) => session["Location name"][0] === location.Name
             )}
+            start={start}
+            end={end}
           />
         ))}
       </div>
