@@ -12,9 +12,9 @@ export async function DayCol(props: {
   const numHalfHours = lengthOfDay / 1000 / 60 / 30;
   const locations = await getLocations();
   return (
-    <div>
+    <div className="w-full">
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-6 divide-x divide-gray-100">
         {locations.map((location) => (
           <LocationCol
             key={location.Name}

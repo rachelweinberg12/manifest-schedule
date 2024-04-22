@@ -16,7 +16,9 @@ export function SessionCard(props: { session: Session }) {
         locationColors[session["Location name"][0]]
       )}
     >
-      <p className="font-semibold text-xs leading-tight">{session.Title}</p>
+      <p className="font-medium text-xs leading-tight line-clamp-2">
+        {session.Title}
+      </p>
       <p className="text-[10px] leading-tight">{formattedHostNames}</p>
     </div>
   );

@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 const roboto = Roboto({
   subsets: ["latin"],
   variable: "--font-roboto",
-  weight: "300",
+  weight: ["100", "300", "400", "500", "700", "900"],
 });
 const monteserrat = Montserrat({
   subsets: ["latin"],
