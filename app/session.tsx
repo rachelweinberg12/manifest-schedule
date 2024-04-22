@@ -7,7 +7,6 @@ export function SessionCard(props: { session: Session }) {
     new Date(session["Start time"]).getTime();
   const numHalfHours = sessionLength / 1000 / 60 / 30;
   const formattedHostNames = session["Host name"].join(", ");
-  console.log(formattedHostNames);
   return (
     <div
       className={clsx(
@@ -30,11 +29,12 @@ const rowSpanVars = {
   3: "row-span-3",
   4: "row-span-4",
 } as { [key: number]: string };
+
 const locationColors = {
-  "Rat Park": "bg-red-300",
-  "1E Main": "bg-orange-300",
-  Gardens: "bg-yellow-300",
-  "2B1": "bg-green-300",
-  "B Ground Floor": "bg-teal-300",
-  "Old Restaurant": "bg-sky-300",
+  "Rat Park": "bg-rose-200",
+  "1E Main": "bg-orange-200",
+  Gardens: "bg-yellow-200",
+  "2B1": "bg-green-200",
+  "B Ground Floor": "bg-teal-200",
+  "Old Restaurant": "bg-sky-200",
 } as { [key: string]: string };

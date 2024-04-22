@@ -1,19 +1,22 @@
 import { Session } from "@/db/db";
 import { SessionCard } from "./session";
 import { add, isBefore, isEqual } from "date-fns";
+import clsx from "clsx";
 
 export function LocationCol(props: {
   sessions: Session[];
   name: string;
   start: Date;
   end: Date;
+  dayGrid: string;
 }) {
-  const { sessions, name, start, end } = props;
+  const { sessions, name, start, end, dayGrid } = props;
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
+  console.log(dayGrid);
   return (
     <div className="px-1">
       <h2 className="text-sm h-24">{name}</h2>
-      <div className="grid grid-rows-[repeat(20,minmax(0,1fr))] gap-1 h-screen">
+      <div className={clsx("grid gap-1 h-5/6", dayGrid)}>
         {sessionsWithBlanks.map((session) => (
           <SessionCard key={session["Start time"]} session={session} />
         ))}

@@ -43,7 +43,3 @@ export default async function Home() {
     </main>
   );
 }
-
-function removeTimezone(date: string) {
-  return date.split("T")[0];
-}
