@@ -1,5 +1,7 @@
 import { Session } from "@/db/db";
 import clsx from "clsx";
+import { locationColors } from "./class-constants";
+
 export function SessionCard(props: { session: Session }) {
   const { session } = props;
   const sessionLength =
@@ -11,8 +13,8 @@ export function SessionCard(props: { session: Session }) {
     <div
       className={clsx(
         "py-1 my-0.5 px-2 rounded font-roboto",
-        rowSpanVars[numHalfHours],
-        locationColors[session["Location name"][0]]
+        `row-span-${numHalfHours}`,
+        `bg-${locationColors[session["Location name"][0]]}-200`
       )}
     >
       <p className="font-medium text-xs leading-tight line-clamp-2">
@@ -22,19 +24,3 @@ export function SessionCard(props: { session: Session }) {
     </div>
   );
 }
-
-const rowSpanVars = {
-  1: "row-span-1",
-  2: "row-span-2",
-  3: "row-span-3",
-  4: "row-span-4",
-} as { [key: number]: string };
-
-const locationColors = {
-  "Rat Park": "bg-rose-200",
-  "1E Main": "bg-orange-200",
-  Gardens: "bg-yellow-200",
-  "2B1": "bg-green-200",
-  "B Ground Floor": "bg-teal-200",
-  "Old Restaurant": "bg-sky-200",
-} as { [key: string]: string };

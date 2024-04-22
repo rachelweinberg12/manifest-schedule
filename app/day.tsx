@@ -13,8 +13,7 @@ export function DayCol(props: {
 }) {
   const { sessions, locations, start, end } = props;
   const lengthOfDay = end.getTime() - start.getTime();
-  const numHalfHours = lengthOfDay / 1000 / 60 / 30;
-  const dayGridRows = dayGridRowVars[numHalfHours];
+  const dayGridRows = lengthOfDay / 1000 / 60 / 30;
   const percentThroughDay = getPercentThroughDay(
     new Date("2024-06-08T11:36-07:00"),
     start,
@@ -25,11 +24,16 @@ export function DayCol(props: {
   const includedLocations = locationOrder.filter((loc) =>
     locParams.includes(loc)
   );
-  const dayGridCols = dayGridColVars[includedLocations.length + 1];
+  const dayGridCols = includedLocations.length + 1;
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
-      <div className={clsx("grid divide-x divide-gray-100 h-5/6", dayGridCols)}>
+      <div
+        className={clsx(
+          "grid divide-x divide-gray-100 h-5/6",
+          `grid-cols-${dayGridCols}`
+        )}
+      >
         <span className="p-1 border-b border-gray-100" />
         {includedLocations.map((locationName) => (
           <span
@@ -41,7 +45,10 @@ export function DayCol(props: {
         ))}
       </div>
       <div
-        className={clsx("grid divide-x divide-gray-100 relative", dayGridCols)}
+        className={clsx(
+          "grid divide-x divide-gray-100 relative",
+          `grid-cols-${dayGridCols}`
+        )}
       >
         {percentThroughDay < 100 && percentThroughDay > 0 && (
           <div
@@ -53,7 +60,11 @@ export function DayCol(props: {
             </span>
           </div>
         )}
-        <TimestampCol start={start} end={end} dayGridRows={dayGridRows} />
+        <TimestampCol
+          start={start}
+          end={end}
+          dayGridRows={`grid-rows-[repeat(${dayGridRows},minmax(0,1fr))]`}
+        />
         {includedLocations.map((locationName) => {
           const location = locations.find((loc) => loc.Name === locationName);
           if (!location) {
@@ -67,7 +78,7 @@ export function DayCol(props: {
               )}
               start={start}
               end={end}
-              dayGridRows={dayGridRows}
+              dayGridRows={`grid-rows-[repeat(${dayGridRows},minmax(0,1fr))]`}
             />
           );
         })}
@@ -105,45 +116,3 @@ export const locationOrder = [
   "B Ground Floor",
   "Old Restaurant",
 ] as string[];
-
-const dayGridRowVars = {
-  1: "grid-rows-1",
-  2: "grid-rows-2",
-  3: "grid-rows-3",
-  4: "grid-rows-4",
-  5: "grid-rows-5",
-  6: "grid-rows-6",
-  7: "grid-rows-7",
-  8: "grid-rows-8",
-  9: "grid-rows-9",
-  10: "grid-rows-10",
-  11: "grid-rows-11",
-  12: "grid-rows-12",
-  13: "grid-rows-[repeat(13,minmax(0,1fr))]",
-  14: "grid-rows-[repeat(14,minmax(0,1fr))]",
-  15: "grid-rows-[repeat(15,minmax(0,1fr))]",
-  16: "grid-rows-[repeat(16,minmax(0,1fr))]",
-  17: "grid-rows-[repeat(17,minmax(0,1fr))]",
-  18: "grid-rows-[repeat(18,minmax(0,1fr))]",
-  19: "grid-rows-[repeat(19,minmax(0,1fr))]",
-  20: "grid-rows-[repeat(20,minmax(0,1fr))]",
-  21: "grid-rows-[repeat(21,minmax(0,1fr))]",
-  22: "grid-rows-[repeat(22,minmax(0,1fr))]",
-  23: "grid-rows-[repeat(23,minmax(0,1fr))]",
-  24: "grid-rows-[repeat(24,minmax(0,1fr))]",
-} as { [key: number]: string };
-
-const dayGridColVars = {
-  1: "grid-cols-1",
-  2: "grid-cols-2",
-  3: "grid-cols-3",
-  4: "grid-cols-4",
-  5: "grid-cols-5",
-  6: "grid-cols-6",
-  7: "grid-cols-7",
-  8: "grid-cols-8",
-  9: "grid-cols-9",
-  10: "grid-cols-10",
-  11: "grid-cols-11",
-  12: "grid-cols-12",
-} as { [key: number]: string };
