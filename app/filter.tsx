@@ -6,6 +6,7 @@ import {
   usePathname,
   useRouter,
 } from "next/navigation";
+import { locationOrder } from "./day";
 
 export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
@@ -86,28 +87,28 @@ function SelectLocationsToShow(props: {
   const { replace } = useRouter();
   return (
     <div className="grid grid-cols-3 gap-4">
-      {locations.map((location) => (
-        <div key={location.Name} className="flex gap-1">
+      {locationOrder.map((location) => (
+        <div key={location} className="flex gap-1 items-center">
           <input
             type="checkbox"
             className="h-4 w-4 rounded border-gray-300 text-rose-600 focus:ring-rose-500"
-            id={location.Name}
-            name={location.Name}
+            id={location}
+            name={location}
             checked={
               urlSearchParams.has("loc") &&
-              urlSearchParams.getAll("loc").includes(location.Name)
+              urlSearchParams.getAll("loc").includes(location)
             }
             onChange={(event) => {
               if (event.target.checked) {
-                urlSearchParams.append("loc", location.Name);
+                urlSearchParams.append("loc", location);
               } else {
-                urlSearchParams.delete("loc", location.Name);
+                urlSearchParams.delete("loc", location);
               }
               replace(`${pathname}?${urlSearchParams.toString()}`);
               console.log(urlSearchParams.toString());
             }}
           />
-          <label htmlFor={location.Name}>{location.Name}</label>
+          <label htmlFor={location}>{location}</label>
         </div>
       ))}
     </div>
