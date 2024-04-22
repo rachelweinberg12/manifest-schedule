@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.5.7",
     "airtable": "^0.12.2",
     "clsx": "^2.1.0",
     "date-fns": "^3.6.0",

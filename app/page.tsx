@@ -1,6 +1,7 @@
-import { Session, getSessions } from "@/db/db";
+import { Session, getLocations, getSessions } from "@/db/db";
 import { isAfter, isBefore, isEqual } from "date-fns";
 import { DayCol } from "./day";
+import { Filter } from "./filter";
 
 type Day = {
   start: Date;
@@ -35,10 +36,12 @@ export default async function Home() {
           isEqual(day.end, new Date(session["End time"])))
     );
   });
+  const locations = await getLocations();
   return (
     <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-32 sm:p-10 p-4">
+      <Filter locations={locations} />
       {days.map((day) => (
-        <DayCol key={day.start.toISOString()} {...day} />
+        <DayCol key={day.start.toISOString()} {...day} locations={locations} />
       ))}
     </main>
   );

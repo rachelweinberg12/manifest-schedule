@@ -1,18 +1,18 @@
-import { Session, getLocations } from "@/db/db";
+import { Session, Location } from "@/db/db";
 import { LocationCol } from "./location";
 import { format } from "date-fns";
 import clsx from "clsx";
 
 export async function DayCol(props: {
   sessions: Session[];
+  locations: Location[];
   start: Date;
   end: Date;
 }) {
-  const { sessions, start, end } = props;
+  const { sessions, locations, start, end } = props;
   const lengthOfDay = end.getTime() - start.getTime();
   const numHalfHours = lengthOfDay / 1000 / 60 / 30;
   const dayGrid = dayGridVars[numHalfHours];
-  const locations = await getLocations();
   const percentThroughDay = getPercentThroughDay(
     new Date("2024-06-08T11:36-07:00"),
     start,
