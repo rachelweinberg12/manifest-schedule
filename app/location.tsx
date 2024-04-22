@@ -12,7 +12,7 @@ export function LocationCol(props: {
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
   return (
     <div>
-      <h2 className="text-lg">{name}</h2>
+      <h2 className="text-base">{name}</h2>
       <div className="grid grid-rows-[repeat(20,minmax(0,1fr))] gap-1 h-screen">
         {sessionsWithBlanks.map((session) => (
           <SessionCard key={session["Start time"]} session={session} />

@@ -1,8 +1,19 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
+  weight: "300",
+});
+const monteserrat = Montserrat({
+  subsets: ["latin"],
+  variable: "--font-monteserrat",
+});
+
+const fontVars = [roboto.variable, monteserrat.variable].join(" ");
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -15,8 +26,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={inter.className}>{children}</body>
+    <html lang="en" className={fontVars}>
+      <body className="font-monteserrat">{children}</body>
     </html>
   );
 }
