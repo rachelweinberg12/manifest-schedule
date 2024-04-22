@@ -5,18 +5,15 @@ import clsx from "clsx";
 
 export function LocationCol(props: {
   sessions: Session[];
-  name: string;
   start: Date;
   end: Date;
   dayGrid: string;
 }) {
-  const { sessions, name, start, end, dayGrid } = props;
+  const { sessions, start, end, dayGrid } = props;
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
-  console.log(dayGrid);
   return (
     <div className="px-1">
-      <h2 className="text-sm h-24">{name}</h2>
-      <div className={clsx("grid gap-1 h-5/6", dayGrid)}>
+      <div className={clsx("grid h-full", dayGrid)}>
         {sessionsWithBlanks.map((session) => (
           <SessionCard key={session["Start time"]} session={session} />
         ))}

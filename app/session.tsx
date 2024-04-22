@@ -10,7 +10,7 @@ export function SessionCard(props: { session: Session }) {
   return (
     <div
       className={clsx(
-        "py-1 px-2 rounded font-roboto",
+        "py-1 my-0.5 px-2 rounded font-roboto",
         rowSpanVars[numHalfHours],
         locationColors[session["Location name"][0]]
       )}

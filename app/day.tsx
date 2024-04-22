@@ -16,6 +16,17 @@ export async function DayCol(props: {
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
+      <div className="grid grid-cols-7 divide-x divide-gray-100 h-5/6">
+        <span className="p-1 border-b border-gray-100" />
+        {locationOrder.map((locationName) => (
+          <span
+            key={locationName}
+            className="text-sm p-1 border-b border-gray-100"
+          >
+            {locationName}
+          </span>
+        ))}
+      </div>
       <div className="grid grid-cols-7 divide-x divide-gray-100">
         <TimestampCol start={start} end={end} dayGrid={dayGrid} />
         {locationOrder.map((locationName) => {
@@ -26,7 +37,6 @@ export async function DayCol(props: {
           return (
             <LocationCol
               key={location.Name}
-              name={location.Name}
               sessions={sessions.filter(
                 (session) => session["Location name"][0] === location.Name
               )}
@@ -46,9 +56,9 @@ function TimestampCol(props: { start: Date; end: Date; dayGrid: string }) {
   const lengthOfDay = end.getTime() - start.getTime();
   const numHalfHours = lengthOfDay / 1000 / 60 / 30;
   return (
-    <div className={clsx("grid gap-1 h-5/6", dayGrid)}>
+    <div className={clsx("grid h-full", dayGrid)}>
       {Array.from({ length: numHalfHours }).map((_, i) => (
-        <div key={i} className="border-b border-gray-100 text-xs">
+        <div key={i} className="border-b border-gray-100 text-[10px] p-1">
           {format(new Date(start.getTime() + i * 30 * 60 * 1000), "h:mm a")}
         </div>
       ))}
