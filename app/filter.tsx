@@ -15,7 +15,7 @@ export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
   const searchParams = useSearchParams();
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       <SelectLocCategoryToShow
         locations={locations}
         searchParams={searchParams}
@@ -65,15 +65,15 @@ function SelectLocCategoryToShow(props: {
     urlSearchParams.getAll("loc")
   );
   const onSelectCategory = (category: locationCategory) => {
+    locCategories.forEach((cat) => {
+      cat.current = cat.name === category.name;
+    });
     urlSearchParams.delete("loc");
     category.locations.forEach((loc) => {
       urlSearchParams.append("loc", loc.Name);
     });
     urlSearchParams.set("locCategory", category.name);
     replace(`${pathname}?${urlSearchParams.toString()}`);
-    locCategories.forEach((cat) => {
-      cat.current = cat.name === category.name;
-    });
     setIncludedLocations(category.locations.map((loc) => loc.Name));
   };
   return (
@@ -94,12 +94,19 @@ function SelectLocCategoryToShow(props: {
           </button>
         ))}
       </div>
-      <SelectLocationsToShow
-        locations={locCategories.find((cat) => cat.current)?.locations || []}
-        searchParams={searchParams}
-        includedLocations={includedLocations}
-        setIncludedLocations={setIncludedLocations}
-      />
+      <div
+        className={clsx(
+          "grid grid-cols-2 gap-4 bg-gray-100 rounded-md p-3",
+          locCategories[0].current && "rounded-tl-none"
+        )}
+      >
+        <SelectLocationsToShow
+          locations={locCategories.find((cat) => cat.current)?.locations || []}
+          searchParams={searchParams}
+          includedLocations={includedLocations}
+          setIncludedLocations={setIncludedLocations}
+        />
+      </div>
     </div>
   );
 }
@@ -119,7 +126,7 @@ function SelectLocationsToShow(props: {
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
-    <div className="grid grid-cols-2 gap-4 bg-gray-100 rounded-md rounded-tl-none p-3">
+    <>
       {locationOptions.map((location) => (
         <div key={location} className="flex items-center">
           <input
@@ -158,6 +165,6 @@ function SelectLocationsToShow(props: {
           </label>
         </div>
       ))}
-    </div>
+    </>
   );
 }
