@@ -26,13 +26,23 @@ export function Filter(props: { locations: Location[] }) {
 
 // TODO: store in airtable
 const MAIN_SESSION_SPACES = ["Rat Park", "1E Main"];
+type locationCategory = {
+  name: string;
+  locations: Location[];
+};
 function SelectLocCategoryToShow(props: {
   locations: Location[];
   searchParams: ReadonlyURLSearchParams;
 }) {
   const { locations, searchParams } = props;
+  const urlSearchParams = new URLSearchParams(searchParams);
+  const pathname = usePathname();
+  const { replace } = useRouter();
   const locCategories = [
-    { name: "all", locations: locations },
+    {
+      name: "all",
+      locations: locations,
+    },
     {
       name: "main",
       locations: locations.filter((loc) =>
@@ -45,32 +55,34 @@ function SelectLocCategoryToShow(props: {
         (loc) => !MAIN_SESSION_SPACES.includes(loc.Name)
       ),
     },
-  ];
+  ] as locationCategory[];
   const currentLocCategory =
     locCategories.find(
       (category) => category.name === props.searchParams.get("locCategory")
     ) ?? locCategories[0];
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const urlSearchParams = new URLSearchParams(searchParams);
+  const onSelectCategory = (category: locationCategory) => {
+    urlSearchParams.delete("loc");
+    category.locations.forEach((loc) => {
+      urlSearchParams.append("loc", loc.Name);
+    });
+    urlSearchParams.set("locCategory", category.name);
+    replace(`${pathname}?${urlSearchParams.toString()}`);
+  };
   return (
     <div>
       <div className="flex space-x-4">
-        {locCategories.map((tab) => (
+        {locCategories.map((cat) => (
           <button
-            key={tab.name}
-            onClick={() => {
-              urlSearchParams.set("locCategory", tab.name);
-              replace(`${pathname}?${urlSearchParams.toString()}`);
-            }}
+            key={cat.name}
+            onClick={() => onSelectCategory(cat)}
             className={clsx(
-              currentLocCategory === tab
+              currentLocCategory === cat
                 ? "bg-gray-100 text-gray-700"
                 : "text-gray-500 hover:text-gray-700",
               "rounded-t-md px-3 py-2 text-sm font-medium"
             )}
           >
-            {tab.name.toLocaleUpperCase()}
+            {cat.name.toLocaleUpperCase()}
           </button>
         ))}
       </div>
@@ -97,7 +109,7 @@ function SelectLocationsToShow(props: {
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
-    <div className="grid grid-cols-3 gap-4 bg-gray-100 rounded-md rounded-tl-none p-3">
+    <div className="grid grid-cols-2 gap-4 bg-gray-100 rounded-md rounded-tl-none p-3">
       {locationOptions.map((location) => (
         <div key={location} className="flex items-center">
           <input
