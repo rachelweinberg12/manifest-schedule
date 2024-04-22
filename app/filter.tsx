@@ -29,6 +29,7 @@ const MAIN_SESSION_SPACES = ["Rat Park", "1E Main"];
 type locationCategory = {
   name: string;
   locations: Location[];
+  current: boolean;
 };
 function SelectLocCategoryToShow(props: {
   locations: Location[];
@@ -38,28 +39,31 @@ function SelectLocCategoryToShow(props: {
   const urlSearchParams = new URLSearchParams(searchParams);
   const pathname = usePathname();
   const { replace } = useRouter();
+  const currCategoryName = urlSearchParams.get("locCategory");
   const locCategories = [
     {
       name: "all",
       locations: locations,
+      current: currCategoryName === "all",
     },
     {
       name: "main",
       locations: locations.filter((loc) =>
         MAIN_SESSION_SPACES.includes(loc.Name)
       ),
+      current: currCategoryName === "main",
     },
     {
       name: "side",
       locations: locations.filter(
         (loc) => !MAIN_SESSION_SPACES.includes(loc.Name)
       ),
+      current: currCategoryName === "side",
     },
   ] as locationCategory[];
-  const currentLocCategory =
-    locCategories.find(
-      (category) => category.name === props.searchParams.get("locCategory")
-    ) ?? locCategories[0];
+  const [includedLocations, setIncludedLocations] = useState(
+    urlSearchParams.getAll("loc")
+  );
   const onSelectCategory = (category: locationCategory) => {
     urlSearchParams.delete("loc");
     category.locations.forEach((loc) => {
@@ -67,6 +71,10 @@ function SelectLocCategoryToShow(props: {
     });
     urlSearchParams.set("locCategory", category.name);
     replace(`${pathname}?${urlSearchParams.toString()}`);
+    locCategories.forEach((cat) => {
+      cat.current = cat.name === category.name;
+    });
+    setIncludedLocations(category.locations.map((loc) => loc.Name));
   };
   return (
     <div>
@@ -76,7 +84,7 @@ function SelectLocCategoryToShow(props: {
             key={cat.name}
             onClick={() => onSelectCategory(cat)}
             className={clsx(
-              currentLocCategory === cat
+              cat.current
                 ? "bg-gray-100 text-gray-700"
                 : "text-gray-500 hover:text-gray-700",
               "rounded-t-md px-3 py-2 text-sm font-medium"
@@ -87,8 +95,10 @@ function SelectLocCategoryToShow(props: {
         ))}
       </div>
       <SelectLocationsToShow
-        locations={currentLocCategory.locations}
+        locations={locCategories.find((cat) => cat.current)?.locations || []}
         searchParams={searchParams}
+        includedLocations={includedLocations}
+        setIncludedLocations={setIncludedLocations}
       />
     </div>
   );
@@ -97,12 +107,12 @@ function SelectLocCategoryToShow(props: {
 function SelectLocationsToShow(props: {
   locations: Location[];
   searchParams: ReadonlyURLSearchParams;
+  includedLocations: string[];
+  setIncludedLocations: (locations: string[]) => void;
 }) {
-  const { locations, searchParams } = props;
+  const { locations, searchParams, includedLocations, setIncludedLocations } =
+    props;
   const urlSearchParams = new URLSearchParams(searchParams);
-  const [includedLocations, setIncludedLocations] = useState(
-    urlSearchParams.getAll("loc")
-  );
   const locationOptions = locationOrder.filter((loc) =>
     locations.find((l) => l.Name === loc)
   );
