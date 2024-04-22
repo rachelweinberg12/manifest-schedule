@@ -20,10 +20,6 @@ export function Filter(props: { locations: Location[] }) {
         locations={locations}
         searchParams={searchParams}
       />
-      <SelectLocationsToShow
-        locations={locations}
-        searchParams={searchParams}
-      />
     </div>
   );
 }
@@ -50,51 +46,38 @@ function SelectLocCategoryToShow(props: {
       ),
     },
   ];
-  const currentLocCategory = locCategories.find(
-    (category) => category.name === props.searchParams.get("locCategory")
-  );
+  const currentLocCategory =
+    locCategories.find(
+      (category) => category.name === props.searchParams.get("locCategory")
+    ) ?? locCategories[0];
   const pathname = usePathname();
   const { replace } = useRouter();
   const urlSearchParams = new URLSearchParams(searchParams);
   return (
     <div>
-      <div className="sm:hidden">
-        <label htmlFor="tabs" className="sr-only">
-          Select a tab
-        </label>
-        {/* Use an "onChange" listener to redirect the user to the selected tab URL. */}
-        <select
-          id="tabs"
-          name="tabs"
-          className="block w-full rounded-md border-gray-300 focus:border-gray-500 focus:ring-gray-500"
-          defaultValue={locCategories[0].name}
-        >
-          {locCategories.map((tab) => (
-            <option key={tab.name}>{tab.name}</option>
-          ))}
-        </select>
+      <div className="flex space-x-4">
+        {locCategories.map((tab) => (
+          <button
+            key={tab.name}
+            onClick={() => {
+              urlSearchParams.set("locCategory", tab.name);
+              replace(`${pathname}?${urlSearchParams.toString()}`);
+            }}
+            className={clsx(
+              currentLocCategory === tab
+                ? "bg-gray-100 text-gray-700"
+                : "text-gray-500 hover:text-gray-700",
+              "rounded-t-md px-3 py-2 text-sm font-medium"
+            )}
+          >
+            {tab.name.toLocaleUpperCase()}
+          </button>
+        ))}
       </div>
-      <div className="hidden sm:block">
-        <nav className="flex space-x-4" aria-label="locCategories">
-          {locCategories.map((tab) => (
-            <button
-              key={tab.name}
-              onClick={() => {
-                urlSearchParams.set("locCategory", tab.name);
-                replace(`${pathname}?${urlSearchParams.toString()}`);
-              }}
-              className={clsx(
-                currentLocCategory === tab
-                  ? "bg-gray-100 text-gray-700"
-                  : "text-gray-500 hover:text-gray-700",
-                "rounded-md px-3 py-2 text-sm font-medium"
-              )}
-            >
-              {tab.name}
-            </button>
-          ))}
-        </nav>
-      </div>
+      <SelectLocationsToShow
+        locations={currentLocCategory.locations}
+        searchParams={searchParams}
+      />
     </div>
   );
 }
@@ -108,11 +91,14 @@ function SelectLocationsToShow(props: {
   const [includedLocations, setIncludedLocations] = useState(
     urlSearchParams.getAll("loc")
   );
+  const locationOptions = locationOrder.filter((loc) =>
+    locations.find((l) => l.Name === loc)
+  );
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
-    <div className="grid grid-cols-3 gap-4">
-      {locationOrder.map((location) => (
+    <div className="grid grid-cols-3 gap-4 bg-gray-100 rounded-md rounded-tl-none p-3">
+      {locationOptions.map((location) => (
         <div key={location} className="flex items-center">
           <input
             type="checkbox"
@@ -142,7 +128,10 @@ function SelectLocationsToShow(props: {
               );
             }}
           />
-          <label htmlFor={location} className="cursor-pointer pl-2">
+          <label
+            htmlFor={location}
+            className="cursor-pointer pl-2 text-sm text-gray-700"
+          >
             {location}
           </label>
         </div>
