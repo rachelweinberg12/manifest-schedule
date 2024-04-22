@@ -8,6 +8,8 @@ import {
 } from "next/navigation";
 import { locationOrder } from "./day";
 import { useState } from "react";
+import clsx from "clsx";
+import { locationColors } from "./class-constants";
 
 export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
@@ -81,7 +83,7 @@ function SelectLocationsToShow(props: {
   locations: Location[];
   searchParams: ReadonlyURLSearchParams;
 }) {
-  const { locations, searchParams } = props;
+  const { searchParams } = props;
   const urlSearchParams = new URLSearchParams(searchParams);
   const [includedLocations, setIncludedLocations] = useState(
     urlSearchParams.getAll("loc")
@@ -94,7 +96,10 @@ function SelectLocationsToShow(props: {
         <div key={location} className="flex items-center">
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-rose-600 focus:ring-rose-500 cursor-pointer"
+            className={clsx(
+              "h-4 w-4 rounded border-gray-300 cursor-pointer",
+              `text-${locationColors[location]}-400 focus:ring-${locationColors[location]}-400`
+            )}
             id={location}
             name={location}
             checked={includedLocations.includes(location)}

@@ -23,12 +23,12 @@ export const locationColors = {
 } as { [key: string]: string };
 
 export const allLocationColors = [
-  "bg-rose-200 focus:ring-rose-500 text-rose-500",
-  "bg-orange-200 focus:ring-orange-500 text-orange-500",
-  "bg-yellow-200 focus:ring-yellow-500 text-yellow-500",
-  "bg-green-200 focus:ring-green-500 text-green-500",
-  "bg-teal-200 focus:ring-teal-500 text-teal-500",
-  "bg-sky-200 focus:ring-sky-500 text-sky-500",
+  "bg-rose-200 focus:ring-rose-400 text-rose-400",
+  "bg-orange-200 focus:ring-orange-400 text-orange-400",
+  "bg-yellow-200 focus:ring-yellow-400 text-yellow-400",
+  "bg-green-200 focus:ring-green-400 text-green-400",
+  "bg-teal-200 focus:ring-teal-400 text-teal-400",
+  "bg-sky-200 focus:ring-sky-400 text-sky-400",
 ];
 
 export const dayGridRowVars = [
