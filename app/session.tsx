@@ -6,7 +6,8 @@ export function SessionCard(props: { session: Session }) {
     new Date(session["End time"]).getTime() -
     new Date(session["Start time"]).getTime();
   const numHalfHours = sessionLength / 1000 / 60 / 30;
-  console.log(session);
+  const formattedHostNames = session["Host name"].join(", ");
+  console.log(formattedHostNames);
   return (
     <div
       className={clsx(
@@ -15,8 +16,8 @@ export function SessionCard(props: { session: Session }) {
         locationColors[session["Location name"][0]]
       )}
     >
-      <p className="font-semibold text-xs">{session.Title}</p>
-      <p className="text-[10px] leading-none">{session["Host name"]}</p>
+      <p className="font-semibold text-xs leading-tight">{session.Title}</p>
+      <p className="text-[10px] leading-tight">{formattedHostNames}</p>
     </div>
   );
 }

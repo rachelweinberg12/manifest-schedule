@@ -44,7 +44,7 @@ function insertBlankSessions(
         Title: "",
         Description: "",
         Hosts: [],
-        "Host name": "",
+        "Host name": [],
         "Host email": "",
         Location: [],
         "Location name": [""],

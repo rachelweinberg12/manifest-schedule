@@ -11,7 +11,7 @@ export type Session = {
   "Start time": string;
   "End time": string;
   Hosts: string[];
-  "Host name": string;
+  "Host name": string[];
   "Host email": string;
   Location: string[];
   "Location name": string[];
