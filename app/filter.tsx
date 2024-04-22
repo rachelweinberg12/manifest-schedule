@@ -7,10 +7,10 @@ import {
   useRouter,
 } from "next/navigation";
 import { locationOrder } from "./day";
+import { useState } from "react";
 
 export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
-  const paramsString = window.location.search;
   const searchParams = useSearchParams();
   return (
     <SelectLocationsToShow locations={locations} searchParams={searchParams} />
@@ -83,32 +83,43 @@ function SelectLocationsToShow(props: {
 }) {
   const { locations, searchParams } = props;
   const urlSearchParams = new URLSearchParams(searchParams);
+  const [includedLocations, setIncludedLocations] = useState(
+    urlSearchParams.getAll("loc")
+  );
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
     <div className="grid grid-cols-3 gap-4">
       {locationOrder.map((location) => (
-        <div key={location} className="flex gap-1 items-center">
+        <div key={location} className="flex items-center">
           <input
             type="checkbox"
-            className="h-4 w-4 rounded border-gray-300 text-rose-600 focus:ring-rose-500"
+            className="h-4 w-4 rounded border-gray-300 text-rose-600 focus:ring-rose-500 cursor-pointer"
             id={location}
             name={location}
-            checked={
-              urlSearchParams.has("loc") &&
-              urlSearchParams.getAll("loc").includes(location)
-            }
+            checked={includedLocations.includes(location)}
             onChange={(event) => {
+              const start = new Date();
               if (event.target.checked) {
                 urlSearchParams.append("loc", location);
+                setIncludedLocations([...includedLocations, location]);
               } else {
                 urlSearchParams.delete("loc", location);
+                setIncludedLocations(
+                  includedLocations.filter((loc) => loc !== location)
+                );
               }
               replace(`${pathname}?${urlSearchParams.toString()}`);
-              console.log(urlSearchParams.toString());
+              const end = new Date();
+              console.log(
+                "Time to update URL:",
+                end.getTime() - start.getTime()
+              );
             }}
           />
-          <label htmlFor={location}>{location}</label>
+          <label htmlFor={location} className="cursor-pointer pl-2">
+            {location}
+          </label>
         </div>
       ))}
     </div>
