@@ -1,9 +1,11 @@
+"use client";
 import { Session, Location } from "@/db/db";
 import { LocationCol } from "./location";
 import { format } from "date-fns";
 import clsx from "clsx";
+import { useSearchParams } from "next/navigation";
 
-export async function DayCol(props: {
+export function DayCol(props: {
   sessions: Session[];
   locations: Location[];
   start: Date;
@@ -12,18 +14,24 @@ export async function DayCol(props: {
   const { sessions, locations, start, end } = props;
   const lengthOfDay = end.getTime() - start.getTime();
   const numHalfHours = lengthOfDay / 1000 / 60 / 30;
-  const dayGrid = dayGridVars[numHalfHours];
+  const dayGridRows = dayGridRowVars[numHalfHours];
   const percentThroughDay = getPercentThroughDay(
     new Date("2024-06-08T11:36-07:00"),
     start,
     end
   );
+  const searchParams = useSearchParams();
+  const locParams = searchParams.getAll("loc");
+  const includedLocations = locationOrder.filter((loc) =>
+    locParams.includes(loc)
+  );
+  const dayGridCols = dayGridColVars[includedLocations.length + 1];
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
-      <div className="grid grid-cols-7 divide-x divide-gray-100 h-5/6">
+      <div className={clsx("grid divide-x divide-gray-100 h-5/6", dayGridCols)}>
         <span className="p-1 border-b border-gray-100" />
-        {locationOrder.map((locationName) => (
+        {includedLocations.map((locationName) => (
           <span
             key={locationName}
             className="text-sm p-1 border-b border-gray-100"
@@ -32,7 +40,9 @@ export async function DayCol(props: {
           </span>
         ))}
       </div>
-      <div className="grid grid-cols-7 divide-x divide-gray-100 relative">
+      <div
+        className={clsx("grid divide-x divide-gray-100 relative", dayGridCols)}
+      >
         {percentThroughDay < 100 && percentThroughDay > 0 && (
           <div
             className="bg-transparent w-full absolute border-b border-rose-600 flex items-end"
@@ -43,8 +53,8 @@ export async function DayCol(props: {
             </span>
           </div>
         )}
-        <TimestampCol start={start} end={end} dayGrid={dayGrid} />
-        {locationOrder.map((locationName) => {
+        <TimestampCol start={start} end={end} dayGridRows={dayGridRows} />
+        {includedLocations.map((locationName) => {
           const location = locations.find((loc) => loc.Name === locationName);
           if (!location) {
             return null;
@@ -57,7 +67,7 @@ export async function DayCol(props: {
               )}
               start={start}
               end={end}
-              dayGrid={dayGrid}
+              dayGridRows={dayGridRows}
             />
           );
         })}
@@ -66,12 +76,12 @@ export async function DayCol(props: {
   );
 }
 
-function TimestampCol(props: { start: Date; end: Date; dayGrid: string }) {
-  const { start, end, dayGrid } = props;
+function TimestampCol(props: { start: Date; end: Date; dayGridRows: string }) {
+  const { start, end, dayGridRows } = props;
   const lengthOfDay = end.getTime() - start.getTime();
   const numHalfHours = lengthOfDay / 1000 / 60 / 30;
   return (
-    <div className={clsx("grid h-full", dayGrid)}>
+    <div className={clsx("grid h-full", dayGridRows)}>
       {Array.from({ length: numHalfHours }).map((_, i) => (
         <div
           key={i}
@@ -96,7 +106,7 @@ export const locationOrder = [
   "Old Restaurant",
 ] as string[];
 
-const dayGridVars = {
+const dayGridRowVars = {
   1: "grid-rows-1",
   2: "grid-rows-2",
   3: "grid-rows-3",
@@ -121,4 +131,19 @@ const dayGridVars = {
   22: "grid-rows-[repeat(22,minmax(0,1fr))]",
   23: "grid-rows-[repeat(23,minmax(0,1fr))]",
   24: "grid-rows-[repeat(24,minmax(0,1fr))]",
+} as { [key: number]: string };
+
+const dayGridColVars = {
+  1: "grid-cols-1",
+  2: "grid-cols-2",
+  3: "grid-cols-3",
+  4: "grid-cols-4",
+  5: "grid-cols-5",
+  6: "grid-cols-6",
+  7: "grid-cols-7",
+  8: "grid-cols-8",
+  9: "grid-cols-9",
+  10: "grid-cols-10",
+  11: "grid-cols-11",
+  12: "grid-cols-12",
 } as { [key: number]: string };
