@@ -11,7 +11,7 @@ export default async function Home() {
   const sessions = await getSessions();
   const days: Day[] = [
     {
-      start: new Date("2024-06-07T10:00-07:00"),
+      start: new Date("2024-06-07T14:00-07:00"),
       end: new Date("2024-06-07T20:00-07:00"),
       sessions: [],
     },
@@ -22,7 +22,7 @@ export default async function Home() {
     },
     {
       start: new Date("2024-06-09T10:00-07:00"),
-      end: new Date("2024-06-09T20:00-07:00"),
+      end: new Date("2024-06-09T22:00-07:00"),
       sessions: [],
     },
   ];
