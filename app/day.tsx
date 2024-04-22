@@ -12,8 +12,12 @@ export async function DayCol(props: {
   const lengthOfDay = end.getTime() - start.getTime();
   const numHalfHours = lengthOfDay / 1000 / 60 / 30;
   const dayGrid = dayGridVars[numHalfHours];
-  console.log(start, end, numHalfHours, dayGrid);
   const locations = await getLocations();
+  const percentThroughDay = getPercentThroughDay(
+    new Date("2024-06-08T11:36-07:00"),
+    start,
+    end
+  );
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
@@ -28,7 +32,17 @@ export async function DayCol(props: {
           </span>
         ))}
       </div>
-      <div className="grid grid-cols-7 divide-x divide-gray-100">
+      <div className="grid grid-cols-7 divide-x divide-gray-100 relative">
+        {percentThroughDay < 100 && percentThroughDay > 0 && (
+          <div
+            className="bg-transparent w-full absolute border-b border-rose-600 flex items-end"
+            style={{ height: `${percentThroughDay}%` }}
+          >
+            <span className="text-[10px] relative bg-rose-600 rounded-t px-2 text-white top-[1px]">
+              now
+            </span>
+          </div>
+        )}
         <TimestampCol start={start} end={end} dayGrid={dayGrid} />
         {locationOrder.map((locationName) => {
           const location = locations.find((loc) => loc.Name === locationName);
@@ -59,13 +73,19 @@ function TimestampCol(props: { start: Date; end: Date; dayGrid: string }) {
   return (
     <div className={clsx("grid h-full", dayGrid)}>
       {Array.from({ length: numHalfHours }).map((_, i) => (
-        <div key={i} className="border-b border-gray-100 text-[10px] p-1">
+        <div
+          key={i}
+          className="border-b border-gray-100 text-[10px] p-1 text-right"
+        >
           {format(new Date(start.getTime() + i * 30 * 60 * 1000), "h:mm a")}
         </div>
       ))}
     </div>
   );
 }
+
+const getPercentThroughDay = (now: Date, start: Date, end: Date) =>
+  ((now.getTime() - start.getTime()) / (end.getTime() - start.getTime())) * 100;
 
 export const locationOrder = [
   "Rat Park",

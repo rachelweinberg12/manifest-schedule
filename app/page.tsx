@@ -36,7 +36,7 @@ export default async function Home() {
     );
   });
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24 gap-32">
+    <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-32 sm:p-10 p-4">
       {days.map((day) => (
         <DayCol key={day.start.toISOString()} {...day} />
       ))}

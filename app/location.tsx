@@ -12,7 +12,7 @@ export function LocationCol(props: {
   const { sessions, start, end, dayGrid } = props;
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
   return (
-    <div className="px-1">
+    <div className="px-0.5">
       <div className={clsx("grid h-full", dayGrid)}>
         {sessionsWithBlanks.map((session) => (
           <SessionCard key={session["Start time"]} session={session} />
