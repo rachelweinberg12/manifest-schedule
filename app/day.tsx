@@ -5,6 +5,8 @@ import { format } from "date-fns";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
+import { ChevronLeftIcon } from "@heroicons/react/20/solid";
+import { ChevronRightIcon } from "@heroicons/react/20/solid";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -20,7 +22,28 @@ export function DayCol(props: {
   );
   return (
     <div className="w-full">
-      <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
+      <div className="flex items-end justify-between mb-5">
+        <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
+        <div className="flex items-center gap-3">
+          <span className="text-gray-500 text-xs">
+            Showing locations 1-3 of 6
+          </span>
+          <span className="isolate inline-flex rounded-md shadow-sm">
+            <button
+              type="button"
+              className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+              <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+            </button>
+            <button
+              type="button"
+              className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+            >
+              <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </span>
+        </div>
+      </div>
       <div
         className={clsx(
           "grid divide-x divide-gray-100 h-5/6",
