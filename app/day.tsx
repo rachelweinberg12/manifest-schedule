@@ -8,6 +8,7 @@ import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useScreenWidth } from "@/utils/hooks";
+import { useState } from "react";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -22,11 +23,16 @@ export function DayCol(props: {
     locParams.includes(loc)
   );
   const screenWidth = useScreenWidth();
-  const numColsToDisplay = getNumColsToDisplay(
+  const numDisplayedLocations = getNumDisplayedLocations(
     screenWidth,
     includedLocations.length
   );
-  const displayedLocations = includedLocations.slice(0, numColsToDisplay);
+  const [displayStartIdx, setDisplayStartIdx] = useState(0);
+  const displayedLocations = includedLocations.slice(
+    displayStartIdx,
+    numDisplayedLocations
+  );
+  const includePagination = includedLocations.length > numDisplayedLocations;
   return (
     <div className="w-full">
       <div className="flex flex-col mb-5">
@@ -34,34 +40,42 @@ export function DayCol(props: {
           <h2 className="text-2xl font-bold">
             {format(start, "EEEE, MMMM d")}
           </h2>
-          <div className="flex items-center gap-3">
-            <span className="text-gray-500 text-xs hidden sm:block">
-              Showing locations 1-3 of 6
-            </span>
-            <span className="isolate inline-flex rounded-md shadow-sm">
-              <button
-                type="button"
-                className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-              >
-                <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-              >
-                <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-              </button>
-            </span>
-          </div>
+          {includePagination && (
+            <div className="flex items-center gap-3">
+              <span className="text-gray-500 text-xs hidden sm:block">
+                Showing locations {displayStartIdx + 1}-
+                {displayStartIdx + numDisplayedLocations} of{" "}
+                {includedLocations.length}
+              </span>
+              <span className="isolate inline-flex rounded-md shadow-sm">
+                <button
+                  type="button"
+                  className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                  <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+                </button>
+                <button
+                  type="button"
+                  className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+                >
+                  <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+                </button>
+              </span>
+            </div>
+          )}
         </div>
-        <span className="text-gray-500 text-xs sm:hidden text-right mt-1">
-          Showing locations 1-3 of 6
-        </span>
+        {includePagination && (
+          <span className="text-gray-500 text-xs sm:hidden text-right mt-1">
+            Showing locations {displayStartIdx + 1}-
+            {displayStartIdx + numDisplayedLocations} of{" "}
+            {includedLocations.length}
+          </span>
+        )}
       </div>
       <div
         className={clsx(
           "grid divide-x divide-gray-100 h-5/6",
-          `grid-cols-[60px_repeat(${numColsToDisplay},minmax(0,2fr))]`
+          `grid-cols-[60px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
         )}
       >
         <span className="p-1 border-b border-gray-100" />
@@ -77,7 +91,7 @@ export function DayCol(props: {
       <div
         className={clsx(
           "grid divide-x divide-gray-100 relative",
-          `grid-cols-[60px_repeat(${numColsToDisplay},minmax(0,2fr))]`
+          `grid-cols-[60px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
         )}
       >
         <NowBar start={start} end={end} />
@@ -173,7 +187,7 @@ function getBreakpoint(screenWidth: number) {
   }
 }
 
-function getNumColsToDisplay(screenWidth: number, numLocations: number) {
+function getNumDisplayedLocations(screenWidth: number, numLocations: number) {
   const breakpoint = getBreakpoint(screenWidth);
   return Math.min(MAX_COLS[breakpoint], numLocations);
 }
