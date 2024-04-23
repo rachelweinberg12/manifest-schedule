@@ -1,4 +1,4 @@
-import { Session } from "@/db/db";
+import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
 

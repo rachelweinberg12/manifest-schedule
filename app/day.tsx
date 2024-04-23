@@ -1,9 +1,10 @@
 "use client";
-import { Session, Location } from "@/db/db";
+import { Session, Location } from "@/utils/db";
 import { LocationCol } from "./location";
 import { format } from "date-fns";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
+import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -12,8 +13,6 @@ export function DayCol(props: {
   end: Date;
 }) {
   const { sessions, locations, start, end } = props;
-  const lengthOfDay = end.getTime() - start.getTime();
-  const dayGridRows = lengthOfDay / 1000 / 60 / 30;
   const percentThroughDay = getPercentThroughDay(
     new Date("2024-06-08T11:36-07:00"),
     start,
@@ -24,14 +23,13 @@ export function DayCol(props: {
   const includedLocations = locationOrder.filter((loc) =>
     locParams.includes(loc)
   );
-  const dayGridCols = includedLocations.length + 1;
   return (
     <div className="w-full">
       <h2 className="text-3xl font-bold">{format(start, "EEEE, MMMM d")}</h2>
       <div
         className={clsx(
           "grid divide-x divide-gray-100 h-5/6",
-          `grid-cols-${dayGridCols}`
+          `grid-cols-[60px_repeat(${includedLocations.length},minmax(0,2fr))]`
         )}
       >
         <span className="p-1 border-b border-gray-100" />
@@ -47,7 +45,7 @@ export function DayCol(props: {
       <div
         className={clsx(
           "grid divide-x divide-gray-100 relative",
-          `grid-cols-${dayGridCols}`
+          `grid-cols-[60px_repeat(${includedLocations.length},minmax(0,2fr))]`
         )}
       >
         {percentThroughDay < 100 && percentThroughDay > 0 && (
@@ -60,11 +58,7 @@ export function DayCol(props: {
             </span>
           </div>
         )}
-        <TimestampCol
-          start={start}
-          end={end}
-          dayGridRows={`grid-rows-[repeat(${dayGridRows},minmax(0,1fr))]`}
-        />
+        <TimestampCol start={start} end={end} />
         {includedLocations.map((locationName) => {
           const location = locations.find((loc) => loc.Name === locationName);
           if (!location) {
@@ -78,7 +72,6 @@ export function DayCol(props: {
               )}
               start={start}
               end={end}
-              dayGridRows={`grid-rows-[repeat(${dayGridRows},minmax(0,1fr))]`}
             />
           );
         })}
@@ -87,12 +80,16 @@ export function DayCol(props: {
   );
 }
 
-function TimestampCol(props: { start: Date; end: Date; dayGridRows: string }) {
-  const { start, end, dayGridRows } = props;
-  const lengthOfDay = end.getTime() - start.getTime();
-  const numHalfHours = lengthOfDay / 1000 / 60 / 30;
+function TimestampCol(props: { start: Date; end: Date }) {
+  const { start, end } = props;
+  const numHalfHours = getNumHalfHours(start, end);
   return (
-    <div className={clsx("grid h-full", dayGridRows)}>
+    <div
+      className={clsx(
+        "grid h-full",
+        `grid-rows-[repeat(${numHalfHours},minmax(0,1fr))]`
+      )}
+    >
       {Array.from({ length: numHalfHours }).map((_, i) => (
         <div
           key={i}
@@ -104,9 +101,6 @@ function TimestampCol(props: { start: Date; end: Date; dayGridRows: string }) {
     </div>
   );
 }
-
-const getPercentThroughDay = (now: Date, start: Date, end: Date) =>
-  ((now.getTime() - start.getTime()) / (end.getTime() - start.getTime())) * 100;
 
 export const locationOrder = [
   "Rat Park",

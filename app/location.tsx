@@ -1,19 +1,25 @@
-import { Session } from "@/db/db";
+import { Session } from "@/utils/db";
 import { SessionCard } from "./session";
 import { add, isBefore, isEqual } from "date-fns";
+import { getNumHalfHours } from "@/utils/utils";
 import clsx from "clsx";
 
 export function LocationCol(props: {
   sessions: Session[];
   start: Date;
   end: Date;
-  dayGridRows: string;
 }) {
-  const { sessions, start, end, dayGridRows } = props;
+  const { sessions, start, end } = props;
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
+  const numHalfHours = getNumHalfHours(start, end);
   return (
     <div className="px-0.5">
-      <div className={clsx("grid h-full", dayGridRows)}>
+      <div
+        className={clsx(
+          "grid h-full",
+          `grid-rows-[repeat(${numHalfHours},minmax(0,1fr))]`
+        )}
+      >
         {sessionsWithBlanks.map((session) => (
           <SessionCard key={session["Start time"]} session={session} />
         ))}

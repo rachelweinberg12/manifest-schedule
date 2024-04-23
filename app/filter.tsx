@@ -1,5 +1,5 @@
 "use client";
-import { Location } from "@/db/db";
+import { Location } from "@/utils/db";
 import {
   ReadonlyURLSearchParams,
   useSearchParams,
