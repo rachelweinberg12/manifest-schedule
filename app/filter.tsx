@@ -58,8 +58,11 @@ function SelectLocCategoryToShow(props: {
       ),
     },
   ] as locationCategory[];
+  const locationsFromParams = urlSearchParams.getAll("loc");
   const [includedLocations, setIncludedLocations] = useState(
-    urlSearchParams.getAll("loc")
+    locationsFromParams.length === 0
+      ? locations.map((loc) => loc.Name)
+      : locationsFromParams
   );
   const onSelectCategory = (category: locationCategory) => {
     locCategories.forEach((cat) => {
@@ -119,6 +122,7 @@ function SelectLocationsToShow(props: {
   );
   const pathname = usePathname();
   const { replace } = useRouter();
+  console.log(includedLocations);
   return (
     <>
       {locationOptions.map((location) => (
@@ -138,6 +142,14 @@ function SelectLocationsToShow(props: {
                 urlSearchParams.append("loc", location);
                 setIncludedLocations([...includedLocations, location]);
               } else {
+                if (
+                  includedLocations.length >
+                  urlSearchParams.getAll("loc").length
+                ) {
+                  includedLocations.forEach((loc) => {
+                    urlSearchParams.append("loc", loc);
+                  });
+                }
                 urlSearchParams.delete("loc", location);
                 setIncludedLocations(
                   includedLocations.filter((loc) => loc !== location)
