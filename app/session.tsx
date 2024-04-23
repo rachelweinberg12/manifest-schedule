@@ -38,7 +38,7 @@ export function SessionCard(props: { session: Session; location: Location }) {
   );
   return (
     <Tooltip
-      content={<TooltipContents />}
+      content={isBlank ? null : <TooltipContents />}
       className={`row-span-${numHalfHours} my-0.5`}
     >
       <div
