@@ -2,6 +2,7 @@ import { Session, getLocations, getSessions } from "@/utils/db";
 import { isAfter, isBefore, isEqual } from "date-fns";
 import { DayCol } from "./day";
 import { Filter } from "./filter";
+import { Suspense } from "react";
 
 type Day = {
   start: Date;
@@ -38,11 +39,17 @@ export default async function Home() {
   });
   const locations = await getLocations();
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-24 sm:p-10 p-4">
-      <Filter locations={locations} />
-      {days.map((day) => (
-        <DayCol key={day.start.toISOString()} {...day} locations={locations} />
-      ))}
-    </main>
+    <Suspense fallback={<div>Loading...</div>}>
+      <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-24 sm:p-10 p-4">
+        <Filter locations={locations} />
+        {days.map((day) => (
+          <DayCol
+            key={day.start.toISOString()}
+            {...day}
+            locations={locations}
+          />
+        ))}
+      </main>
+    </Suspense>
   );
 }
