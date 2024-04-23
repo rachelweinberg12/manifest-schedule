@@ -2,7 +2,7 @@ import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
 import { Popover } from "@headlessui/react";
-import { PopoverPanel } from "./popover";
+import { ClockIcon, UserIcon } from "@heroicons/react/20/solid";
 
 export function SessionCard(props: { session: Session; isMain: boolean }) {
   const { session, isMain } = props;
@@ -34,9 +34,24 @@ export function SessionCard(props: { session: Session; isMain: boolean }) {
           {formattedHostNames}
         </p>
       </Popover.Button>
-      <PopoverPanel>
-        <span>hello</span>
-      </PopoverPanel>
+      <Popover.Panel className="absolute bottom-5 left-5 rounded-md p-3 shadow-md z-10 bg-white border border-gray-100 font-monteserrat w-80">
+        <h1 className="text-lg font-bold">{session.Title}</h1>
+        <p className="text-xs">{formattedHostNames}</p>
+        <p className="text-sm">{session.Description}</p>
+        <div className="flex justify-between mt-2 text-xs">
+          <div className="flex gap-1">
+            <UserIcon className="h-4 w-4" />
+            <span>60</span>
+          </div>
+          <div className="flex gap-1">
+            <ClockIcon className="h-4 w-4" />
+            <span>
+              {new Date(session["Start time"]).toLocaleTimeString()} -{" "}
+              {new Date(session["End time"]).toLocaleTimeString()}
+            </span>
+          </div>
+        </div>
+      </Popover.Panel>
     </Popover>
   );
 }
