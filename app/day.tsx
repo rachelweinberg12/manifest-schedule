@@ -8,7 +8,7 @@ import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useScreenWidth } from "@/utils/hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -22,12 +22,18 @@ export function DayCol(props: {
   const includedLocations = locationOrder.filter((loc) =>
     locParams.includes(loc)
   );
+  const numIncludedLocations = includedLocations.length;
   const screenWidth = useScreenWidth();
   const numDisplayedLocations = getNumDisplayedLocations(
     screenWidth,
     includedLocations.length
   );
   const [displayStartIdx, setDisplayStartIdx] = useState(0);
+  useEffect(() => {
+    setDisplayStartIdx(
+      Math.min(displayStartIdx, numIncludedLocations - numDisplayedLocations)
+    );
+  }, [numDisplayedLocations]);
   const displayedLocations = includedLocations.slice(
     displayStartIdx,
     displayStartIdx + numDisplayedLocations
