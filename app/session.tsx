@@ -2,16 +2,19 @@ import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
 import { Popover } from "@headlessui/react";
-import { ClockIcon, UserIcon } from "@heroicons/react/20/solid";
+import { ClockIcon, UserIcon } from "@heroicons/react/24/outline";
+import { format } from "date-fns";
+import { Location } from "@/utils/db";
 
-export function SessionCard(props: { session: Session; isMain: boolean }) {
-  const { session, isMain } = props;
+export function SessionCard(props: { session: Session; location: Location }) {
+  const { session, location } = props;
   const sessionLength =
     new Date(session["End time"]).getTime() -
     new Date(session["Start time"]).getTime();
   const numHalfHours = sessionLength / 1000 / 60 / 30;
   const formattedHostNames = session["Host name"].join(", ");
   const isBlank = session.Title === "";
+  const isMain = location.Type === "main";
   return (
     <Popover
       className={clsx(
@@ -36,9 +39,9 @@ export function SessionCard(props: { session: Session; isMain: boolean }) {
       </Popover.Button>
       <Popover.Panel className="absolute bottom-5 left-5 rounded-md p-3 shadow-md z-10 bg-white border border-gray-100 font-monteserrat w-80">
         <h1 className="text-lg font-bold">{session.Title}</h1>
-        <p className="text-xs">{formattedHostNames}</p>
+        <p className="text-xs text-gray-500 mb-2">{formattedHostNames}</p>
         <p className="text-sm">{session.Description}</p>
-        <div className="flex justify-between mt-2 text-xs">
+        <div className="flex justify-between mt-2 text-xs text-gray-500">
           <div className="flex gap-1">
             <UserIcon className="h-4 w-4" />
             <span>60</span>
@@ -46,8 +49,8 @@ export function SessionCard(props: { session: Session; isMain: boolean }) {
           <div className="flex gap-1">
             <ClockIcon className="h-4 w-4" />
             <span>
-              {new Date(session["Start time"]).toLocaleTimeString()} -{" "}
-              {new Date(session["End time"]).toLocaleTimeString()}
+              {format(new Date(session["Start time"]), "h:mm")} -{" "}
+              {format(new Date(session["End time"]), "h:mm")}
             </span>
           </div>
         </div>

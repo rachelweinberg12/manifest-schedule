@@ -1,4 +1,4 @@
-import { Session } from "@/utils/db";
+import { Session, Location } from "@/utils/db";
 import { SessionCard } from "./session";
 import { add, isBefore, isEqual } from "date-fns";
 import { getNumHalfHours } from "@/utils/utils";
@@ -6,11 +6,11 @@ import clsx from "clsx";
 
 export function LocationCol(props: {
   sessions: Session[];
+  location: Location;
   start: Date;
   end: Date;
-  isMain: boolean;
 }) {
-  const { sessions, start, end, isMain } = props;
+  const { sessions, location, start, end } = props;
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
   const numHalfHours = getNumHalfHours(start, end);
   return (
@@ -25,7 +25,7 @@ export function LocationCol(props: {
           <SessionCard
             key={session["Start time"]}
             session={session}
-            isMain={isMain}
+            location={location}
           />
         ))}
       </div>

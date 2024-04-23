@@ -107,7 +107,7 @@ export function DayCol(props: {
               )}
               start={start}
               end={end}
-              isMain={location.Type === "main"}
+              location={location}
             />
           );
         })}
