@@ -7,6 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
+import { useSafeLayoutEffect, useScreenSize } from "@/utils/hooks";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -20,6 +21,8 @@ export function DayCol(props: {
   const includedLocations = locationOrder.filter((loc) =>
     locParams.includes(loc)
   );
+  const screenSize = useScreenSize();
+  console.log(screenSize);
   return (
     <div className="w-full">
       <div className="flex items-end justify-between mb-5">
