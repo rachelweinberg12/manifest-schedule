@@ -178,7 +178,7 @@ function PaginationButtons(props: {
       <button
         type="button"
         disabled={displayStartIdx === 0}
-        className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:cursor-not-allowed disabled:opacity-40"
+        className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
         onClick={() =>
           setDisplayStartIdx(
             Math.max(0, displayStartIdx - numDisplayedLocations)
@@ -192,7 +192,7 @@ function PaginationButtons(props: {
         disabled={
           displayStartIdx + numDisplayedLocations >= numIncludedLocations
         }
-        className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:cursor-not-allowed disabled:opacity-40"
+        className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
         onClick={() =>
           setDisplayStartIdx(
             Math.min(
@@ -212,10 +212,10 @@ const MAX_COLS = {
   xxs: 2,
   xs: 3,
   sm: 4,
-  md: 6,
-  lg: 8,
-  xl: 10,
-  "2xl": 12,
+  md: 5,
+  lg: 6,
+  xl: 8,
+  "2xl": 10,
 };
 
 function getBreakpoint(screenWidth: number) {
@@ -248,4 +248,6 @@ export const locationOrder = [
   "2B1",
   "B Ground Floor",
   "Old Restaurant",
+  "2E2",
+  "B Attic",
 ] as string[];

@@ -20,6 +20,8 @@ export const locationColors = {
   "2B1": "green",
   "B Ground Floor": "teal",
   "Old Restaurant": "sky",
+  "2E2": "indigo",
+  "B Attic": "purple",
 } as { [key: string]: string };
 
 export const allLocationColors = [
@@ -29,6 +31,8 @@ export const allLocationColors = [
   "bg-green-200 bg-green-100 bg-green-400 border-green-400 focus:ring-green-400 text-green-400",
   "bg-teal-200 bg-teal-100 bg-teal-400 border-teal-400 focus:ring-teal-400 text-teal-400",
   "bg-sky-200 bg-sky-100 bg-sky-400 border-sky-400 focus:ring-sky-400 text-sky-400",
+  "bg-indigo-200 bg-indigo-100 bg-indigo-400 border-indigo-400 focus:ring-indigo-400 text-indigo-400",
+  "bg-purple-200 bg-purple-100 bg-purple-400 border-purple-400 focus:ring-purple-400 text-purple-400",
 ];
 
 export const dayGridRowVars = [

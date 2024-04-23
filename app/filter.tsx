@@ -93,7 +93,7 @@ function SelectLocCategoryToShow(props: {
           </button>
         ))}
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 gap-4 mt-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 2xl:grid-cols-8 gap-4 mt-3">
         <SelectLocationsToShow
           locations={locations}
           searchParams={searchParams}
