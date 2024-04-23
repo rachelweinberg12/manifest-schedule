@@ -205,6 +205,7 @@ function PaginationButtons(props: {
 }
 
 const MAX_COLS = {
+  xxs: 2,
   xs: 3,
   sm: 4,
   md: 6,
@@ -214,7 +215,9 @@ const MAX_COLS = {
 };
 
 function getBreakpoint(screenWidth: number) {
-  if (screenWidth < 640) {
+  if (screenWidth < 400) {
+    return "xxs";
+  } else if (screenWidth < 640) {
     return "xs";
   } else if (screenWidth < 768) {
     return "sm";
