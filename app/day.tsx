@@ -148,13 +148,13 @@ function NowBar(props: { start: Date; end: Date }) {
   if (percentThroughDay < 100 && percentThroughDay > 0) {
     return (
       <div
-        className="bg-transparent w-full absolute flex flex-col justify-end border-none"
-        style={{ height: `${percentThroughDay}%` }}
+        className="bg-transparent w-full absolute flex flex-col justify-end border-none z-10"
+        style={{ top: `${percentThroughDay}%` }}
       >
-        <span className="text-[10px] relative bg-rose-600 rounded-t px-2 text-white top-[1px] w-fit z-10">
+        <div className="w-full h-[1.5px] bg-rose-600" />
+        <span className="text-[10px] relative bg-rose-600 rounded-b px-2 text-white bottom-[1px] w-fit">
           now
         </span>
-        <div className="w-full h-0.5 bg-rose-600 z-10" />
       </div>
     );
   } else {
