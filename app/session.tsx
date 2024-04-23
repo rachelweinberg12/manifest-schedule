@@ -24,7 +24,7 @@ export function SessionCard(props: { session: Session; location: Location }) {
       <div className="flex justify-between mt-2 text-xs text-gray-500">
         <div className="flex gap-1">
           <UserIcon className="h-4 w-4" />
-          <span>60</span>
+          <span>{location.Capacity}</span>
         </div>
         <div className="flex gap-1">
           <ClockIcon className="h-4 w-4" />
