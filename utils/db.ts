@@ -49,12 +49,13 @@ export type Location = {
   Name: string;
   Area: string;
   Capacity: number;
+  Type: "main" | "side";
 };
 export async function getLocations() {
   const locations: Location[] = [];
   await base("Spaces")
     .select({
-      fields: ["Name", "Area", "Capacity"],
+      fields: ["Name", "Area", "Capacity", "Type"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
