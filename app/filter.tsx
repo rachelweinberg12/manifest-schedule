@@ -6,7 +6,7 @@ import {
   usePathname,
   useRouter,
 } from "next/navigation";
-import { locationOrder } from "./day";
+import { orderedLocations } from "./day";
 import { useState } from "react";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
@@ -114,7 +114,7 @@ function SelectLocationsToShow(props: {
   const { locations, searchParams, includedLocations, setIncludedLocations } =
     props;
   const urlSearchParams = new URLSearchParams(searchParams);
-  const locationOptions = locationOrder.filter((loc) =>
+  const locationOptions = orderedLocations.filter((loc) =>
     locations.find((l) => l.Name === loc)
   );
   const pathname = usePathname();

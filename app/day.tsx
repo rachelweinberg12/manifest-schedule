@@ -19,9 +19,11 @@ export function DayCol(props: {
   const { sessions, locations, start, end } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams.getAll("loc");
-  const includedLocations = locationOrder.filter((loc) =>
+  const locationsFromParams = orderedLocations.filter((loc) =>
     locParams.includes(loc)
   );
+  const includedLocations =
+    locationsFromParams.length === 0 ? orderedLocations : locationsFromParams;
   const numIncludedLocations = includedLocations.length;
   const screenWidth = useScreenWidth();
   const numDisplayedLocations = getNumDisplayedLocations(
@@ -242,7 +244,7 @@ function getNumDisplayedLocations(screenWidth: number, numLocations: number) {
   return Math.min(MAX_COLS[breakpoint], numLocations);
 }
 
-export const locationOrder = [
+export const orderedLocations = [
   "Rat Park",
   "1E Main",
   "Gardens",

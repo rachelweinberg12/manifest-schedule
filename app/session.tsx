@@ -1,7 +1,6 @@
 import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
-import { Popover } from "@headlessui/react";
 import { ClockIcon, UserIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 import { Location } from "@/utils/db";
