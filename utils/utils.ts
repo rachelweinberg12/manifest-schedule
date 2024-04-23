@@ -7,4 +7,4 @@ export const getNumHalfHours = (start: Date, end: Date) => {
 };
 
 export const arraysEqual = (a: any[], b: any[]) =>
-  a.length === b.length && a.every((value, index) => value === b[index]);
+  a.length === b.length && a.every((value) => b.includes(value));
