@@ -13,24 +13,26 @@ export function SessionCard(props: { session: Session; isMain: boolean }) {
   const formattedHostNames = session["Host name"].join(", ");
   const isBlank = session.Title === "";
   return (
-    <Popover className="relative">
-      <Popover.Button
-        className={clsx(
-          "py-1 px-1.5 my-0.5 rounded font-roboto w-full flex flex-col items-start justify-start",
-          `row-span-${numHalfHours}`,
-          isMain && !isBlank
-            ? `bg-${
-                locationColors[session["Location name"][0]]
-              }-200 border-2 border-${
-                locationColors[session["Location name"][0]]
-              }-400`
-            : `bg-${locationColors[session["Location name"][0]]}-200`
-        )}
-      >
+    <Popover
+      className={clsx(
+        "py-1 px-1.5 my-0.5 rounded font-roboto w-full flex relative",
+        `row-span-${numHalfHours}`,
+        isMain && !isBlank
+          ? `bg-${
+              locationColors[session["Location name"][0]]
+            }-200 border-2 border-${
+              locationColors[session["Location name"][0]]
+            }-400`
+          : `bg-${locationColors[session["Location name"][0]]}-200`
+      )}
+    >
+      <Popover.Button className="w-full h-full focus:outline-0 flex flex-col justify-start">
         <p className="font-medium text-xs leading-tight line-clamp-2 text-left">
           {session.Title}
         </p>
-        <p className="text-[10px] leading-tight">{formattedHostNames}</p>
+        <p className="text-[10px] leading-tight text-left">
+          {formattedHostNames}
+        </p>
       </Popover.Button>
       <PopoverPanel>
         <span>hello</span>
