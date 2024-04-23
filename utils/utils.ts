@@ -5,3 +5,6 @@ export const getNumHalfHours = (start: Date, end: Date) => {
   const lengthOfDay = end.getTime() - start.getTime();
   return lengthOfDay / 1000 / 60 / 30;
 };
+
+export const arraysEqual = (a: any[], b: any[]) =>
+  a.length === b.length && a.every((value, index) => value === b[index]);

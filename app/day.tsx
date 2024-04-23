@@ -13,11 +13,6 @@ export function DayCol(props: {
   end: Date;
 }) {
   const { sessions, locations, start, end } = props;
-  const percentThroughDay = getPercentThroughDay(
-    new Date("2024-06-08T11:36-07:00"),
-    start,
-    end
-  );
   const searchParams = useSearchParams();
   const locParams = searchParams.getAll("loc");
   const includedLocations = locationOrder.filter((loc) =>
@@ -48,16 +43,7 @@ export function DayCol(props: {
           `grid-cols-[60px_repeat(${includedLocations.length},minmax(0,2fr))]`
         )}
       >
-        {percentThroughDay < 100 && percentThroughDay > 0 && (
-          <div
-            className="bg-transparent w-full absolute border-b border-rose-600 flex items-end"
-            style={{ height: `${percentThroughDay}%` }}
-          >
-            <span className="text-[10px] relative bg-rose-600 rounded-t px-2 text-white top-[1px]">
-              now
-            </span>
-          </div>
-        )}
+        <NowBar start={start} end={end} />
         <TimestampCol start={start} end={end} />
         {includedLocations.map((locationName) => {
           const location = locations.find((loc) => loc.Name === locationName);
@@ -100,6 +86,29 @@ function TimestampCol(props: { start: Date; end: Date }) {
       ))}
     </div>
   );
+}
+
+function NowBar(props: { start: Date; end: Date }) {
+  const { start, end } = props;
+  const percentThroughDay = getPercentThroughDay(
+    new Date("2024-06-08T11:36-07:00"),
+    start,
+    end
+  );
+  if (percentThroughDay < 100 && percentThroughDay > 0) {
+    return (
+      <div
+        className="bg-transparent w-full absolute border-b border-rose-600 flex items-end"
+        style={{ height: `${percentThroughDay}%` }}
+      >
+        <span className="text-[10px] relative bg-rose-600 rounded-t px-2 text-white top-[1px]">
+          now
+        </span>
+      </div>
+    );
+  } else {
+    return null;
+  }
 }
 
 export const locationOrder = [
