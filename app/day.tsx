@@ -1,7 +1,7 @@
 "use client";
 import { Session, Location } from "@/utils/db";
 import { LocationCol } from "./location";
-import { format, set } from "date-fns";
+import { format } from "date-fns";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
@@ -148,12 +148,13 @@ function NowBar(props: { start: Date; end: Date }) {
   if (percentThroughDay < 100 && percentThroughDay > 0) {
     return (
       <div
-        className="bg-transparent w-full absolute border-b border-rose-600 flex items-end z-20"
+        className="bg-transparent w-full absolute flex flex-col justify-end border-none"
         style={{ height: `${percentThroughDay}%` }}
       >
-        <span className="text-[10px] relative bg-rose-600 rounded-t px-2 text-white top-[1px]">
+        <span className="text-[10px] relative bg-rose-600 rounded-t px-2 text-white top-[1px] w-fit z-10">
           now
         </span>
+        <div className="w-full h-0.5 bg-rose-600 z-10" />
       </div>
     );
   } else {
