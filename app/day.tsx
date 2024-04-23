@@ -7,7 +7,7 @@ import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useSafeLayoutEffect, useScreenSize } from "@/utils/hooks";
+import { useScreenWidth } from "@/utils/hooks";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -21,8 +21,12 @@ export function DayCol(props: {
   const includedLocations = locationOrder.filter((loc) =>
     locParams.includes(loc)
   );
-  const screenSize = useScreenSize();
-  console.log(screenSize);
+  const screenWidth = useScreenWidth();
+  const numColsToDisplay = getNumColsToDisplay(
+    screenWidth,
+    includedLocations.length
+  );
+  const displayedLocations = includedLocations.slice(0, numColsToDisplay);
   return (
     <div className="w-full">
       <div className="flex items-end justify-between mb-5">
@@ -50,11 +54,11 @@ export function DayCol(props: {
       <div
         className={clsx(
           "grid divide-x divide-gray-100 h-5/6",
-          `grid-cols-[60px_repeat(${includedLocations.length},minmax(0,2fr))]`
+          `grid-cols-[60px_repeat(${numColsToDisplay},minmax(0,2fr))]`
         )}
       >
         <span className="p-1 border-b border-gray-100" />
-        {includedLocations.map((locationName) => (
+        {displayedLocations.map((locationName) => (
           <span
             key={locationName}
             className="text-sm p-1 border-b border-gray-100"
@@ -66,12 +70,12 @@ export function DayCol(props: {
       <div
         className={clsx(
           "grid divide-x divide-gray-100 relative",
-          `grid-cols-[60px_repeat(${includedLocations.length},minmax(0,2fr))]`
+          `grid-cols-[60px_repeat(${numColsToDisplay},minmax(0,2fr))]`
         )}
       >
         <NowBar start={start} end={end} />
         <TimestampCol start={start} end={end} />
-        {includedLocations.map((locationName) => {
+        {displayedLocations.map((locationName) => {
           const location = locations.find((loc) => loc.Name === locationName);
           if (!location) {
             return null;
@@ -135,6 +139,36 @@ function NowBar(props: { start: Date; end: Date }) {
   } else {
     return null;
   }
+}
+
+const MAX_COLS = {
+  xs: 3,
+  sm: 4,
+  md: 6,
+  lg: 8,
+  xl: 10,
+  "2xl": 12,
+};
+
+function getBreakpoint(screenWidth: number) {
+  if (screenWidth < 640) {
+    return "xs";
+  } else if (screenWidth < 768) {
+    return "sm";
+  } else if (screenWidth < 1024) {
+    return "md";
+  } else if (screenWidth < 1280) {
+    return "lg";
+  } else if (screenWidth < 1536) {
+    return "xl";
+  } else {
+    return "2xl";
+  }
+}
+
+function getNumColsToDisplay(screenWidth: number, numLocations: number) {
+  const breakpoint = getBreakpoint(screenWidth);
+  return Math.min(MAX_COLS[breakpoint], numLocations);
 }
 
 export const locationOrder = [

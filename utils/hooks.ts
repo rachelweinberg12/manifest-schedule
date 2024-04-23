@@ -3,18 +3,12 @@ import { useEffect, useLayoutEffect, useState } from "react";
 export const useSafeLayoutEffect =
   typeof window !== "undefined" ? useLayoutEffect : useEffect;
 
-export const useScreenSize = () => {
-  const [screenSize, setScreenSize] = useState({
-    width: 0,
-    height: 0,
-  });
+export const useScreenWidth = () => {
+  const [screenWidth, setScreenWidth] = useState(0);
 
   useSafeLayoutEffect(() => {
     const handleResize = () => {
-      setScreenSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
+      setScreenWidth(window.innerWidth);
     };
 
     handleResize();
@@ -27,5 +21,5 @@ export const useScreenSize = () => {
     };
   }, []);
 
-  return screenSize;
+  return screenWidth;
 };
