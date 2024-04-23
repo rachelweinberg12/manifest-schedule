@@ -47,33 +47,12 @@ export function DayCol(props: {
                 {displayStartIdx + numDisplayedLocations} of{" "}
                 {includedLocations.length}
               </span>
-              <span className="isolate inline-flex rounded-md shadow-sm">
-                <button
-                  type="button"
-                  className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-                  onClick={() =>
-                    setDisplayStartIdx(
-                      Math.max(0, displayStartIdx - numDisplayedLocations)
-                    )
-                  }
-                >
-                  <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
-                </button>
-                <button
-                  type="button"
-                  className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-                  onClick={() =>
-                    setDisplayStartIdx(
-                      Math.min(
-                        includedLocations.length - numDisplayedLocations,
-                        displayStartIdx + numDisplayedLocations
-                      )
-                    )
-                  }
-                >
-                  <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
-                </button>
-              </span>
+              <PaginationButtons
+                setDisplayStartIdx={setDisplayStartIdx}
+                displayStartIdx={displayStartIdx}
+                numDisplayedLocations={numDisplayedLocations}
+                numIncludedLocations={includedLocations.length}
+              />
             </div>
           )}
         </div>
@@ -174,6 +153,49 @@ function NowBar(props: { start: Date; end: Date }) {
   } else {
     return null;
   }
+}
+
+function PaginationButtons(props: {
+  setDisplayStartIdx: (idx: number) => void;
+  displayStartIdx: number;
+  numDisplayedLocations: number;
+  numIncludedLocations: number;
+}) {
+  const {
+    setDisplayStartIdx,
+    displayStartIdx,
+    numDisplayedLocations,
+    numIncludedLocations,
+  } = props;
+  return (
+    <span className="isolate inline-flex rounded-md shadow-sm">
+      <button
+        type="button"
+        className="relative inline-flex items-center rounded-l-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+        onClick={() =>
+          setDisplayStartIdx(
+            Math.max(0, displayStartIdx - numDisplayedLocations)
+          )
+        }
+      >
+        <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-1.5 py-1.5 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+        onClick={() =>
+          setDisplayStartIdx(
+            Math.min(
+              numIncludedLocations - numDisplayedLocations,
+              displayStartIdx + numDisplayedLocations
+            )
+          )
+        }
+      >
+        <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+      </button>
+    </span>
+  );
 }
 
 const MAX_COLS = {
