@@ -12,9 +12,37 @@ export function SessionCard(props: { session: Session; location: Location }) {
     new Date(session["End time"]).getTime() -
     new Date(session["Start time"]).getTime();
   const numHalfHours = sessionLength / 1000 / 60 / 30;
-  const formattedHostNames = session["Host name"].join(", ");
   const isBlank = session.Title === "";
-  const isMain = location.Type === "main";
+  return isBlank ? (
+    <BlankSessionCard location={location} numHalfHours={numHalfHours} />
+  ) : (
+    <RealSessionCard
+      session={session}
+      location={location}
+      numHalfHours={numHalfHours}
+    />
+  );
+}
+
+export function BlankSessionCard(props: {
+  location: Location;
+  numHalfHours: number;
+}) {
+  const { numHalfHours } = props;
+  return (
+    <div
+      className={`py-1 px-1.5 rounded font-roboto h-full row-span-${numHalfHours} my-0.5`}
+    ></div>
+  );
+}
+
+export function RealSessionCard(props: {
+  session: Session;
+  numHalfHours: number;
+  location: Location;
+}) {
+  const { session, numHalfHours, location } = props;
+  const formattedHostNames = session["Host name"].join(", ");
   const TooltipContents = () => (
     <>
       <h1 className="text-lg font-bold">{session.Title}</h1>
@@ -35,15 +63,16 @@ export function SessionCard(props: { session: Session; location: Location }) {
       </div>
     </>
   );
+  const isMain = location.Type === "main";
   return (
     <Tooltip
-      content={isBlank ? null : <TooltipContents />}
+      content={<TooltipContents />}
       className={`row-span-${numHalfHours} my-0.5`}
     >
       <div
         className={clsx(
           "py-1 px-1.5 rounded font-roboto h-full",
-          isMain && !isBlank
+          isMain
             ? `bg-${
                 locationColors[session["Location name"][0]]
               }-200 border-2 border-${
