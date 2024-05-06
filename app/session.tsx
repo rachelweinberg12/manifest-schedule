@@ -1,10 +1,13 @@
 import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
-import { ClockIcon, UserIcon } from "@heroicons/react/24/outline";
+import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
 import { format } from "date-fns";
 import { Location } from "@/utils/db";
 import { Tooltip } from "./tooltip";
+import { useState } from "react";
+import { AddSessionForm } from "./add-session-form";
+import { Modal } from "./modal";
 
 export function SessionCard(props: { session: Session; location: Location }) {
   const { session, location } = props;
@@ -29,10 +32,19 @@ export function BlankSessionCard(props: {
   numHalfHours: number;
 }) {
   const { numHalfHours } = props;
+  const [formOpen, setFormOpen] = useState(false);
   return (
-    <div
-      className={`py-1 px-1.5 rounded font-roboto h-full row-span-${numHalfHours} my-0.5`}
-    ></div>
+    <div className={`row-span-${numHalfHours} my-0.5`}>
+      <button
+        className="rounded font-roboto h-full w-full bg-gray-100 flex items-center justify-center"
+        onClick={() => setFormOpen(true)}
+      >
+        <PlusIcon className="h-4 w-4 text-gray-400" />
+        <Modal open={formOpen} setOpen={setFormOpen}>
+          <AddSessionForm />
+        </Modal>
+      </button>
+    </div>
   );
 }
 
