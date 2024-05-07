@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Session, Location, Guest } from "@/utils/db";
 import { Combobox, Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
+import { XMarkIcon } from "@heroicons/react/24/outline";
 
 export function AddSessionForm(props: {
   days: Day[];
@@ -223,16 +224,23 @@ function SelectHosts(props: {
         multiple
       >
         <div className="relative mt-1">
-          <div className="relative w-full min-h-12 h-fit rounded-md border px-4 shadow-sm transition-colors focus:outline-none cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left placeholder:text-gray-400">
+          <Combobox.Button className="relative w-full min-h-12 h-fit rounded-md border px-4 shadow-sm transition-colors focus:outline-none border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left placeholder:text-gray-400">
             <div className="flex flex-wrap gap-1 items-center">
               {hosts.length > 0 && (
                 <>
                   {hosts.map((host) => (
                     <span
                       key={host.ID}
-                      className="p-1 bg-gray-200 rounded text-nowrap"
+                      className="py-1 px-2 bg-gray-100 rounded text-nowrap text-sm flex items-center gap-1"
                     >
                       {host["Full name"]}
+                      <button
+                        onClick={() =>
+                          setHosts(hosts.filter((h) => h !== host))
+                        }
+                      >
+                        <XMarkIcon className="h-3 w-3 text-gray-400" />
+                      </button>
                     </span>
                   ))}
                 </>
@@ -240,16 +248,13 @@ function SelectHosts(props: {
               <Combobox.Input
                 onChange={(event) => setQuery(event.target.value)}
                 value={query}
-                className="border-none focus:ring-0"
+                className="border-none focus:ring-0 px-0 py-1 text-sm focus:w-fit w-0"
               />
             </div>
-            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
-              <ChevronUpDownIcon
-                className="h-5 w-5 text-gray-400"
-                aria-hidden="true"
-              />
-            </Combobox.Button>
-          </div>
+            <div className="absolute inset-y-0 right-0 flex items-center pr-2">
+              <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
+            </div>
+          </Combobox.Button>
           <Transition
             as={Fragment}
             leave="transition ease-in duration-100"
