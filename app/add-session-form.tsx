@@ -35,7 +35,7 @@ export function AddSessionForm(props: { days: Day[] }) {
       </div>
       <div className="flex flex-col gap-1">
         <label>Day</label>
-        <fieldset className="mt-4">
+        <fieldset>
           <div className="space-y-4">
             {days.map((d) => {
               const formattedDay = format(d.start, "EEEE, MMMM d");
@@ -44,7 +44,6 @@ export function AddSessionForm(props: { days: Day[] }) {
                 <div key={formattedDay} className="flex items-center">
                   <input
                     id={formattedDay}
-                    name="notification-method"
                     type="radio"
                     checked={d.start === day.start}
                     onChange={() => setDay(d)}
@@ -72,13 +71,12 @@ export function AddSessionForm(props: { days: Day[] }) {
       </div>
       <div className="flex flex-col gap-1">
         <label>Duration</label>
-        <fieldset className="mt-4">
+        <fieldset>
           <div className="space-y-4">
             {DURATIONS.map(({ value, label }) => (
               <div key={value} className="flex items-center">
                 <input
                   id={label}
-                  name="notification-method"
                   type="radio"
                   checked={value === duration}
                   onChange={() => setDuration(value)}
