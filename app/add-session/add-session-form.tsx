@@ -212,12 +212,14 @@ function SelectHosts(props: {
   );
   return (
     <div className="w-72">
-      <Combobox value={hosts} onChange={setHosts}>
+      <Combobox value={hosts} onChange={setHosts} multiple>
         <div className="relative mt-1">
           <div className="relative w-full">
             <Combobox.Input
               className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left"
-              // displayValue={(hosts) => hosts.map((host) => host["Full name"]).join(', ')}
+              displayValue={(hosts) =>
+                (hosts as Guest[]).map((host) => host["Full name"]).join(", ")
+              }
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
