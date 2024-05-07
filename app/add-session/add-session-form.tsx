@@ -213,17 +213,36 @@ function SelectHosts(props: {
   console.log(filteredGuests.length, query, filteredGuests);
   return (
     <div className="w-full">
-      <Combobox value={hosts} onChange={setHosts} multiple>
+      <Combobox
+        value={hosts}
+        onChange={(newHosts) => {
+          setHosts(newHosts);
+          setQuery("");
+          console.log("query", query, "newHosts", newHosts);
+        }}
+        multiple
+      >
         <div className="relative mt-1">
-          <div className="relative w-full">
-            <Combobox.Input
-              className="h-12 rounded-md border px-4 shadow-sm transition-colors focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left placeholder:text-gray-400"
-              displayValue={(hosts) =>
-                (hosts as Guest[]).map((host) => host["Full name"]).join(", ")
-              }
-              placeholder="Select hosts"
-              onChange={(event) => setQuery(event.target.value)}
-            />
+          <div className="relative w-full min-h-12 h-fit rounded-md border px-4 shadow-sm transition-colors focus:outline-none cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left placeholder:text-gray-400">
+            <div className="flex flex-wrap gap-1 items-center">
+              {hosts.length > 0 && (
+                <>
+                  {hosts.map((host) => (
+                    <span
+                      key={host.ID}
+                      className="p-1 bg-gray-200 rounded text-nowrap"
+                    >
+                      {host["Full name"]}
+                    </span>
+                  ))}
+                </>
+              )}
+              <Combobox.Input
+                onChange={(event) => setQuery(event.target.value)}
+                value={query}
+                className="border-none focus:ring-0"
+              />
+            </div>
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
               <ChevronUpDownIcon
                 className="h-5 w-5 text-gray-400"
