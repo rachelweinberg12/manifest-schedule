@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import { Input } from "./input";
 import { Day } from "@/utils/constants";
 import { format } from "date-fns";
-import { Session, Location } from "@/utils/db";
+import { Session, Location, Guest } from "@/utils/db";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 
@@ -12,8 +12,9 @@ export function AddSessionForm(props: {
   days: Day[];
   sessions: Session[];
   locations: Location[];
+  guests: Guest[];
 }) {
-  const { days, sessions, locations } = props;
+  const { days, sessions, locations, guests } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(days[0]);
@@ -169,7 +170,7 @@ export function AddSessionForm(props: {
           "hover:bg-rose-500 active:bg-rose-500"
         )}
       >
-        Add Session
+        Add session
       </button>
     </div>
   );

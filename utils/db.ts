@@ -65,3 +65,21 @@ export async function getLocations() {
     });
   return locations;
 }
+
+export type Guest = {
+  "Full name": string;
+  Email: string;
+  "Manifest ticket type": string;
+};
+export async function getGuests() {
+  const guests: Guest[] = [];
+  await base("Guest list")
+    .select({ fields: ["Full name", "Email", "Manifest ticket type"] })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        guests.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return guests;
+}

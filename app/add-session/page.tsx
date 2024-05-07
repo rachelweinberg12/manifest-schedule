@@ -1,4 +1,4 @@
-import { Session, getLocations, getSessions } from "@/utils/db";
+import { getGuests, getLocations, getSessions } from "@/utils/db";
 import { isAfter, isBefore, isEqual } from "date-fns";
 import { days } from "@/utils/constants";
 import { AddSessionForm } from "./add-session-form";
@@ -15,9 +15,15 @@ export default async function Home() {
     );
   });
   const locations = await getLocations();
+  const guests = await getGuests();
   return (
     <div className="p-6">
-      <AddSessionForm days={days} locations={locations} sessions={sessions} />
+      <AddSessionForm
+        days={days}
+        locations={locations}
+        sessions={sessions}
+        guests={guests}
+      />
     </div>
   );
 }
