@@ -1,8 +1,6 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { Input } from "./input";
-import { RadioGroup } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/16/solid";
 
 export function AddSessionForm() {
   const [title, setTitle] = useState("");
