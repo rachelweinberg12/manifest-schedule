@@ -5,7 +5,7 @@ import { Input } from "./input";
 import { Day } from "@/utils/constants";
 import { format } from "date-fns";
 import { Session, Location, Guest } from "@/utils/db";
-import { Listbox, Transition } from "@headlessui/react";
+import { Combobox, Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 
 export function AddSessionForm(props: {
@@ -20,7 +20,7 @@ export function AddSessionForm(props: {
   const [day, setDay] = useState(days[0]);
   const [startTime, setStartTime] = useState("");
   const [duration, setDuration] = useState(30);
-  const [hosts, setHosts] = useState("");
+  const [hosts, setHosts] = useState<Guest[]>([]);
   const [location, setLocation] = useState("");
   const availableStartTimes = getAvailableStartTimes(day, sessions, location);
   console.log(availableStartTimes);
@@ -157,7 +157,7 @@ export function AddSessionForm(props: {
       </div>
       <div className="flex flex-col gap-1">
         <label>Hosts</label>
-        <Input value={hosts} onChange={(e) => setHosts(e.target.value)} />
+        <SelectHosts guests={guests} hosts={hosts} setHosts={setHosts} />
       </div>
       <div className="flex flex-col gap-1">
         <label>Location</label>
@@ -198,4 +198,85 @@ function getAvailableStartTimes(
     }
   }
   return availableStartTimes;
+}
+
+function SelectHosts(props: {
+  guests: Guest[];
+  hosts: Guest[];
+  setHosts: (hosts: Guest[]) => void;
+}) {
+  const { guests, hosts, setHosts } = props;
+  const [query, setQuery] = useState("");
+  const filteredGuests = guests.filter((guest) =>
+    guest["Full name"].toLowerCase().includes(query.toLowerCase())
+  );
+  return (
+    <div className="w-72">
+      <Combobox value={hosts} onChange={setHosts}>
+        <div className="relative mt-1">
+          <div className="relative w-full">
+            <Combobox.Input
+              className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left"
+              // displayValue={(hosts) => hosts.map((host) => host["Full name"]).join(', ')}
+              onChange={(event) => setQuery(event.target.value)}
+            />
+            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+              <ChevronUpDownIcon
+                className="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </Combobox.Button>
+          </div>
+          <Transition
+            as={Fragment}
+            leave="transition ease-in duration-100"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+            afterLeave={() => setQuery("")}
+          >
+            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+              {filteredGuests.length === 0 && query !== "" ? (
+                <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
+                  Nothing found.
+                </div>
+              ) : (
+                filteredGuests.map((guest) => (
+                  <Combobox.Option
+                    key={guest["Full name"]}
+                    className={({ active }) =>
+                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
+                        active ? "bg-rose-400 text-white" : "text-gray-900"
+                      }`
+                    }
+                    value={guest}
+                  >
+                    {({ selected, active }) => (
+                      <>
+                        <span
+                          className={`block truncate ${
+                            selected ? "font-medium" : "font-normal"
+                          }`}
+                        >
+                          {guest["Full name"]}
+                        </span>
+                        {selected ? (
+                          <span
+                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
+                              active ? "text-white" : "text-rose-400"
+                            }`}
+                          >
+                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </Combobox.Option>
+                ))
+              )}
+            </Combobox.Options>
+          </Transition>
+        </div>
+      </Combobox>
+    </div>
+  );
 }
