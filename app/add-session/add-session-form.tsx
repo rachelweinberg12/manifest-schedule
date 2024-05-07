@@ -81,7 +81,7 @@ export function AddSessionForm(props: {
                 </span>
               ) : (
                 <span className="block truncate text-gray-400">
-                  select a time
+                  Select a time
                 </span>
               )}
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
@@ -210,16 +210,18 @@ function SelectHosts(props: {
   const filteredGuests = guests.filter((guest) =>
     guest["Full name"].toLowerCase().includes(query.toLowerCase())
   );
+  console.log(filteredGuests.length, query, filteredGuests);
   return (
-    <div className="w-72">
+    <div className="w-full">
       <Combobox value={hosts} onChange={setHosts} multiple>
         <div className="relative mt-1">
           <div className="relative w-full">
             <Combobox.Input
-              className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left"
+              className="h-12 rounded-md border px-4 shadow-sm transition-colors focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left placeholder:text-gray-400"
               displayValue={(hosts) =>
                 (hosts as Guest[]).map((host) => host["Full name"]).join(", ")
               }
+              placeholder="Select hosts"
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -244,7 +246,7 @@ function SelectHosts(props: {
               ) : (
                 filteredGuests.map((guest) => (
                   <Combobox.Option
-                    key={guest["Full name"]}
+                    key={guest["ID"]}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
                         active ? "bg-rose-400 text-white" : "text-gray-900"
