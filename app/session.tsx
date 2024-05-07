@@ -6,7 +6,7 @@ import { format } from "date-fns";
 import { Location } from "@/utils/db";
 import { Tooltip } from "./tooltip";
 import { useState } from "react";
-import { AddSessionForm } from "./add-session-form";
+import { AddSessionForm } from "./add-session/add-session-form";
 import { Modal } from "./modal";
 import { days } from "@/utils/constants";
 
@@ -33,18 +33,14 @@ export function BlankSessionCard(props: {
   numHalfHours: number;
 }) {
   const { numHalfHours } = props;
-  const [formOpen, setFormOpen] = useState(false);
   return (
     <div className={`row-span-${numHalfHours} my-0.5`}>
-      <button
+      <a
         className="rounded font-roboto h-full w-full bg-gray-100 flex items-center justify-center"
-        onClick={() => setFormOpen(true)}
+        href="/add-session"
       >
         <PlusIcon className="h-4 w-4 text-gray-400" />
-        <Modal open={formOpen} setOpen={setFormOpen}>
-          <AddSessionForm days={days} />
-        </Modal>
-      </button>
+      </a>
     </div>
   );
 }

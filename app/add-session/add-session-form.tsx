@@ -1,10 +1,16 @@
+"use client";
 import clsx from "clsx";
 import { useState } from "react";
-import { Input } from "./input";
+import { Input } from "../input";
 import { Day } from "@/utils/constants";
 import { format } from "date-fns";
+import { Session, Location } from "@/utils/db";
 
-export function AddSessionForm(props: { days: Day[] }) {
+export function AddSessionForm(props: {
+  days: Day[];
+  sessions: Session[];
+  locations: Location[];
+}) {
   const { days } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -113,3 +119,5 @@ export function AddSessionForm(props: { days: Day[] }) {
     </div>
   );
 }
+
+function getStartTimes(day: Day, sessions: Session[]) {}
