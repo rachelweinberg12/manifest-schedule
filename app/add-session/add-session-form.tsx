@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { Fragment, useState } from "react";
-import { Input } from "../input";
+import { Input } from "./input";
 import { Day } from "@/utils/constants";
 import { format } from "date-fns";
 import { Session, Location } from "@/utils/db";
@@ -73,15 +73,18 @@ export function AddSessionForm(props: {
         <label>Start Time</label>
         <Listbox value={startTime} onChange={setStartTime}>
           <div className="relative mt-1">
-            <Listbox.Button className="relative w-full cursor-pointer rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-rose-400 focus-visible:ring-2 focus-visible:ring-white/75 focus-visible:ring-offset-2 focus-visible:ring-offset-rose-400 sm:text-sm">
-              <span className="block truncate">
-                {format(startTime, "h:mm a")}
-              </span>
+            <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
+              {startTime ? (
+                <span className="block truncate">
+                  {format(new Date(startTime), "h:mm a")}
+                </span>
+              ) : (
+                <span className="block truncate text-gray-400">
+                  select a time
+                </span>
+              )}
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon
-                  className="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
-                />
+                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
               </span>
             </Listbox.Button>
             <Transition
@@ -97,7 +100,6 @@ export function AddSessionForm(props: {
                     <Listbox.Option
                       key={startTime}
                       value={startTime}
-                      // disabled={startTime}
                       className={({ active }) =>
                         `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                           active ? "bg-rose-100 text-rose-900" : "text-gray-900"
