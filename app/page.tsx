@@ -3,31 +3,10 @@ import { isAfter, isBefore, isEqual } from "date-fns";
 import { DayCol } from "./day";
 import { Filter } from "./filter";
 import { Suspense } from "react";
+import { days } from "@/utils/constants";
 
-type Day = {
-  start: Date;
-  end: Date;
-  sessions: Session[];
-};
 export default async function Home() {
   const sessions = await getSessions();
-  const days: Day[] = [
-    {
-      start: new Date("2024-06-07T14:00-07:00"),
-      end: new Date("2024-06-07T20:00-07:00"),
-      sessions: [],
-    },
-    {
-      start: new Date("2024-06-08T10:00-07:00"),
-      end: new Date("2024-06-08T20:00-07:00"),
-      sessions: [],
-    },
-    {
-      start: new Date("2024-06-09T10:00-07:00"),
-      end: new Date("2024-06-09T22:00-07:00"),
-      sessions: [],
-    },
-  ];
   days.forEach((day) => {
     day.sessions = sessions.filter(
       (session) =>

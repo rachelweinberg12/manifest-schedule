@@ -1,10 +1,14 @@
 import clsx from "clsx";
 import { useState } from "react";
 import { Input } from "./input";
+import { Day } from "@/utils/constants";
+import { format } from "date-fns";
 
-export function AddSessionForm() {
+export function AddSessionForm(props: { days: Day[] }) {
+  const { days } = props;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [day, setDay] = useState(days[0]);
   const [startTime, setStartTime] = useState("");
   const [duration, setDuration] = useState(30);
   const [hosts, setHosts] = useState("");
@@ -15,6 +19,7 @@ export function AddSessionForm() {
     { value: 90, label: "1.5 hours" },
     { value: 120, label: "2 hours" },
   ];
+  console.log(day);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-1">
@@ -27,6 +32,35 @@ export function AddSessionForm() {
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label>Day</label>
+        <fieldset className="mt-4">
+          <div className="space-y-4">
+            {days.map((d) => {
+              const formattedDay = format(d.start, "EEEE, MMMM d");
+              console.log(d, day, d.start === day.start);
+              return (
+                <div key={formattedDay} className="flex items-center">
+                  <input
+                    id={formattedDay}
+                    name="notification-method"
+                    type="radio"
+                    checked={d.start === day.start}
+                    onChange={() => setDay(d)}
+                    className="h-4 w-4 border-gray-300 text-rose-400 focus:ring-rose-400"
+                  />
+                  <label
+                    htmlFor={formattedDay}
+                    className="ml-3 block text-sm font-medium leading-6 text-gray-900"
+                  >
+                    {formattedDay}
+                  </label>
+                </div>
+              );
+            })}
+          </div>
+        </fieldset>
       </div>
       <div className="flex flex-col gap-1">
         <label>Start Time</label>

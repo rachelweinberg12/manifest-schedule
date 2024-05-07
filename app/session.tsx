@@ -8,6 +8,7 @@ import { Tooltip } from "./tooltip";
 import { useState } from "react";
 import { AddSessionForm } from "./add-session-form";
 import { Modal } from "./modal";
+import { days } from "@/utils/constants";
 
 export function SessionCard(props: { session: Session; location: Location }) {
   const { session, location } = props;
@@ -41,7 +42,7 @@ export function BlankSessionCard(props: {
       >
         <PlusIcon className="h-4 w-4 text-gray-400" />
         <Modal open={formOpen} setOpen={setFormOpen}>
-          <AddSessionForm />
+          <AddSessionForm days={days} />
         </Modal>
       </button>
     </div>
