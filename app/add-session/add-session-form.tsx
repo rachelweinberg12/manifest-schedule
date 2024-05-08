@@ -8,6 +8,7 @@ import { Session, Location, Guest } from "@/utils/db";
 import { Combobox, Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
+import { DateTime } from "luxon";
 
 export function AddSessionForm(props: {
   days: Day[];
@@ -19,12 +20,11 @@ export function AddSessionForm(props: {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(days[0]);
-  const [startTime, setStartTime] = useState("");
+  const [startTime, setStartTime] = useState<StartTime>();
   const [duration, setDuration] = useState(30);
   const [hosts, setHosts] = useState<Guest[]>([]);
   const [location, setLocation] = useState<Location>();
-  const availableStartTimes = getAvailableStartTimes(day, sessions, location);
-  console.log(availableStartTimes);
+  const startTimes = getAvailableStartTimes(day, sessions, location);
   const DURATIONS = [
     { value: 30, label: "30 minutes" },
     { value: 60, label: "1 hour" },
@@ -78,7 +78,7 @@ export function AddSessionForm(props: {
             <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
               {startTime ? (
                 <span className="block truncate">
-                  {format(new Date(startTime), "h:mm a")}
+                  {startTime.formattedTime}
                 </span>
               ) : (
                 <span className="block truncate text-gray-400">
@@ -96,11 +96,10 @@ export function AddSessionForm(props: {
               leaveTo="opacity-0"
             >
               <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                {availableStartTimes.map((startTime) => {
-                  const formattedStartTime = format(startTime, "h:mm a");
+                {startTimes.map((startTime) => {
                   return (
                     <Listbox.Option
-                      key={startTime}
+                      key={startTime.time}
                       value={startTime}
                       className={({ active }) =>
                         `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
@@ -115,7 +114,7 @@ export function AddSessionForm(props: {
                               selected ? "font-medium" : "font-normal"
                             }`}
                           >
-                            {formattedStartTime}
+                            {startTime.formattedTime}
                           </span>
                           {selected ? (
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
@@ -160,7 +159,7 @@ export function AddSessionForm(props: {
         <label>Hosts</label>
         <SelectHosts guests={guests} hosts={hosts} setHosts={setHosts} />
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 w-72">
         <label>Location</label>
         <Listbox value={location} onChange={setLocation}>
           <div className="relative mt-1">
@@ -231,30 +230,72 @@ export function AddSessionForm(props: {
   );
 }
 
+type StartTime = {
+  formattedTime: string;
+  time: number;
+  maxDuration: number;
+  available: boolean;
+};
 function getAvailableStartTimes(
   day: Day,
   sessions: Session[],
   location?: Location
 ) {
-  const takenStartTimes = sessions
-    .filter(
-      (session) =>
-        session["Location name"] &&
-        location &&
-        session["Location name"][0] === location.Name
-    )
-    .map((session) => new Date(session["Start time"]).getTime());
-  const availableStartTimes = [];
+  const locationSelected = !!location;
+  const filteredSessions = locationSelected
+    ? sessions.filter((s) => s["Location name"][0] === location?.Name)
+    : sessions;
+  const sortedSessions = filteredSessions.sort(
+    (a, b) =>
+      new Date(a["Start time"]).getTime() - new Date(b["Start time"]).getTime()
+  );
+  const startTimes: StartTime[] = [];
   for (
-    let i = day.start.getTime();
-    i < day.end.getTime();
-    i += 30 * 60 * 1000
+    let t = day.start.getTime();
+    t < day.end.getTime();
+    t += 30 * 60 * 1000
   ) {
-    if (!takenStartTimes.includes(i)) {
-      availableStartTimes.push(i);
+    const formattedTime = DateTime.fromMillis(t)
+      .setZone("America/Los_Angeles")
+      .toFormat("h:mm a");
+    if (locationSelected) {
+      const sessionNow = sortedSessions.find(
+        (session) =>
+          new Date(session["Start time"]).getTime() <= t &&
+          new Date(session["End time"]).getTime() > t
+      );
+      if (!!sessionNow) {
+        startTimes.push({
+          formattedTime,
+          time: t,
+          maxDuration: 0,
+          available: false,
+        });
+      } else {
+        const nextSession = sortedSessions.find(
+          (session) => new Date(session["Start time"]).getTime() > t
+        );
+        const latestEndTime = nextSession
+          ? new Date(nextSession["Start time"]).getTime()
+          : day.end.getTime();
+        startTimes.push({
+          formattedTime,
+          time: t,
+          maxDuration: (latestEndTime - t) / 1000 / 60,
+          available: true,
+        });
+      }
+    } else {
+      startTimes.push({
+        formattedTime,
+        time: t,
+        maxDuration: 120,
+        available: true,
+      });
     }
   }
-  return availableStartTimes;
+  console.log("start times", startTimes);
+  return startTimes;
 }
 
 function SelectHosts(props: {
@@ -267,7 +308,6 @@ function SelectHosts(props: {
   const filteredGuests = guests.filter((guest) =>
     guest["Full name"].toLowerCase().includes(query.toLowerCase())
   );
-  console.log(filteredGuests.length, query, filteredGuests);
   return (
     <div className="w-full">
       <Combobox
@@ -275,7 +315,6 @@ function SelectHosts(props: {
         onChange={(newHosts) => {
           setHosts(newHosts);
           setQuery("");
-          console.log("query", query, "newHosts", newHosts);
         }}
         multiple
       >

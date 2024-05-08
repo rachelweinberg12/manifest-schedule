@@ -22,6 +22,7 @@ export async function getSessions() {
   const sessions: Session[] = [];
   await base("Sessions")
     .select({
+      view: "Scheduled sessions",
       fields: [
         "Title",
         "Description",
@@ -75,7 +76,9 @@ export type Guest = {
 export async function getGuests() {
   const guests: Guest[] = [];
   await base("Guest list")
-    .select({ fields: ["Full name", "Email", "Manifest ticket type", "ID"] })
+    .select({
+      fields: ["Full name", "Email", "Manifest ticket type", "ID"],
+    })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
         guests.push(record.fields);
