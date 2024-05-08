@@ -9,6 +9,7 @@ import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useScreenWidth } from "@/utils/hooks";
 import { useEffect, useState } from "react";
+import { DateTime } from "luxon";
 
 export function DayCol(props: {
   sessions: Session[];
@@ -133,7 +134,9 @@ function TimestampCol(props: { start: Date; end: Date }) {
           key={i}
           className="border-b border-gray-100 text-[10px] p-1 text-right"
         >
-          {format(new Date(start.getTime() + i * 30 * 60 * 1000), "h:mm a")}
+          {DateTime.fromMillis(start.getTime() + i * 30 * 60 * 1000)
+            .setZone("America/Los_Angeles")
+            .toFormat("h:mm a")}
         </div>
       ))}
     </div>

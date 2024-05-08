@@ -9,6 +9,7 @@ import { useState } from "react";
 import { AddSessionForm } from "./add-session/add-session-form";
 import { Modal } from "./modal";
 import { days } from "@/utils/constants";
+import { DateTime } from "luxon";
 
 export function SessionCard(props: { session: Session; location: Location }) {
   const { session, location } = props;
@@ -65,8 +66,13 @@ export function RealSessionCard(props: {
         <div className="flex gap-1">
           <ClockIcon className="h-4 w-4" />
           <span>
-            {format(new Date(session["Start time"]), "h:mm")} -{" "}
-            {format(new Date(session["End time"]), "h:mm")}
+            {DateTime.fromISO(session["Start time"])
+              .setZone("America/Los_Angeles")
+              .toFormat("h:mm a")}{" "}
+            -{" "}
+            {DateTime.fromISO(session["End time"])
+              .setZone("America/Los_Angeles")
+              .toFormat("h:mm a")}
           </span>
         </div>
       </div>
