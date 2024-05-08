@@ -25,22 +25,18 @@ export function AddSessionForm(props: {
   const [hosts, setHosts] = useState<Guest[]>([]);
   const [location, setLocation] = useState<Location>();
   const startTimes = getAvailableStartTimes(day, sessions, location);
-  const DURATIONS = [
-    { value: 30, label: "30 minutes" },
-    { value: 60, label: "1 hour" },
-    { value: 90, label: "1.5 hours" },
-    { value: 120, label: "2 hours" },
-  ];
   return (
     <div className="flex flex-col gap-4">
+      <h2 className="text-2xl font-bold">Add a session</h2>
       <div className="flex flex-col gap-1">
         <label>Session title</label>
         <Input value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
       <div className="flex flex-col gap-1">
         <label>Description</label>
-        <Input
+        <textarea
           value={description}
+          className="rounded-md text-sm resize-none h-24 border bg-white px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 invalid:placeholder-red-300 focus:outline-none disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 border-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none"
           onChange={(e) => setDescription(e.target.value)}
         />
       </div>
@@ -79,7 +75,7 @@ export function AddSessionForm(props: {
           "hover:bg-rose-500 active:bg-rose-500"
         )}
       >
-        Add session
+        Submit
       </button>
     </div>
   );
