@@ -45,177 +45,32 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>Day</label>
-        <fieldset>
-          <div className="space-y-4">
-            {days.map((d) => {
-              const formattedDay = format(d.start, "EEEE, MMMM d");
-              return (
-                <div key={formattedDay} className="flex items-center">
-                  <input
-                    id={formattedDay}
-                    type="radio"
-                    checked={d.start === day.start}
-                    onChange={() => setDay(d)}
-                    className="h-4 w-4 border-gray-300 text-rose-400 focus:ring-rose-400"
-                  />
-                  <label
-                    htmlFor={formattedDay}
-                    className="ml-3 block text-sm font-medium leading-6 text-gray-900"
-                  >
-                    {formattedDay}
-                  </label>
-                </div>
-              );
-            })}
-          </div>
-        </fieldset>
-      </div>
-      <div className="flex flex-col gap-1 w-72">
-        <label>Start Time</label>
-        <Listbox value={startTime} onChange={setStartTime}>
-          <div className="relative mt-1">
-            <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
-              {startTime ? (
-                <span className="block truncate">
-                  {startTime.formattedTime}
-                </span>
-              ) : (
-                <span className="block truncate text-gray-400">
-                  Select a time
-                </span>
-              )}
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
-              </span>
-            </Listbox.Button>
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                {startTimes.map((startTime) => {
-                  return (
-                    <Listbox.Option
-                      key={startTime.time}
-                      value={startTime}
-                      className={({ active }) =>
-                        `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                          active ? "bg-rose-100 text-rose-900" : "text-gray-900"
-                        }`
-                      }
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span
-                            className={`block truncate ${
-                              selected ? "font-medium" : "font-normal"
-                            }`}
-                          >
-                            {startTime.formattedTime}
-                          </span>
-                          {selected ? (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
-                              <CheckIcon className="h-5 w-5" />
-                            </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  );
-                })}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </Listbox>
-      </div>
-      <div className="flex flex-col gap-1">
-        <label>Duration</label>
-        <fieldset>
-          <div className="space-y-4">
-            {DURATIONS.map(({ value, label }) => (
-              <div key={value} className="flex items-center">
-                <input
-                  id={label}
-                  type="radio"
-                  checked={value === duration}
-                  onChange={() => setDuration(value)}
-                  className="h-4 w-4 border-gray-300 text-rose-400 focus:ring-rose-400"
-                />
-                <label
-                  htmlFor={label}
-                  className="ml-3 block text-sm font-medium leading-6 text-gray-900"
-                >
-                  {label}
-                </label>
-              </div>
-            ))}
-          </div>
-        </fieldset>
-      </div>
-      <div className="flex flex-col gap-1">
         <label>Hosts</label>
         <SelectHosts guests={guests} hosts={hosts} setHosts={setHosts} />
       </div>
       <div className="flex flex-col gap-1 w-72">
         <label>Location</label>
-        <Listbox value={location} onChange={setLocation}>
-          <div className="relative mt-1">
-            <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
-              {location ? (
-                <span className="block truncate">{location.Name}</span>
-              ) : (
-                <span className="block truncate text-gray-400">
-                  Select a location
-                </span>
-              )}
-              <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
-              </span>
-            </Listbox.Button>
-            <Transition
-              as={Fragment}
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-                {locations.map((loc) => {
-                  return (
-                    <Listbox.Option
-                      key={loc.Name}
-                      value={loc}
-                      className={({ active }) =>
-                        `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                          active ? "bg-rose-100 text-rose-900" : "text-gray-900"
-                        }`
-                      }
-                    >
-                      {({ selected }) => (
-                        <>
-                          <span
-                            className={`block truncate ${
-                              selected ? "font-medium" : "font-normal"
-                            }`}
-                          >
-                            {loc["Name"]}
-                          </span>
-                          {selected ? (
-                            <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
-                              <CheckIcon className="h-5 w-5" />
-                            </span>
-                          ) : null}
-                        </>
-                      )}
-                    </Listbox.Option>
-                  );
-                })}
-              </Listbox.Options>
-            </Transition>
-          </div>
-        </Listbox>
+        <SelectLocation
+          location={location}
+          setLocation={setLocation}
+          locations={locations}
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label>Day</label>
+        <SelectDay days={days} day={day} setDay={setDay} />
+      </div>
+      <div className="flex flex-col gap-1 w-72">
+        <label>Start Time</label>
+        <SelectStartTime
+          startTimes={startTimes}
+          startTime={startTime}
+          setStartTime={setStartTime}
+        />
+      </div>
+      <div className="flex flex-col gap-1">
+        <label>Duration</label>
+        <SelectDuration duration={duration} setDuration={setDuration} />
       </div>
       <button
         type="submit"
@@ -294,7 +149,6 @@ function getAvailableStartTimes(
       });
     }
   }
-  console.log("start times", startTimes);
   return startTimes;
 }
 
@@ -401,5 +255,203 @@ function SelectHosts(props: {
         </div>
       </Combobox>
     </div>
+  );
+}
+
+function SelectDuration(props: {
+  duration: number;
+  setDuration: (duration: number) => void;
+}) {
+  const { duration, setDuration } = props;
+  const DURATIONS = [
+    { value: 30, label: "30 minutes" },
+    { value: 60, label: "1 hour" },
+    { value: 90, label: "1.5 hours" },
+    { value: 120, label: "2 hours" },
+  ];
+  return (
+    <fieldset>
+      <div className="space-y-4">
+        {DURATIONS.map(({ value, label }) => (
+          <div key={value} className="flex items-center">
+            <input
+              id={label}
+              type="radio"
+              checked={value === duration}
+              onChange={() => setDuration(value)}
+              className="h-4 w-4 border-gray-300 text-rose-400 focus:ring-rose-400"
+            />
+            <label
+              htmlFor={label}
+              className="ml-3 block text-sm font-medium leading-6 text-gray-900"
+            >
+              {label}
+            </label>
+          </div>
+        ))}
+      </div>
+    </fieldset>
+  );
+}
+
+function SelectDay(props: {
+  days: Day[];
+  day: Day;
+  setDay: (day: Day) => void;
+}) {
+  const { days, day, setDay } = props;
+  return (
+    <fieldset>
+      <div className="space-y-4">
+        {days.map((d) => {
+          const formattedDay = format(d.start, "EEEE, MMMM d");
+          return (
+            <div key={formattedDay} className="flex items-center">
+              <input
+                id={formattedDay}
+                type="radio"
+                checked={d.start === day.start}
+                onChange={() => setDay(d)}
+                className="h-4 w-4 border-gray-300 text-rose-400 focus:ring-rose-400"
+              />
+              <label
+                htmlFor={formattedDay}
+                className="ml-3 block text-sm font-medium leading-6 text-gray-900"
+              >
+                {formattedDay}
+              </label>
+            </div>
+          );
+        })}
+      </div>
+    </fieldset>
+  );
+}
+
+function SelectStartTime(props: {
+  startTimes: StartTime[];
+  startTime?: StartTime;
+  setStartTime: (startTime: StartTime) => void;
+}) {
+  const { startTimes, startTime, setStartTime } = props;
+  return (
+    <Listbox value={startTime} onChange={setStartTime}>
+      <div className="relative mt-1">
+        <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
+          {startTime ? (
+            <span className="block truncate">{startTime.formattedTime}</span>
+          ) : (
+            <span className="block truncate text-gray-400">Select a time</span>
+          )}
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
+          </span>
+        </Listbox.Button>
+        <Transition
+          as={Fragment}
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+            {startTimes.map((startTime) => {
+              return (
+                <Listbox.Option
+                  key={startTime.time}
+                  value={startTime}
+                  className={({ active }) =>
+                    `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-rose-100 text-rose-900" : "text-gray-900"
+                    }`
+                  }
+                >
+                  {({ selected }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {startTime.formattedTime}
+                      </span>
+                      {selected ? (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
+                          <CheckIcon className="h-5 w-5" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Listbox.Option>
+              );
+            })}
+          </Listbox.Options>
+        </Transition>
+      </div>
+    </Listbox>
+  );
+}
+
+function SelectLocation(props: {
+  location?: Location;
+  setLocation: (location: Location) => void;
+  locations: Location[];
+}) {
+  const { location, setLocation, locations } = props;
+  return (
+    <Listbox value={location} onChange={setLocation}>
+      <div className="relative mt-1">
+        <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
+          {location ? (
+            <span className="block truncate">{location.Name}</span>
+          ) : (
+            <span className="block truncate text-gray-400">
+              Select a location
+            </span>
+          )}
+          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
+          </span>
+        </Listbox.Button>
+        <Transition
+          as={Fragment}
+          leave="transition ease-in duration-100"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
+        >
+          <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+            {locations.map((loc) => {
+              return (
+                <Listbox.Option
+                  key={loc.Name}
+                  value={loc}
+                  className={({ active }) =>
+                    `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
+                      active ? "bg-rose-100 text-rose-900" : "text-gray-900"
+                    }`
+                  }
+                >
+                  {({ selected }) => (
+                    <>
+                      <span
+                        className={`block truncate ${
+                          selected ? "font-medium" : "font-normal"
+                        }`}
+                      >
+                        {loc["Name"]}
+                      </span>
+                      {selected ? (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
+                          <CheckIcon className="h-5 w-5" />
+                        </span>
+                      ) : null}
+                    </>
+                  )}
+                </Listbox.Option>
+              );
+            })}
+          </Listbox.Options>
+        </Transition>
+      </div>
+    </Listbox>
   );
 }
