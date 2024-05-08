@@ -17,7 +17,7 @@ export default async function Home() {
   const locations = await getLocations();
   const guests = await getGuests();
   return (
-    <div className="p-6">
+    <div className="p-8 max-w-2xl mx-auto">
       <AddSessionForm
         days={days}
         locations={locations}
