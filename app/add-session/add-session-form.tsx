@@ -3,12 +3,14 @@ import clsx from "clsx";
 import { Fragment, useState } from "react";
 import { Input } from "./input";
 import { Day } from "@/utils/constants";
-import { format } from "date-fns";
+import { format, isBefore } from "date-fns";
 import { Session, Location, Guest } from "@/utils/db";
 import { Combobox, Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
+import { useSearchParams } from "next/navigation";
+import { convertParamDateTime, dateOnDay } from "@/utils/utils";
 
 export function AddSessionForm(props: {
   days: Day[];
@@ -17,14 +19,35 @@ export function AddSessionForm(props: {
   guests: Guest[];
 }) {
   const { days, sessions, locations, guests } = props;
+  //day=06-09&time=12:00&location=1E%20Main
+  const searchParams = useSearchParams();
+  const dayParam = searchParams.get("day");
+  const timeParam = searchParams.get("time");
+  const initLocation = searchParams.get("location");
+  console.log(initLocation);
+  const initDateTime =
+    dayParam && timeParam
+      ? convertParamDateTime(dayParam, timeParam)
+      : undefined;
+  const initDay = initDateTime
+    ? days.find((d) => dateOnDay(initDateTime, d))
+    : undefined;
+  const initTime = initDateTime
+    ? DateTime.fromJSDate(initDateTime).toFormat("h:mm a")
+    : undefined;
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [day, setDay] = useState(days[0]);
-  const [startTime, setStartTime] = useState<StartTime>();
-  const [duration, setDuration] = useState(30);
-  const [hosts, setHosts] = useState<Guest[]>([]);
-  const [location, setLocation] = useState<Location>();
+  const [day, setDay] = useState(initDay ?? days[0]);
+  const [location, setLocation] = useState(
+    locations.find((l) => l.Name === initLocation)
+  );
   const startTimes = getAvailableStartTimes(day, sessions, location);
+  const initMaxDuration = startTimes.find(
+    (st) => st.formattedTime === initTime
+  )?.maxDuration;
+  const [startTime, setStartTime] = useState(initMaxDuration ? initTime : "");
+  const [duration, setDuration] = useState(Math.min(initMaxDuration ?? 60, 60));
+  const [hosts, setHosts] = useState<Guest[]>([]);
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Add a session</h2>
@@ -326,8 +349,8 @@ function SelectDay(props: {
 
 function SelectStartTime(props: {
   startTimes: StartTime[];
-  startTime?: StartTime;
-  setStartTime: (startTime: StartTime) => void;
+  startTime?: string;
+  setStartTime: (startTime: string) => void;
 }) {
   const { startTimes, startTime, setStartTime } = props;
   return (
@@ -335,7 +358,7 @@ function SelectStartTime(props: {
       <div className="relative mt-1">
         <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
           {startTime ? (
-            <span className="block truncate">{startTime.formattedTime}</span>
+            <span className="block truncate">{startTime}</span>
           ) : (
             <span className="block truncate text-gray-400">Select a time</span>
           )}
@@ -354,12 +377,13 @@ function SelectStartTime(props: {
               return (
                 <Listbox.Option
                   key={startTime.time}
-                  value={startTime}
+                  value={startTime.formattedTime}
                   className={({ active }) =>
                     `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
                       active ? "bg-rose-100 text-rose-900" : "text-gray-900"
                     }`
                   }
+                  disabled={!startTime.available}
                 >
                   {({ selected }) => (
                     <>

@@ -1,4 +1,4 @@
-import { Session, getLocations, getSessions } from "@/utils/db";
+import { getLocations, getSessions } from "@/utils/db";
 import { isAfter, isBefore, isEqual } from "date-fns";
 import { DayCol } from "./day";
 import { Filter } from "./filter";
