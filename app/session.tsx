@@ -2,13 +2,8 @@ import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "./class-constants";
 import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
-import { format } from "date-fns";
 import { Location } from "@/utils/db";
 import { Tooltip } from "./tooltip";
-import { useState } from "react";
-import { AddSessionForm } from "./add-session/add-session-form";
-import { Modal } from "./modal";
-import { days } from "@/utils/constants";
 import { DateTime } from "luxon";
 
 export function SessionCard(props: { session: Session; location: Location }) {
@@ -19,7 +14,11 @@ export function SessionCard(props: { session: Session; location: Location }) {
   const numHalfHours = sessionLength / 1000 / 60 / 30;
   const isBlank = session.Title === "";
   return isBlank ? (
-    <BlankSessionCard location={location} numHalfHours={numHalfHours} />
+    <BlankSessionCard
+      session={session}
+      location={location}
+      numHalfHours={numHalfHours}
+    />
   ) : (
     <RealSessionCard
       session={session}
@@ -31,14 +30,17 @@ export function SessionCard(props: { session: Session; location: Location }) {
 
 export function BlankSessionCard(props: {
   location: Location;
+  session: Session;
   numHalfHours: number;
 }) {
-  const { numHalfHours } = props;
+  const { numHalfHours, session, location } = props;
+  const dayParam = DateTime.fromISO(session["Start time"]).toFormat("MM-dd");
+  const timeParam = DateTime.fromISO(session["Start time"]).toFormat("HH:mm");
   return (
     <div className={`row-span-${numHalfHours} my-0.5`}>
       <a
         className="rounded font-roboto h-full w-full bg-gray-100 flex items-center justify-center"
-        href="/add-session"
+        href={`/add-session?location=${props.location.Name}&time=${timeParam}&day=${dayParam}`}
       >
         <PlusIcon className="h-4 w-4 text-gray-400" />
       </a>
