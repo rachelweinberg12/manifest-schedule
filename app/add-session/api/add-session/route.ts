@@ -20,10 +20,10 @@ type SessionInsert = {
   Hosts: string[];
   Location: string[];
 };
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+
+export const dynamic = "force-dynamic"; // defaults to auto
+
+export async function POST(req: Request) {
   const {
     title,
     description,
@@ -32,7 +32,7 @@ export default async function handler(
     day,
     startTimeString,
     duration,
-  } = (await req.body) as SessionParams;
+  } = (await req.json()) as SessionParams;
   const [hour, minute] = startTimeString.split(":").map(Number);
   const startTimeStamp = new Date(
     2024,
@@ -76,14 +76,16 @@ export default async function handler(
         });
       }
     );
-    return res.status(200).json({ success: true });
+    return Response.json({ success: true });
+    // return res.status(200).json({ success: true });
   } else {
-    console.error("Invalid session");
-    return res.status(400).json({ success: false });
+    // console.error("Invalid session");
+    return Response.error();
+    // return res.status(400).json({ success: false });
   }
 }
 
-export const validateSession = (
+const validateSession = (
   session: SessionInsert,
   existingSessions: Session[]
 ) => {

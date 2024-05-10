@@ -21,9 +21,9 @@ export function AddSessionForm(props: {
 }) {
   const { days, sessions, locations, guests } = props;
   const searchParams = useSearchParams();
-  const dayParam = searchParams.get("day");
-  const timeParam = searchParams.get("time");
-  const initLocation = searchParams.get("location");
+  const dayParam = searchParams?.get("day");
+  const timeParam = searchParams?.get("time");
+  const initLocation = searchParams?.get("location");
   const initDateTime =
     dayParam && timeParam
       ? convertParamDateTime(dayParam, timeParam)

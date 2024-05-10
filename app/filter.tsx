@@ -19,7 +19,7 @@ export function Filter(props: { locations: Location[] }) {
     <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
       <SelectLocCategoryToShow
         locations={locations}
-        searchParams={searchParams}
+        searchParams={searchParams ?? undefined}
       />
     </div>
   );
@@ -34,7 +34,7 @@ type locationCategory = {
 };
 function SelectLocCategoryToShow(props: {
   locations: Location[];
-  searchParams: ReadonlyURLSearchParams;
+  searchParams?: ReadonlyURLSearchParams;
 }) {
   const { locations, searchParams } = props;
   const urlSearchParams = new URLSearchParams(searchParams);
@@ -110,7 +110,7 @@ function SelectLocCategoryToShow(props: {
 
 function SelectLocationsToShow(props: {
   locations: Location[];
-  searchParams: ReadonlyURLSearchParams;
+  searchParams?: ReadonlyURLSearchParams;
   includedLocations: string[];
   setIncludedLocations: (locations: string[]) => void;
 }) {

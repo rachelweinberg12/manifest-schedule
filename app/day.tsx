@@ -19,9 +19,9 @@ export function DayCol(props: {
 }) {
   const { sessions, locations, start, end } = props;
   const searchParams = useSearchParams();
-  const locParams = searchParams.getAll("loc");
+  const locParams = searchParams?.getAll("loc");
   const locationsFromParams = orderedLocations.filter((loc) =>
-    locParams.includes(loc)
+    locParams?.includes(loc)
   );
   const includedLocations =
     locationsFromParams.length === 0 ? orderedLocations : locationsFromParams;
