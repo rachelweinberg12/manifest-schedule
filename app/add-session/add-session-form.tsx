@@ -93,16 +93,23 @@ export function AddSessionForm(props: {
   };
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-2xl font-bold">Add a session</h2>
+      <div>
+        <h2 className="text-2xl font-bold">Add a session</h2>
+        <p className="text-sm text-gray-500 mt-2">
+          Fill out this form to add a session to the schedule! Your session will
+          be added to the schedule immediately, but we may reach out to you
+          about rescheduling, relocating, or cancelling.
+        </p>
+      </div>
       <div className="flex flex-col gap-1">
-        <label>
+        <label className="font-medium">
           Session title
           <RequiredStar />
         </label>
         <Input value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
       <div className="flex flex-col gap-1">
-        <label>Description</label>
+        <label className="font-medium">Description</label>
         <textarea
           value={description}
           className="rounded-md text-sm resize-none h-24 border bg-white px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 invalid:placeholder-red-300 focus:outline-none disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 border-gray-300 placeholder-gray-400 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none"
@@ -110,14 +117,18 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>
+        <label className="font-medium">
           Hosts
           <RequiredStar />
         </label>
+        <p className="text-sm text-gray-500">
+          You and any cohosts who have agreed to host this session with you. All
+          hosts will get an email confirmation when this form is submitted.
+        </p>
         <SelectHosts guests={guests} hosts={hosts} setHosts={setHosts} />
       </div>
       <div className="flex flex-col gap-1 w-72">
-        <label>
+        <label className="font-medium">
           Location
           <RequiredStar />
         </label>
@@ -135,14 +146,14 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>
+        <label className="font-medium">
           Day
           <RequiredStar />
         </label>
         <SelectDay days={days} day={day} setDay={setDay} />
       </div>
       <div className="flex flex-col gap-1 w-72">
-        <label>
+        <label className="font-medium">
           Start Time
           <RequiredStar />
         </label>
@@ -156,7 +167,7 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>
+        <label className="font-medium">
           Duration
           <RequiredStar />
         </label>
