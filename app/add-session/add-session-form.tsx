@@ -137,6 +137,28 @@ export function AddSessionForm(props: {
           "bg-rose-400 text-white font-bold py-2 px-4 rounded",
           "hover:bg-rose-500 active:bg-rose-500"
         )}
+        onClick={async () => {
+          const res = await fetch("/api/add-session", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              title,
+              description,
+              day: day,
+              location: locations.find((loc) => loc.Name === location),
+              startTime,
+              duration,
+              hosts: hosts,
+            }),
+          });
+          if (res.ok) {
+            console.log("Session added successfully");
+          } else {
+            console.error("Failed to add session");
+          }
+        }}
       >
         Submit
       </button>

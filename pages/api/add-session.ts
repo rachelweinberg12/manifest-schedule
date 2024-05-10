@@ -83,22 +83,6 @@ export default async function handler(
   }
 }
 
-/*
-{
-    Title: 'Big speech',
-    Hosts: [ 'rec2Yfgh9eIU5eJvT' ],
-    'Start time': '2024-06-09T18:00:00.000Z',
-    'End time': '2024-06-09T18:30:00.000Z',
-    Description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec euismod, nulla eget ultrices tristique, lectus leo molestie tellus, a iaculis mi lacus nec ipsum. In dignissim elit quis dictum gravida. Curabitur sit amet tincidunt tellus, quis vulputate nisi. Praesent ac est ut arcu condimentum tincidunt ullamcorper nec sapien.',
-    Location: [ 'recOLTYQeKGoalT6t' ],
-    'Host email': [ 'alexw1n1w1@gmail.com' ],
-    'Host name': [ 'Alex Chen' ],
-    Capacity: [ 250 ],
-    Area: [ 'Rat park' ],
-    'Location name': [ 'Rat Park' ]
-  },
-  */
-
 export const validateSession = (
   session: SessionInsert,
   existingSessions: Session[]
