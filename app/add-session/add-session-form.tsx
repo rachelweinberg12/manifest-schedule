@@ -54,7 +54,9 @@ export function AddSessionForm(props: {
   const [duration, setDuration] = useState(Math.min(maxDuration ?? 60, 60));
   const [hosts, setHosts] = useState<Guest[]>([]);
   useEffect(() => {
-    if (!startTimes.some((st) => st.formattedTime === startTime)) {
+    if (
+      !startTimes.some((st) => st.formattedTime === startTime && st.available)
+    ) {
       setStartTime(undefined);
     }
     if (maxDuration && duration > maxDuration) {
@@ -69,7 +71,6 @@ export function AddSessionForm(props: {
     !!day &&
     !!duration &&
     !!duration;
-  console.log(allowSubmit);
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Add a session</h2>
