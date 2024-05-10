@@ -9,7 +9,7 @@ import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { convertParamDateTime, dateOnDay } from "@/utils/utils";
 import { MyListbox } from "./select";
 
@@ -63,14 +63,33 @@ export function AddSessionForm(props: {
       setDuration(maxDuration);
     }
   }, [startTime, maxDuration, duration, startTimes]);
-  const allowSubmit =
-    !!title &&
-    !!startTime &&
-    !!hosts.length &&
-    !!location &&
-    !!day &&
-    !!duration &&
-    !!duration;
+  const router = useRouter();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const Submit = async () => {
+    setIsSubmitting(true);
+    const res = await fetch("/api/add-session", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        description,
+        day: day,
+        location: locations.find((loc) => loc.Name === location),
+        startTime,
+        duration,
+        hosts: hosts,
+      }),
+    });
+    if (res.ok) {
+      console.log("Session added successfully");
+      router.push("/confirmation");
+    } else {
+      console.error("Failed to add session");
+    }
+    setIsSubmitting(false);
+  };
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Add a session</h2>
@@ -130,34 +149,18 @@ export function AddSessionForm(props: {
       </div>
       <button
         type="submit"
-        className={clsx(
-          "bg-rose-400 text-white font-semibold py-2 px-4 rounded shadow",
-          "disabled:bg-gray-200 disabled:text-gray-400 shadow-none",
-          "hover:bg-rose-500 active:bg-rose-500"
-        )}
-        disabled={!allowSubmit}
-        onClick={async () => {
-          const res = await fetch("/api/add-session", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              title,
-              description,
-              day: day,
-              location: locations.find((loc) => loc.Name === location),
-              startTime,
-              duration,
-              hosts: hosts,
-            }),
-          });
-          if (res.ok) {
-            console.log("Session added successfully");
-          } else {
-            console.error("Failed to add session");
-          }
-        }}
+        className="bg-rose-400 text-white font-semibold py-2 rounded shadow disabled:bg-gray-200 disabled:text-gray-400 disabled:shadow-none hover:bg-rose-500 active:bg-rose-500 mx-auto px-12"
+        disabled={
+          !title ||
+          !startTime ||
+          !hosts.length ||
+          !location ||
+          !day ||
+          !duration ||
+          !duration ||
+          isSubmitting
+        }
+        onClick={Submit}
       >
         Submit
       </button>
