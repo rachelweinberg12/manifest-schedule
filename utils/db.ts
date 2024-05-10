@@ -1,9 +1,9 @@
-var Airtable = require("airtable");
+const Airtable = require("airtable");
 Airtable.configure({
   endpointUrl: "https://api.airtable.com",
   apiKey: process.env.AIRTABLE_API_KEY,
 });
-var base = Airtable.base("appklVAIrAhkGj98d");
+const base = Airtable.base("appklVAIrAhkGj98d");
 
 export type Session = {
   Title: string;
@@ -51,12 +51,13 @@ export type Location = {
   Area: string;
   Capacity: number;
   Type: "main" | "side";
+  ID: string;
 };
 export async function getLocations() {
   const locations: Location[] = [];
   await base("Spaces")
     .select({
-      fields: ["Name", "Area", "Capacity", "Type"],
+      fields: ["Name", "Area", "Capacity", "Type", "ID"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {

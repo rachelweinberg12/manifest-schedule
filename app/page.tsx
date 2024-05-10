@@ -7,6 +7,7 @@ import { days } from "@/utils/constants";
 
 export default async function Home() {
   const sessions = await getSessions();
+  console.log(sessions);
   days.forEach((day) => {
     day.sessions = sessions.filter(
       (session) =>

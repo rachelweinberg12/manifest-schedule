@@ -69,7 +69,9 @@ export function AddSessionForm(props: {
       "duration",
       duration,
       "start times",
-      startTimes
+      startTimes,
+      "day",
+      day
     );
   }, [startTime, maxDuration, duration, startTimes]);
   return (
