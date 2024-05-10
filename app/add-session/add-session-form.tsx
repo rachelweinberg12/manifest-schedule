@@ -5,7 +5,7 @@ import { Input } from "./input";
 import { Day } from "@/utils/constants";
 import { format } from "date-fns";
 import { Session, Location, Guest } from "@/utils/db";
-import { Combobox, Listbox, Transition } from "@headlessui/react";
+import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
@@ -349,70 +349,5 @@ function SelectDay(props: {
         })}
       </div>
     </fieldset>
-  );
-}
-
-function SelectLocation(props: {
-  location?: Location;
-  setLocation: (location: Location) => void;
-  locations: Location[];
-}) {
-  const { location, setLocation, locations } = props;
-  return (
-    <Listbox value={location} onChange={setLocation}>
-      <div className="relative mt-1">
-        <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
-          {location ? (
-            <span className="block truncate">{location.Name}</span>
-          ) : (
-            <span className="block truncate text-gray-400">
-              Select a location
-            </span>
-          )}
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
-          </span>
-        </Listbox.Button>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-            {locations.map((loc) => {
-              return (
-                <Listbox.Option
-                  key={loc.Name}
-                  value={loc}
-                  className={({ active }) =>
-                    `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-rose-100 text-rose-900" : "text-gray-900"
-                    }`
-                  }
-                >
-                  {({ selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
-                      >
-                        {loc["Name"]}
-                      </span>
-                      {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
-                          <CheckIcon className="h-5 w-5" />
-                        </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              );
-            })}
-          </Listbox.Options>
-        </Transition>
-      </div>
-    </Listbox>
   );
 }
