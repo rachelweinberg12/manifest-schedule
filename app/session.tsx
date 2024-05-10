@@ -34,8 +34,12 @@ export function BlankSessionCard(props: {
   numHalfHours: number;
 }) {
   const { numHalfHours, session, location } = props;
-  const dayParam = DateTime.fromISO(session["Start time"]).toFormat("MM-dd");
-  const timeParam = DateTime.fromISO(session["Start time"]).toFormat("HH:mm");
+  const dayParam = DateTime.fromISO(session["Start time"])
+    .setZone("America/Los_Angeles")
+    .toFormat("MM-dd");
+  const timeParam = DateTime.fromISO(session["Start time"])
+    .setZone("America/Los_Angeles")
+    .toFormat("HH:mm");
   return (
     <div className={`row-span-${numHalfHours} my-0.5`}>
       <a

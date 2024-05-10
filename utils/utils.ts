@@ -12,11 +12,11 @@ export const arraysEqual = (a: any[], b: any[]) =>
   a.length === b.length && a.every((value) => b.includes(value));
 
 export const convertParamDateTime = (date: string, time: string) => {
-  const [month, day] = date.split("-").map(Number);
-  const [hour, minute] = time.split(":").map(Number);
-  return new Date(2024, month - 1, day, hour, minute);
+  return new Date(`2024-${date}T${time}:00-07:00`);
 };
 
 export const dateOnDay = (date: Date, day: Day) => {
-  return date >= day.start && date <= day.end;
+  return (
+    date.getTime() >= day.start.getTime() && date.getTime() <= day.end.getTime()
+  );
 };

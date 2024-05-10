@@ -28,12 +28,16 @@ export function AddSessionForm(props: {
     dayParam && timeParam
       ? convertParamDateTime(dayParam, timeParam)
       : undefined;
+  console.log(initDateTime);
   const initDay = initDateTime
     ? days.find((d) => dateOnDay(initDateTime, d))
     : undefined;
   const initTime = initDateTime
-    ? DateTime.fromJSDate(initDateTime).toFormat("h:mm a")
+    ? DateTime.fromJSDate(initDateTime)
+        .setZone("America/Los_Angeles")
+        .toFormat("h:mm a")
     : undefined;
+  console.log(initDateTime, initDay, initTime);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(initDay ?? days[0]);
