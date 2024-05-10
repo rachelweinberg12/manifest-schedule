@@ -95,7 +95,10 @@ export function AddSessionForm(props: {
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Add a session</h2>
       <div className="flex flex-col gap-1">
-        <label>Session title</label>
+        <label>
+          Session title
+          <RequiredStar />
+        </label>
         <Input value={title} onChange={(e) => setTitle(e.target.value)} />
       </div>
       <div className="flex flex-col gap-1">
@@ -107,11 +110,17 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>Hosts</label>
+        <label>
+          Hosts
+          <RequiredStar />
+        </label>
         <SelectHosts guests={guests} hosts={hosts} setHosts={setHosts} />
       </div>
       <div className="flex flex-col gap-1 w-72">
-        <label>Location</label>
+        <label>
+          Location
+          <RequiredStar />
+        </label>
         <MyListbox
           currValue={location}
           setCurrValue={setLocation}
@@ -126,11 +135,17 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>Day</label>
+        <label>
+          Day
+          <RequiredStar />
+        </label>
         <SelectDay days={days} day={day} setDay={setDay} />
       </div>
       <div className="flex flex-col gap-1 w-72">
-        <label>Start Time</label>
+        <label>
+          Start Time
+          <RequiredStar />
+        </label>
         <MyListbox
           currValue={startTime}
           setCurrValue={setStartTime}
@@ -141,7 +156,10 @@ export function AddSessionForm(props: {
         />
       </div>
       <div className="flex flex-col gap-1">
-        <label>Duration</label>
+        <label>
+          Duration
+          <RequiredStar />
+        </label>
         <SelectDuration
           duration={duration}
           setDuration={setDuration}
@@ -168,6 +186,8 @@ export function AddSessionForm(props: {
     </div>
   );
 }
+
+const RequiredStar = () => <span className="text-rose-500 mx-1">*</span>;
 
 type StartTime = {
   formattedTime: string;
