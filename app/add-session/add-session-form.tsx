@@ -3,7 +3,7 @@ import clsx from "clsx";
 import { Fragment, useState } from "react";
 import { Input } from "./input";
 import { Day } from "@/utils/constants";
-import { format, isBefore } from "date-fns";
+import { format } from "date-fns";
 import { Session, Location, Guest } from "@/utils/db";
 import { Combobox, Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
@@ -11,7 +11,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
 import { useSearchParams } from "next/navigation";
 import { convertParamDateTime, dateOnDay } from "@/utils/utils";
-import { MyListbox } from "./listbox";
+import { MyListbox } from "./select";
 
 export function AddSessionForm(props: {
   days: Day[];
@@ -20,7 +20,6 @@ export function AddSessionForm(props: {
   guests: Guest[];
 }) {
   const { days, sessions, locations, guests } = props;
-  //day=06-09&time=12:00&location=1E%20Main
   const searchParams = useSearchParams();
   const dayParam = searchParams.get("day");
   const timeParam = searchParams.get("time");
@@ -236,7 +235,7 @@ function SelectHosts(props: {
             leaveTo="opacity-0"
             afterLeave={() => setQuery("")}
           >
-            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
+            <Combobox.Options className="absolute mt-1 max-h-60 z-10 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
               {filteredGuests.length === 0 && query !== "" ? (
                 <div className="relative cursor-default select-none px-4 py-2 text-gray-700">
                   Nothing found.
@@ -246,28 +245,28 @@ function SelectHosts(props: {
                   <Combobox.Option
                     key={guest["ID"]}
                     className={({ active }) =>
-                      `relative cursor-default select-none py-2 pl-10 pr-4 ${
-                        active ? "bg-rose-400 text-white" : "text-gray-900"
-                      }`
+                      clsx(
+                        "relative cursor-pointer select-none py-2 pl-10 pr-4 z-10",
+                        active
+                          ? "bg-rose-100 text-rose-900"
+                          : "text-gray-900 bg-white"
+                      )
                     }
                     value={guest}
                   >
-                    {({ selected, active }) => (
+                    {({ selected }) => (
                       <>
                         <span
-                          className={`block truncate ${
+                          className={clsx(
+                            "block truncate",
                             selected ? "font-medium" : "font-normal"
-                          }`}
+                          )}
                         >
                           {guest["Full name"]}
                         </span>
                         {selected ? (
-                          <span
-                            className={`absolute inset-y-0 left-0 flex items-center pl-3 ${
-                              active ? "text-white" : "text-rose-400"
-                            }`}
-                          >
-                            <CheckIcon className="h-5 w-5" aria-hidden="true" />
+                          <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
+                            <CheckIcon className="h-5 w-5" />
                           </span>
                         ) : null}
                       </>

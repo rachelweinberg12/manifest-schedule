@@ -1,6 +1,7 @@
 import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
+import clsx from "clsx";
 
 type Option = {
   value: string;
@@ -39,18 +40,22 @@ export function MyListbox(props: {
                   key={option.value}
                   value={option.value}
                   className={({ active }) =>
-                    `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-rose-100 text-rose-900" : "text-gray-900"
-                    }`
+                    clsx(
+                      "relative cursor-pointer select-none py-2 pl-10 pr-4 z-10",
+                      active
+                        ? "bg-rose-100 text-rose-900"
+                        : "text-gray-900 bg-white"
+                    )
                   }
                   disabled={!option.available}
                 >
                   {({ selected }) => (
                     <>
                       <span
-                        className={`block truncate ${
+                        className={clsx(
+                          "block truncate",
                           selected ? "font-medium" : "font-normal"
-                        }`}
+                        )}
                       >
                         {option.value}
                       </span>
