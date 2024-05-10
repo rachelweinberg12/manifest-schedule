@@ -1,6 +1,6 @@
 "use client";
 import clsx from "clsx";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Input } from "./input";
 import { Day } from "@/utils/constants";
 import { format } from "date-fns";
@@ -50,6 +50,28 @@ export function AddSessionForm(props: {
   )?.maxDuration;
   const [duration, setDuration] = useState(Math.min(maxDuration ?? 60, 60));
   const [hosts, setHosts] = useState<Guest[]>([]);
+  useEffect(() => {
+    if (!startTimes.some((st) => st.formattedTime === startTime)) {
+      setStartTime(undefined);
+    }
+    if (maxDuration && duration > maxDuration) {
+      setDuration(maxDuration);
+    }
+    console.log(
+      "max duration",
+      maxDuration,
+      "day",
+      day,
+      "location",
+      location,
+      "start time",
+      startTime,
+      "duration",
+      duration,
+      "start times",
+      startTimes
+    );
+  }, [startTime, maxDuration, duration, startTimes]);
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Add a session</h2>
