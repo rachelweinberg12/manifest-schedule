@@ -101,7 +101,11 @@ export function AddSessionForm(props: {
       </div>
       <div className="flex flex-col gap-1">
         <label>Duration</label>
-        <SelectDuration duration={duration} setDuration={setDuration} />
+        <SelectDuration
+          duration={duration}
+          setDuration={setDuration}
+          maxDuration={maxDuration}
+        />
       </div>
       <button
         type="submit"
@@ -293,18 +297,22 @@ function SelectHosts(props: {
 function SelectDuration(props: {
   duration: number;
   setDuration: (duration: number) => void;
+  maxDuration?: number;
 }) {
-  const { duration, setDuration } = props;
-  const DURATIONS = [
+  const { duration, setDuration, maxDuration } = props;
+  const durations = [
     { value: 30, label: "30 minutes" },
     { value: 60, label: "1 hour" },
     { value: 90, label: "1.5 hours" },
     { value: 120, label: "2 hours" },
   ];
+  const availableDurations = !!maxDuration
+    ? durations.filter(({ value }) => value <= maxDuration)
+    : durations;
   return (
     <fieldset>
       <div className="space-y-4">
-        {DURATIONS.map(({ value, label }) => (
+        {availableDurations.map(({ value, label }) => (
           <div key={value} className="flex items-center">
             <input
               id={label}
