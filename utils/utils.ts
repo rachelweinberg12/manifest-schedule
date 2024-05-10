@@ -25,4 +25,29 @@ export const dateOnDay = (date: Date, day: Day) => {
 export const validateSession = (
   session: Session,
   existingSessions: Session[]
-) => {};
+) => {
+  const sessionStart = new Date(session["Start time"]);
+  const sessionEnd = new Date(session["End time"]);
+  const sessionStartsBeforeEnds = sessionStart < sessionEnd;
+  const sessionStartsAfterNow = sessionStart > new Date();
+  const sessionsHere = existingSessions.filter((s) => {
+    return s["Location name"][0] === session["Location name"][0];
+  });
+  const concurrentSessions = sessionsHere.filter((s) => {
+    const sStart = new Date(s["Start time"]);
+    const sEnd = new Date(s["End time"]);
+    return (
+      (sStart <= sessionStart && sEnd >= sessionStart) ||
+      (sStart <= sessionEnd && sEnd >= sessionEnd) ||
+      (sStart >= sessionStart && sEnd <= sessionEnd)
+    );
+  });
+  const sessionValid =
+    sessionStartsBeforeEnds &&
+    sessionStartsAfterNow &&
+    concurrentSessions.length === 0 &&
+    session["Title"] &&
+    session["Location name"][0] &&
+    session["Hosts"][0];
+  return sessionValid;
+};
