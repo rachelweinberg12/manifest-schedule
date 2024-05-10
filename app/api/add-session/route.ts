@@ -1,7 +1,7 @@
 import { Guest, Session, Location, getSessions } from "@/utils/db";
-import { NextApiRequest, NextApiResponse } from "next";
 import { Day } from "@/utils/constants";
 import { getDay, getMonth } from "date-fns";
+import { DateTime } from "luxon";
 
 type SessionParams = {
   title: string;
@@ -33,14 +33,29 @@ export async function POST(req: Request) {
     startTimeString,
     duration,
   } = (await req.json()) as SessionParams;
-  const [hour, minute] = startTimeString.split(":").map(Number);
+  console.log(typeof day.start);
+  const dayStartDT = DateTime.fromJSDate(new Date(day.start));
+  const dayISOFormatted = dayStartDT.toFormat("yyyy-MM-dd");
+  const [rawHour, rawMinute, ampm] = startTimeString.split(/[: ]/);
+  const hourNum = parseInt(rawHour);
+  const hourStr = ampm === "PM" ? (hourNum + 12).toString() : rawHour;
+  const minuteNum = parseInt(rawMinute);
+  const minuteStr = minuteNum < 10 ? `0${minuteNum}` : rawMinute;
   const startTimeStamp = new Date(
-    2024,
-    getMonth(day.start),
-    getDay(day.start),
-    hour,
-    minute
+    `${dayISOFormatted}T${hourStr}:${minuteStr}:00-07:00`
   );
+  console.log(
+    dayStartDT,
+    dayISOFormatted,
+    rawHour,
+    rawMinute,
+    ampm,
+    hourStr,
+    minuteStr,
+    "startTimeStamp",
+    startTimeStamp
+  );
+  console.log("duration", duration);
   const session: SessionInsert = {
     Title: title,
     Description: description,
@@ -48,10 +63,11 @@ export async function POST(req: Request) {
     Location: [location.ID],
     "Start time": startTimeStamp.toISOString(),
     "End time": new Date(
-      startTimeStamp.getTime() + duration * 30 * 60 * 1000
+      startTimeStamp.getTime() + duration * 60 * 1000
     ).toISOString(),
   };
   const existingSessions = await getSessions();
+  console.log("existingSessions", existingSessions.length);
   const sessionValid = validateSession(session, existingSessions);
   if (sessionValid) {
     const Airtable = require("airtable");
@@ -89,6 +105,7 @@ const validateSession = (
   session: SessionInsert,
   existingSessions: Session[]
 ) => {
+  console.log("session to add", session);
   const sessionStart = new Date(session["Start time"]);
   const sessionEnd = new Date(session["End time"]);
   const sessionStartsBeforeEnds = sessionStart < sessionEnd;
@@ -100,11 +117,21 @@ const validateSession = (
     const sStart = new Date(s["Start time"]);
     const sEnd = new Date(s["End time"]);
     return (
-      (sStart <= sessionStart && sEnd >= sessionStart) ||
-      (sStart <= sessionEnd && sEnd >= sessionEnd) ||
-      (sStart >= sessionStart && sEnd <= sessionEnd)
+      (sStart < sessionStart && sEnd > sessionStart) ||
+      (sStart < sessionEnd && sEnd > sessionEnd) ||
+      (sStart > sessionStart && sEnd < sessionEnd)
     );
   });
+  console.log(
+    "CONDITIONS",
+    concurrentSessions,
+    sessionStartsBeforeEnds,
+    sessionStartsAfterNow,
+    concurrentSessions.length === 0,
+    session["Title"],
+    session["Location"][0],
+    session["Hosts"]
+  );
   const sessionValid =
     sessionStartsBeforeEnds &&
     sessionStartsAfterNow &&
@@ -112,5 +139,6 @@ const validateSession = (
     session["Title"] &&
     session["Location"][0] &&
     session["Hosts"][0];
+  console.log("valid", sessionValid);
   return sessionValid;
 };

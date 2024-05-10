@@ -40,6 +40,7 @@ export function AddSessionForm(props: {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(initDay ?? days[0]);
+  console.log(day, day.start, typeof day.start);
   const [location, setLocation] = useState(
     locations.find((l) => l.Name === initLocation)?.Name
   );
@@ -77,7 +78,7 @@ export function AddSessionForm(props: {
         description,
         day: day,
         location: locations.find((loc) => loc.Name === location),
-        startTime,
+        startTimeString: startTime,
         duration,
         hosts: hosts,
       }),
