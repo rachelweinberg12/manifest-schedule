@@ -11,6 +11,7 @@ import { XMarkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
 import { useSearchParams } from "next/navigation";
 import { convertParamDateTime, dateOnDay } from "@/utils/utils";
+import { MyListbox } from "./listbox";
 
 export function AddSessionForm(props: {
   days: Day[];
@@ -24,7 +25,6 @@ export function AddSessionForm(props: {
   const dayParam = searchParams.get("day");
   const timeParam = searchParams.get("time");
   const initLocation = searchParams.get("location");
-  console.log(initLocation);
   const initDateTime =
     dayParam && timeParam
       ? convertParamDateTime(dayParam, timeParam)
@@ -39,7 +39,7 @@ export function AddSessionForm(props: {
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(initDay ?? days[0]);
   const [location, setLocation] = useState(
-    locations.find((l) => l.Name === initLocation)
+    locations.find((l) => l.Name === initLocation)?.Name
   );
   const startTimes = getAvailableStartTimes(day, sessions, location);
   const initMaxDuration = startTimes.find(
@@ -69,10 +69,13 @@ export function AddSessionForm(props: {
       </div>
       <div className="flex flex-col gap-1 w-72">
         <label>Location</label>
-        <SelectLocation
-          location={location}
-          setLocation={setLocation}
-          locations={locations}
+        <MyListbox
+          currValue={location}
+          setCurrValue={setLocation}
+          options={locations.map((loc) => {
+            return { value: loc.Name, available: true };
+          })}
+          placeholder={"Select a location"}
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -81,10 +84,13 @@ export function AddSessionForm(props: {
       </div>
       <div className="flex flex-col gap-1 w-72">
         <label>Start Time</label>
-        <SelectStartTime
-          startTimes={startTimes}
-          startTime={startTime}
-          setStartTime={setStartTime}
+        <MyListbox
+          currValue={startTime}
+          setCurrValue={setStartTime}
+          options={startTimes.map((st) => {
+            return { value: st.formattedTime, available: st.available };
+          })}
+          placeholder={"Select a start time"}
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -113,11 +119,11 @@ type StartTime = {
 function getAvailableStartTimes(
   day: Day,
   sessions: Session[],
-  location?: Location
+  location?: string
 ) {
   const locationSelected = !!location;
   const filteredSessions = locationSelected
-    ? sessions.filter((s) => s["Location name"][0] === location?.Name)
+    ? sessions.filter((s) => s["Location name"][0] === location)
     : sessions;
   const sortedSessions = filteredSessions.sort(
     (a, b) =>
@@ -344,70 +350,6 @@ function SelectDay(props: {
         })}
       </div>
     </fieldset>
-  );
-}
-
-function SelectStartTime(props: {
-  startTimes: StartTime[];
-  startTime?: string;
-  setStartTime: (startTime: string) => void;
-}) {
-  const { startTimes, startTime, setStartTime } = props;
-  return (
-    <Listbox value={startTime} onChange={setStartTime}>
-      <div className="relative mt-1">
-        <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
-          {startTime ? (
-            <span className="block truncate">{startTime}</span>
-          ) : (
-            <span className="block truncate text-gray-400">Select a time</span>
-          )}
-          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-            <ChevronUpDownIcon className="h-5 w-5 text-gray-400" />
-          </span>
-        </Listbox.Button>
-        <Transition
-          as={Fragment}
-          leave="transition ease-in duration-100"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <Listbox.Options className="absolute mt-1 max-h-60 w-72 overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5 focus:outline-none sm:text-sm">
-            {startTimes.map((startTime) => {
-              return (
-                <Listbox.Option
-                  key={startTime.time}
-                  value={startTime.formattedTime}
-                  className={({ active }) =>
-                    `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                      active ? "bg-rose-100 text-rose-900" : "text-gray-900"
-                    }`
-                  }
-                  disabled={!startTime.available}
-                >
-                  {({ selected }) => (
-                    <>
-                      <span
-                        className={`block truncate ${
-                          selected ? "font-medium" : "font-normal"
-                        }`}
-                      >
-                        {startTime.formattedTime}
-                      </span>
-                      {selected ? (
-                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
-                          <CheckIcon className="h-5 w-5" />
-                        </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              );
-            })}
-          </Listbox.Options>
-        </Transition>
-      </div>
-    </Listbox>
   );
 }
 
