@@ -221,7 +221,7 @@ function SelectHosts(props: {
               <Combobox.Input
                 onChange={(event) => setQuery(event.target.value)}
                 value={query}
-                className="border-none focus:ring-0 px-0 py-1 text-sm focus:w-fit w-0"
+                className="border-none focus:ring-0 px-0 py-1 text-sm focus:w-fit w-0 placeholder:text-gray-400"
               />
             </div>
             <div className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -254,12 +254,13 @@ function SelectHosts(props: {
                     }
                     value={guest}
                   >
-                    {({ selected }) => (
+                    {({ selected, disabled }) => (
                       <>
                         <span
                           className={clsx(
                             "block truncate",
-                            selected ? "font-medium" : "font-normal"
+                            selected ? "font-medium" : "font-normal",
+                            disabled ? "text-gray-400" : "text-gray-900"
                           )}
                         >
                           {guest["Full name"]}

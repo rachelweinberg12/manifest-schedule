@@ -41,7 +41,7 @@ export function MyListbox(props: {
                   value={option.value}
                   className={({ active }) =>
                     clsx(
-                      "relative cursor-pointer select-none py-2 pl-10 pr-4 z-10",
+                      "relative cursor-pointer select-none py-2 pl-10 pr-4 z-10 disabled:text-gray-400 disabled:cursor-default",
                       active
                         ? "bg-rose-100 text-rose-900"
                         : "text-gray-900 bg-white"
@@ -49,12 +49,13 @@ export function MyListbox(props: {
                   }
                   disabled={!option.available}
                 >
-                  {({ selected }) => (
+                  {({ selected, disabled }) => (
                     <>
                       <span
                         className={clsx(
                           "block truncate",
-                          selected ? "font-medium" : "font-normal"
+                          selected ? "font-medium" : "font-normal",
+                          disabled ? "text-gray-400" : "text-gray-900"
                         )}
                       >
                         {option.value}
