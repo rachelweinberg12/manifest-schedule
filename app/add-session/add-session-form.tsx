@@ -37,7 +37,6 @@ export function AddSessionForm(props: {
         .setZone("America/Los_Angeles")
         .toFormat("h:mm a")
     : undefined;
-  console.log(initDateTime, initDay, initTime);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(initDay ?? days[0]);
@@ -61,22 +60,6 @@ export function AddSessionForm(props: {
     if (maxDuration && duration > maxDuration) {
       setDuration(maxDuration);
     }
-    console.log(
-      "max duration",
-      maxDuration,
-      "day",
-      day,
-      "location",
-      location,
-      "start time",
-      startTime,
-      "duration",
-      duration,
-      "start times",
-      startTimes,
-      "day",
-      day
-    );
   }, [startTime, maxDuration, duration, startTimes]);
   return (
     <div className="flex flex-col gap-4">

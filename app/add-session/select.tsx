@@ -15,12 +15,20 @@ export function MyListbox(props: {
   placeholder: string;
 }) {
   const { options, currValue, setCurrValue, placeholder } = props;
+  const currOption = options.find((option) => option.value === currValue);
   return (
     <Listbox value={currValue} onChange={setCurrValue}>
       <div className="relative mt-1">
         <Listbox.Button className="h-12 rounded-md border px-4 shadow-sm transition-colors invalid:border-red-500 invalid:text-red-900 focus:outline-none relative w-full cursor-pointer border-gray-300 focus:ring-2 focus:ring-rose-400 focus:outline-0 focus:border-none bg-white py-2 pl-3 pr-10 text-left">
           {currValue ? (
-            <span className="block truncate">{currValue}</span>
+            <span className="text-gray-900 truncate flex items-center justify-between">
+              {currValue}
+              {currOption?.helperText && (
+                <span className="inline text-xs text-gray-400 truncate">
+                  {currOption.helperText}
+                </span>
+              )}
+            </span>
           ) : (
             <span className="block truncate text-gray-400">{placeholder}</span>
           )}

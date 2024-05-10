@@ -16,7 +16,6 @@ export default async function Home() {
   });
   const locations = await getLocations();
   const guests = await getGuests();
-  console.log(guests);
   return (
     <div className="p-8 max-w-2xl mx-auto">
       <AddSessionForm
