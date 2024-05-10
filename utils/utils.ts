@@ -1,4 +1,5 @@
 import { Day } from "./constants";
+import { Session } from "./db";
 
 export const getPercentThroughDay = (now: Date, start: Date, end: Date) =>
   ((now.getTime() - start.getTime()) / (end.getTime() - start.getTime())) * 100;
@@ -20,3 +21,8 @@ export const convertParamDateTime = (date: string, time: string) => {
 export const dateOnDay = (date: Date, day: Day) => {
   return date >= day.start && date <= day.end;
 };
+
+export const validateSession = (
+  session: Session,
+  existingSessions: Session[]
+) => {};

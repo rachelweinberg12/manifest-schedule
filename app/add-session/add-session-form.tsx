@@ -72,7 +72,11 @@ export function AddSessionForm(props: {
           currValue={location}
           setCurrValue={setLocation}
           options={locations.map((loc) => {
-            return { value: loc.Name, available: true };
+            return {
+              value: loc.Name,
+              available: true,
+              helperText: `max ${loc.Capacity}`,
+            };
           })}
           placeholder={"Select a location"}
         />

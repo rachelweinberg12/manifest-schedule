@@ -6,6 +6,7 @@ import clsx from "clsx";
 type Option = {
   value: string;
   available: boolean;
+  helperText?: string;
 };
 export function MyListbox(props: {
   options: Option[];
@@ -53,12 +54,17 @@ export function MyListbox(props: {
                     <>
                       <span
                         className={clsx(
-                          "block truncate",
+                          "flex items-end justify-between truncate",
                           selected ? "font-medium" : "font-normal",
                           disabled ? "text-gray-400" : "text-gray-900"
                         )}
                       >
                         {option.value}
+                        {option.helperText && (
+                          <span className="inline text-xs text-gray-400 truncate">
+                            {option.helperText}
+                          </span>
+                        )}
                       </span>
                       {selected ? (
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-rose-400">
