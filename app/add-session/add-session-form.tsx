@@ -41,11 +41,14 @@ export function AddSessionForm(props: {
     locations.find((l) => l.Name === initLocation)?.Name
   );
   const startTimes = getAvailableStartTimes(day, sessions, location);
-  const initMaxDuration = startTimes.find(
-    (st) => st.formattedTime === initTime
+  const initTimeValid = startTimes.some((st) => st.formattedTime === initTime);
+  const [startTime, setStartTime] = useState(
+    initTimeValid ? initTime : undefined
+  );
+  const maxDuration = startTimes.find(
+    (st) => st.formattedTime === startTime
   )?.maxDuration;
-  const [startTime, setStartTime] = useState(initMaxDuration ? initTime : "");
-  const [duration, setDuration] = useState(Math.min(initMaxDuration ?? 60, 60));
+  const [duration, setDuration] = useState(Math.min(maxDuration ?? 60, 60));
   const [hosts, setHosts] = useState<Guest[]>([]);
   return (
     <div className="flex flex-col gap-4">
