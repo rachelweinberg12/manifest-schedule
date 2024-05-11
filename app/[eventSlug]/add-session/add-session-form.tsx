@@ -28,7 +28,6 @@ export function AddSessionForm(props: {
     dayParam && timeParam
       ? convertParamDateTime(dayParam, timeParam)
       : undefined;
-  console.log(initDateTime);
   const initDay = initDateTime
     ? days.find((d) => dateOnDay(initDateTime, d))
     : undefined;
@@ -220,8 +219,8 @@ function getAvailableStartTimes(
   );
   const startTimes: StartTime[] = [];
   for (
-    let t = new Date(day.Start).getTime();
-    t < new Date(day.End).getTime();
+    let t = new Date(day["Start bookings"]).getTime();
+    t < new Date(day["End bookings"]).getTime();
     t += 30 * 60 * 1000
   ) {
     const formattedTime = DateTime.fromMillis(t)
