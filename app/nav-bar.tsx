@@ -73,7 +73,7 @@ export default function Example() {
 
 function NavBarItem(props: { item: NavItem }) {
   const { item } = props;
-  const isCurrentPage = item.href === usePathname() && item.href != null;
+  const isCurrentPage = usePathname().includes(item.href) && item.href != null;
   return (
     <Link
       key={item.name}
@@ -93,7 +93,8 @@ function NavBarItem(props: { item: NavItem }) {
 
 function SmallNavBarItem(props: { item: NavItem }) {
   const { item } = props;
-  const isCurrentPage = item.href === usePathname() && item.href != null;
+  const isCurrentPage =
+    item.href === usePathname().includes(item.href) && item.href != null;
   return (
     <Disclosure.Button
       key={item.name}
