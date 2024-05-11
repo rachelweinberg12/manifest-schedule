@@ -25,9 +25,7 @@ export default async function Home() {
   const eventNames = events.map((event) => event.Name);
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <main className="flex min-h-screen flex-col items-center justify-between lg:px-24 gap-10 sm:p-10 p-4">
-        <EventDisplay event={events[0]} days={days} locations={locations} />
-      </main>
+      <EventDisplay event={events[0]} days={days} locations={locations} />
     </Suspense>
   );
 }

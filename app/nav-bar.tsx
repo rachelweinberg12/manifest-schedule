@@ -18,9 +18,9 @@ type NavItem = {
   icon: any;
 };
 const navigation = [
-  { name: "Manifest", href: "/Manifest", icon: ArrowTrendingUpIcon },
-  { name: "Summer Camp", href: "/Summer-Camp", icon: SunIcon },
   { name: "LessOnline", href: "/LessOnline", icon: PencilIcon },
+  { name: "Summer Camp", href: "/Summer-Camp", icon: SunIcon },
+  { name: "Manifest", href: "/Manifest", icon: ArrowTrendingUpIcon },
 ] as NavItem[];
 
 export default function Example() {

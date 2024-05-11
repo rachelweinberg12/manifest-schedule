@@ -184,12 +184,14 @@ export type Event = {
   Description: string;
   Website: string;
   Guests: string[];
+  Start: string;
+  End: string;
 };
 export async function getEvents() {
   const events: Event[] = [];
   await base("Events")
     .select({
-      fields: ["Name", "Description", "Website", "Guests"],
+      fields: ["Name", "Description", "Website", "Guests", "Start", "End"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
@@ -204,7 +206,7 @@ export async function getEventByName(name: string) {
   const events: Event[] = [];
   await base("Events")
     .select({
-      fields: ["Name", "Description", "Website", "Guests"],
+      fields: ["Name", "Description", "Website", "Guests", "Start", "End"],
       filterByFormula: `{Name} = "${name}"`,
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
