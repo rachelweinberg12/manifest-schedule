@@ -105,10 +105,8 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
               sessions={day.Sessions.filter(
                 (session) => session["Location name"][0] === location.Name
               )}
-              start={start}
-              end={end}
+              day={day}
               location={location}
-              eventName={day["Event name"][0]}
             />
           );
         })}

@@ -1,8 +1,7 @@
-import { Session } from "@/utils/db";
 import clsx from "clsx";
 import { locationColors } from "../class-constants";
 import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
-import { Location } from "@/utils/db";
+import { Location, Day, Session } from "@/utils/db";
 import { Tooltip } from "./tooltip";
 import { DateTime } from "luxon";
 import Link from "next/link";
@@ -10,31 +9,42 @@ import Link from "next/link";
 export function SessionCard(props: {
   session: Session;
   location: Location;
-  eventName: string;
+  day: Day;
 }) {
-  const { session, location, eventName } = props;
-  const sessionLength =
-    new Date(session["End time"]).getTime() -
-    new Date(session["Start time"]).getTime();
+  const { session, location, day } = props;
+  const startTime = new Date(session["Start time"]).getTime();
+  const endTime = new Date(session["End time"]).getTime();
+  const sessionLength = endTime - startTime;
   const numHalfHours = sessionLength / 1000 / 60 / 30;
-  const isBlank = session.Title === "";
-  return isBlank ? (
-    <BlankSessionCard
-      eventName={eventName}
+  const isBlank = !session.Title;
+  const isBookable =
+    isBlank &&
+    startTime > new Date().getTime() &&
+    startTime >= new Date(day["Start bookings"]).getTime() &&
+    startTime < new Date(day["End bookings"]).getTime();
+  return isBookable ? (
+    <BookableSessionCard
+      eventName={day["Event name"][0]}
       session={session}
       location={location}
       numHalfHours={numHalfHours}
     />
   ) : (
-    <RealSessionCard
-      session={session}
-      location={location}
-      numHalfHours={numHalfHours}
-    />
+    <>
+      {isBlank ? (
+        <BlankSessionCard numHalfHours={numHalfHours} />
+      ) : (
+        <RealSessionCard
+          session={session}
+          location={location}
+          numHalfHours={numHalfHours}
+        />
+      )}
+    </>
   );
 }
 
-export function BlankSessionCard(props: {
+export function BookableSessionCard(props: {
   location: Location;
   session: Session;
   numHalfHours: number;
@@ -58,6 +68,11 @@ export function BlankSessionCard(props: {
       </Link>
     </div>
   );
+}
+
+function BlankSessionCard(props: { numHalfHours: number }) {
+  const { numHalfHours } = props;
+  return <div className={`row-span-${numHalfHours} my-0.5`} />;
 }
 
 export function RealSessionCard(props: {
