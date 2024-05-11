@@ -34,7 +34,7 @@ export default function RootLayout({
     <html lang="en" className={fontVars}>
       <body className="font-monteserrat">
         <NavBar />
-        <main className="lg:px-24 sm:p-10 p-6">{children}</main>
+        <main className="lg:px-24 sm:px-10 py-24 p-6">{children}</main>
       </body>
     </html>
   );
