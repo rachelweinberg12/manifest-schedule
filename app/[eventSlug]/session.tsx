@@ -18,6 +18,7 @@ export function SessionCard(props: {
   const isBlank = !session.Title;
   const isBookable =
     isBlank &&
+    location.Bookable &&
     startTime > new Date().getTime() &&
     startTime >= new Date(day["Start bookings"]).getTime() &&
     startTime < new Date(day["End bookings"]).getTime();

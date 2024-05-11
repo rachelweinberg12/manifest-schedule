@@ -1,11 +1,7 @@
 import {
-  getDays,
   getDaysByEvent,
-  getEventByName,
-  getGuests,
   getGuestsByEvent,
-  getLocations,
-  getSessions,
+  getBookableLocations,
   getSessionsByEvent,
 } from "@/utils/db";
 import { AddSessionForm } from "./add-session-form";
@@ -20,7 +16,7 @@ export default async function AddSession(props: {
     getDaysByEvent(eventName),
     getSessionsByEvent(eventName),
     getGuestsByEvent(eventName),
-    getLocations(),
+    getBookableLocations(),
   ]);
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();

@@ -111,6 +111,32 @@ export async function getLocations() {
   return locations;
 }
 
+export async function getBookableLocations() {
+  const locations: Location[] = [];
+  await base("Spaces")
+    .select({
+      fields: [
+        "Name",
+        "Area",
+        "Capacity",
+        "Type",
+        "ID",
+        "Color",
+        "Hidden",
+        "Bookable",
+      ],
+      filterByFormula: `AND({Hidden} = FALSE(), {Bookable} = TRUE())`,
+      sort: [{ field: "Index", direction: "asc" }],
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        locations.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return locations;
+}
+
 export type Guest = {
   "Full name": string;
   Email: string;
