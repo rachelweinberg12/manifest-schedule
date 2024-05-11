@@ -1,13 +1,26 @@
-import { getDays, getGuests, getLocations, getSessions } from "@/utils/db";
+import {
+  getDays,
+  getDaysByEvent,
+  getEventByName,
+  getGuests,
+  getGuestsByEvent,
+  getLocations,
+  getSessions,
+  getSessionsByEvent,
+} from "@/utils/db";
 import { AddSessionForm } from "./add-session-form";
 import { Suspense } from "react";
 
-export default async function Home() {
-  const [days, sessions, locations, guests] = await Promise.all([
-    getDays(),
-    getSessions(),
+export default async function AddSession(props: {
+  params: { eventSlug: string };
+}) {
+  const { eventSlug } = props.params;
+  const eventName = eventSlug.replace(/-/g, " ");
+  const [days, sessions, guests, locations] = await Promise.all([
+    getDaysByEvent(eventName),
+    getSessionsByEvent(eventName),
+    getGuestsByEvent(eventName),
     getLocations(),
-    getGuests(),
   ]);
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();
@@ -16,7 +29,7 @@ export default async function Home() {
       const sessionStartMillis = new Date(s["Start time"]).getTime();
       const sessionEndMillis = new Date(s["End time"]).getTime();
       return (
-        dayStartMillis >= sessionStartMillis && dayEndMillis <= sessionEndMillis
+        dayStartMillis <= sessionStartMillis && dayEndMillis >= sessionEndMillis
       );
     });
   });
@@ -24,6 +37,7 @@ export default async function Home() {
     <Suspense fallback={<div>Loading...</div>}>
       <div className="max-w-2xl mx-auto pb-24">
         <AddSessionForm
+          eventName={eventName}
           days={days}
           locations={locations}
           sessions={sessions}

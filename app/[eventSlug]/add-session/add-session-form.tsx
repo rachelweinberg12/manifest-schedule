@@ -13,12 +13,13 @@ import { convertParamDateTime, dateOnDay } from "@/utils/utils";
 import { MyListbox } from "./select";
 
 export function AddSessionForm(props: {
+  eventName: string;
   days: Day[];
   sessions: Session[];
   locations: Location[];
   guests: Guest[];
 }) {
-  const { days, sessions, locations, guests } = props;
+  const { eventName, days, sessions, locations, guests } = props;
   const searchParams = useSearchParams();
   const dayParam = searchParams?.get("day");
   const timeParam = searchParams?.get("time");
@@ -92,7 +93,7 @@ export function AddSessionForm(props: {
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="text-2xl font-bold">Add a session</h2>
+        <h2 className="text-2xl font-bold">{eventName}: Add a session</h2>
         <p className="text-sm text-gray-500 mt-2">
           Fill out this form to add a session to the schedule! Your session will
           be added to the schedule immediately, but we may reach out to you

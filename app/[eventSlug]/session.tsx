@@ -5,9 +5,14 @@ import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Location } from "@/utils/db";
 import { Tooltip } from "./tooltip";
 import { DateTime } from "luxon";
+import Link from "next/link";
 
-export function SessionCard(props: { session: Session; location: Location }) {
-  const { session, location } = props;
+export function SessionCard(props: {
+  session: Session;
+  location: Location;
+  eventName: string;
+}) {
+  const { session, location, eventName } = props;
   const sessionLength =
     new Date(session["End time"]).getTime() -
     new Date(session["Start time"]).getTime();
@@ -15,6 +20,7 @@ export function SessionCard(props: { session: Session; location: Location }) {
   const isBlank = session.Title === "";
   return isBlank ? (
     <BlankSessionCard
+      eventName={eventName}
       session={session}
       location={location}
       numHalfHours={numHalfHours}
@@ -32,22 +38,24 @@ export function BlankSessionCard(props: {
   location: Location;
   session: Session;
   numHalfHours: number;
+  eventName: string;
 }) {
-  const { numHalfHours, session, location } = props;
+  const { numHalfHours, session, location, eventName } = props;
   const dayParam = DateTime.fromISO(session["Start time"])
     .setZone("America/Los_Angeles")
     .toFormat("MM-dd");
   const timeParam = DateTime.fromISO(session["Start time"])
     .setZone("America/Los_Angeles")
     .toFormat("HH:mm");
+  const eventSlug = eventName.replace(" ", "-");
   return (
     <div className={`row-span-${numHalfHours} my-0.5`}>
-      <a
+      <Link
         className="rounded font-roboto h-full w-full bg-gray-100 flex items-center justify-center"
-        href={`/add-session?location=${props.location.Name}&time=${timeParam}&day=${dayParam}`}
+        href={`/${eventSlug}/add-session?location=${location.Name}&time=${timeParam}&day=${dayParam}`}
       >
         <PlusIcon className="h-4 w-4 text-gray-400" />
-      </a>
+      </Link>
     </div>
   );
 }

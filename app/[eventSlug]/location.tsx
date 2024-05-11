@@ -5,12 +5,13 @@ import { getNumHalfHours } from "@/utils/utils";
 import clsx from "clsx";
 
 export function LocationCol(props: {
+  eventName: string;
   sessions: Session[];
   location: Location;
   start: Date;
   end: Date;
 }) {
-  const { sessions, location, start, end } = props;
+  const { eventName, sessions, location, start, end } = props;
   const sessionsWithBlanks = insertBlankSessions(sessions, start, end);
   const numHalfHours = getNumHalfHours(start, end);
   return (
@@ -23,6 +24,7 @@ export function LocationCol(props: {
       >
         {sessionsWithBlanks.map((session) => (
           <SessionCard
+            eventName={eventName}
             key={session["Start time"]}
             session={session}
             location={location}

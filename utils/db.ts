@@ -118,6 +118,22 @@ export async function getGuests() {
   return guests;
 }
 
+export async function getGuestsByEvent(eventName: string) {
+  const guests: Guest[] = [];
+  await base("Guest list")
+    .select({
+      view: eventName,
+      fields: ["Full name", "Email", "Manifest ticket type", "ID"],
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        guests.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return guests;
+}
+
 export type Day = {
   Start: string;
   End: string;

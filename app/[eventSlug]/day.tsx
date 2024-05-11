@@ -108,6 +108,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
               start={start}
               end={end}
               location={location}
+              eventName={day["Event name"][0]}
             />
           );
         })}
