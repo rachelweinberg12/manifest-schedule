@@ -3,7 +3,6 @@ import { Disclosure } from "@headlessui/react";
 import {
   ArrowTrendingUpIcon,
   Bars3Icon,
-  BellIcon,
   CalendarIcon,
   PencilIcon,
   SunIcon,
@@ -26,25 +25,28 @@ const navigation = [
 
 export default function Example() {
   return (
-    <Disclosure as="nav" className="bg-rose-400 shadow fixed w-full">
+    <Disclosure
+      as="nav"
+      className="bg-white border-b border-gray-300 fixed w-full z-10"
+    >
       {({ open }) => (
         <>
           <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <div className="relative flex h-16 items-center justify-between">
               <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
                 {/* Mobile menu button*/}
-                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-rose-300 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                <Disclosure.Button className="relative inline-flex items-center justify-center rounded-md p-2 text-rose-400 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400">
                   <span className="absolute -inset-0.5" />
                   {open ? (
-                    <XMarkIcon className="block h-6 w-6" />
+                    <XMarkIcon className="block h-6 w-6 stroke-2" />
                   ) : (
-                    <Bars3Icon className="block h-6 w-6" />
+                    <Bars3Icon className="block h-6 w-6 stroke-2" />
                   )}
                 </Disclosure.Button>
               </div>
               <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                 <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-4 sm:pr-0">
-                  <CalendarIcon className="block h-8 w-auto text-white" />
+                  <CalendarIcon className="block h-8 w-auto text-rose-400" />
                 </div>
                 <div className="hidden sm:ml-10 sm:block">
                   <div className="flex space-x-4">
@@ -78,8 +80,8 @@ function NavBarItem(props: { item: NavItem }) {
       href={item.href}
       className={clsx(
         isCurrentPage
-          ? "bg-rose-700 text-rose-200"
-          : "text-white hover:bg-rose-300",
+          ? "bg-rose-50 text-rose-400"
+          : "text-gray-400 hover:bg-gray-100",
         "group flex gap-1 cursor-pointer items-center rounded-md px-3 py-2 text-sm font-medium"
       )}
     >
@@ -99,8 +101,8 @@ function SmallNavBarItem(props: { item: NavItem }) {
       href={item.href}
       className={clsx(
         isCurrentPage
-          ? "bg-rose-700 text-rose-200"
-          : "text-white hover:bg-rose-300",
+          ? "bg-rose-50 text-rose-400"
+          : "text-gray-400 hover:bg-gray-100",
         "flex gap-2 rounded-md px-3 py-2 text-base font-medium"
       )}
     >
