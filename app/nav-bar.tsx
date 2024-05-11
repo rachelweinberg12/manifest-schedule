@@ -27,7 +27,7 @@ export default function Example() {
   return (
     <Disclosure
       as="nav"
-      className="bg-white border-b border-gray-300 fixed w-full z-10"
+      className="bg-white border-b border-gray-300 fixed w-full z-30"
     >
       {({ open }) => (
         <>
