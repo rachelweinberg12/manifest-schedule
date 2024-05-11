@@ -46,6 +46,35 @@ export async function getSessions() {
   return sessions;
 }
 
+export async function getSessionsByEvent(eventName: string) {
+  const sessions: Session[] = [];
+  await base("Sessions")
+    .select({
+      view: "Scheduled sessions",
+      fields: [
+        "Title",
+        "Description",
+        "Start time",
+        "End time",
+        "Hosts",
+        "Host name",
+        "Host email",
+        "Location",
+        "Location name",
+        "Area",
+        "Capacity",
+      ],
+      filterByFormula: `{Event name} = "${eventName}"`,
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        sessions.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return sessions;
+}
+
 export type Location = {
   Name: string;
   Area: string;
@@ -115,15 +144,36 @@ export async function getDays() {
   return sortedDays;
 }
 
+export async function getDaysByEvent(eventName: string) {
+  const days: Day[] = [];
+  await base("Days")
+    .select({
+      fields: ["Start", "End", "Start bookings", "End bookings", "Event name"],
+      filterByFormula: `{Event name} = "${eventName}"`,
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        days.push({ ...record.fields, Sessions: [] });
+      });
+      fetchNextPage();
+    });
+  const sortedDays = days.sort((a, b) => {
+    return new Date(a.Start).getTime() - new Date(b.Start).getTime();
+  });
+  return sortedDays;
+}
+
 export type Event = {
   Name: string;
+  Description: string;
+  Website: string;
   Guests: string[];
 };
 export async function getEvents() {
   const events: Event[] = [];
   await base("Events")
     .select({
-      fields: ["Name", "Guests"],
+      fields: ["Name", "Description", "Website", "Guests"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
@@ -132,4 +182,20 @@ export async function getEvents() {
       fetchNextPage();
     });
   return events;
+}
+
+export async function getEventByName(name: string) {
+  const events: Event[] = [];
+  await base("Events")
+    .select({
+      fields: ["Name", "Description", "Website", "Guests"],
+      filterByFormula: `{Name} = "${name}"`,
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        events.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return events[0];
 }
