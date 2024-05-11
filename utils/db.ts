@@ -81,12 +81,26 @@ export type Location = {
   Capacity: number;
   Type: "main" | "side";
   ID: string;
+  Color: string;
+  Hidden: boolean;
+  Bookable: boolean;
 };
 export async function getLocations() {
   const locations: Location[] = [];
   await base("Spaces")
     .select({
-      fields: ["Name", "Area", "Capacity", "Type", "ID"],
+      fields: [
+        "Name",
+        "Area",
+        "Capacity",
+        "Type",
+        "ID",
+        "Color",
+        "Hidden",
+        "Bookable",
+      ],
+      filterByFormula: `{Hidden} = FALSE()`,
+      sort: [{ field: "Index", direction: "asc" }],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {

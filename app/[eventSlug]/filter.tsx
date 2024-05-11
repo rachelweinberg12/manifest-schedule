@@ -6,10 +6,8 @@ import {
   usePathname,
   useRouter,
 } from "next/navigation";
-import { orderedLocations } from "./day";
 import { useState } from "react";
 import clsx from "clsx";
-import { locationColors } from "../class-constants";
 import { arraysEqual } from "@/utils/utils";
 
 export function Filter(props: { locations: Location[] }) {
@@ -117,29 +115,26 @@ function SelectLocationsToShow(props: {
   const { locations, searchParams, includedLocations, setIncludedLocations } =
     props;
   const urlSearchParams = new URLSearchParams(searchParams);
-  const locationOptions = orderedLocations.filter((loc) =>
-    locations.find((l) => l.Name === loc)
-  );
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
     <>
-      {locationOptions.map((location) => (
-        <div key={location} className="flex items-center">
+      {locations.map((location) => (
+        <div key={location.Name} className="flex items-center">
           <input
             type="checkbox"
             className={clsx(
               "h-4 w-4 rounded border-gray-300 cursor-pointer",
-              `text-${locationColors[location]}-400 focus:ring-${locationColors[location]}-400`
+              `text-${location.Color}-400 focus:ring-${location.Color}-400`
             )}
-            id={location}
-            name={location}
-            checked={includedLocations.includes(location)}
+            id={location.Name}
+            name={location.Name}
+            checked={includedLocations.includes(location.Name)}
             onChange={(event) => {
               const start = new Date();
               if (event.target.checked) {
-                urlSearchParams.append("loc", location);
-                setIncludedLocations([...includedLocations, location]);
+                urlSearchParams.append("loc", location.Name);
+                setIncludedLocations([...includedLocations, location.Name]);
               } else {
                 if (
                   includedLocations.length >
@@ -149,9 +144,9 @@ function SelectLocationsToShow(props: {
                     urlSearchParams.append("loc", loc);
                   });
                 }
-                urlSearchParams.delete("loc", location);
+                urlSearchParams.delete("loc", location.Name);
                 setIncludedLocations(
-                  includedLocations.filter((loc) => loc !== location)
+                  includedLocations.filter((loc) => loc !== location.Name)
                 );
               }
               replace(`${pathname}?${urlSearchParams.toString()}`);
@@ -163,10 +158,10 @@ function SelectLocationsToShow(props: {
             }}
           />
           <label
-            htmlFor={location}
+            htmlFor={location.Name}
             className="cursor-pointer pl-2 text-sm text-gray-700"
           >
-            {location}
+            {location.Name}
           </label>
         </div>
       ))}

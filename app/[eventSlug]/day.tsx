@@ -1,5 +1,5 @@
 "use client";
-import { Session, Location, Day } from "@/utils/db";
+import { Location, Day } from "@/utils/db";
 import { LocationCol } from "./location";
 import { format } from "date-fns";
 import clsx from "clsx";
@@ -15,11 +15,11 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
   const { day, locations } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams?.getAll("loc");
-  const locationsFromParams = orderedLocations.filter((loc) =>
-    locParams?.includes(loc)
+  const locationsFromParams = locations.filter((loc) =>
+    locParams?.includes(loc.Name)
   );
   const includedLocations =
-    locationsFromParams.length === 0 ? orderedLocations : locationsFromParams;
+    locationsFromParams.length === 0 ? locations : locationsFromParams;
   const numIncludedLocations = includedLocations.length;
   const screenWidth = useScreenWidth();
   const numDisplayedLocations = getNumDisplayedLocations(
@@ -77,12 +77,9 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
         )}
       >
         <span className="p-1 border-b border-gray-100" />
-        {displayedLocations.map((locationName) => (
-          <span
-            key={locationName}
-            className="text-sm p-1 border-b border-gray-100"
-          >
-            {locationName}
+        {displayedLocations.map((loc) => (
+          <span key={loc.Name} className="text-sm p-1 border-b border-gray-100">
+            {loc.Name}
           </span>
         ))}
       </div>
@@ -94,8 +91,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       >
         <NowBar start={start} end={end} />
         <TimestampCol start={start} end={end} />
-        {displayedLocations.map((locationName) => {
-          const location = locations.find((loc) => loc.Name === locationName);
+        {displayedLocations.map((location) => {
           if (!location) {
             return null;
           }
@@ -242,14 +238,3 @@ function getNumDisplayedLocations(screenWidth: number, numLocations: number) {
   const breakpoint = getBreakpoint(screenWidth);
   return Math.min(MAX_COLS[breakpoint], numLocations);
 }
-
-export const orderedLocations = [
-  "Rat Park",
-  "1E Main",
-  "Gardens",
-  "2B1",
-  "B Ground Floor",
-  "Old Restaurant",
-  "2E2",
-  "B Attic",
-] as string[];

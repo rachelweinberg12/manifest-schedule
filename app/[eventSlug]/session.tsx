@@ -1,5 +1,4 @@
 import clsx from "clsx";
-import { locationColors } from "../class-constants";
 import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Location, Day, Session } from "@/utils/db";
 import { Tooltip } from "./tooltip";
@@ -117,12 +116,8 @@ export function RealSessionCard(props: {
         className={clsx(
           "py-1 px-1.5 rounded font-roboto h-full",
           isMain
-            ? `bg-${
-                locationColors[session["Location name"][0]]
-              }-200 border-2 border-${
-                locationColors[session["Location name"][0]]
-              }-400`
-            : `bg-${locationColors[session["Location name"][0]]}-200`
+            ? `bg-${location.Color}-200 border-2 border-${location.Color}-400`
+            : `bg-${location.Color}-200`
         )}
       >
         <p className="font-medium text-xs leading-tight line-clamp-2 text-left">
