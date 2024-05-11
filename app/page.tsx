@@ -2,6 +2,7 @@ import { getDays, getEvents, getLocations, getSessions } from "@/utils/db";
 import { Suspense } from "react";
 import { EventSelect } from "./event-select";
 import { EventDisplay } from "./[eventSlug]/event";
+import NavBar from "./nav-bar";
 
 export default async function Home() {
   const [events, days, sessions, locations] = await Promise.all([
@@ -25,7 +26,6 @@ export default async function Home() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="flex min-h-screen flex-col items-center justify-between lg:px-24 gap-10 sm:p-10 p-4">
-        <EventSelect eventNames={eventNames} />
         <EventDisplay event={events[0]} days={days} locations={locations} />
       </main>
     </Suspense>
