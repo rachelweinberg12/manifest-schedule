@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={fontVars}>
-      <body className="font-monteserrat lg:px-24 sm:p-10 p-4">{children}</body>
+      <body className="font-monteserrat lg:px-24 sm:p-10 p-6">{children}</body>
     </html>
   );
 }
