@@ -1,11 +1,12 @@
-import { getDays, getLocations, getSessions } from "@/utils/db";
+import { getDays, getEvents, getLocations, getSessions } from "@/utils/db";
 import { Suspense } from "react";
 import { uniq } from "lodash";
 import { EventSelect } from "./event-select";
 import { Event } from "./event";
 
 export default async function Home() {
-  const [days, sessions, locations] = await Promise.all([
+  const [events, days, sessions, locations] = await Promise.all([
+    getEvents(),
     getDays(),
     getSessions(),
     getLocations(),
@@ -21,7 +22,7 @@ export default async function Home() {
       );
     });
   });
-  const eventNames = uniq(days.map((day) => day.Event));
+  const eventNames = events.map((event) => event.Name);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-10 sm:p-10 p-4">

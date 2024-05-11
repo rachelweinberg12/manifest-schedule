@@ -94,14 +94,14 @@ export type Day = {
   End: string;
   "Start bookings": string;
   "End bookings": string;
-  Event: string;
+  "Event name": string;
   Sessions: Session[];
 };
 export async function getDays() {
   const days: Day[] = [];
   await base("Days")
     .select({
-      fields: ["Start", "End", "Start bookings", "End bookings", "Event"],
+      fields: ["Start", "End", "Start bookings", "End bookings", "Event name"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
@@ -113,4 +113,23 @@ export async function getDays() {
     return new Date(a.Start).getTime() - new Date(b.Start).getTime();
   });
   return sortedDays;
+}
+
+export type Event = {
+  Name: string;
+  Guests: string[];
+};
+export async function getEvents() {
+  const events: Event[] = [];
+  await base("Events")
+    .select({
+      fields: ["Name", "Guests"],
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        events.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return events;
 }

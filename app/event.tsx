@@ -8,7 +8,7 @@ export function Event(props: { days: Day[]; locations: Location[] }) {
   const { days, locations } = props;
   const searchParams = useSearchParams();
   const eventName = searchParams.get("event") ?? "Manifest";
-  const daysForEvent = days.filter((day) => day.Event === eventName);
+  const daysForEvent = days.filter((day) => day["Event name"][0] === eventName);
   return (
     <div className="flex flex-col gap-5 items-start w-full">
       <h1 className="text-3xl font-bold text-center">{eventName}</h1>
