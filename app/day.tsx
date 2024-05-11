@@ -1,5 +1,5 @@
 "use client";
-import { Session, Location } from "@/utils/db";
+import { Session, Location, Day } from "@/utils/db";
 import { LocationCol } from "./location";
 import { format } from "date-fns";
 import clsx from "clsx";
@@ -11,13 +11,8 @@ import { useScreenWidth } from "@/utils/hooks";
 import { useEffect, useState } from "react";
 import { DateTime } from "luxon";
 
-export function DayCol(props: {
-  sessions: Session[];
-  locations: Location[];
-  start: Date;
-  end: Date;
-}) {
-  const { sessions, locations, start, end } = props;
+export function DayCol(props: { locations: Location[]; day: Day }) {
+  const { day, locations } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams?.getAll("loc");
   const locationsFromParams = orderedLocations.filter((loc) =>
@@ -42,12 +37,14 @@ export function DayCol(props: {
     displayStartIdx + numDisplayedLocations
   );
   const includePagination = includedLocations.length > numDisplayedLocations;
+  const start = new Date(day.Start);
+  const end = new Date(day.End);
   return (
     <div className="w-full">
       <div className="flex flex-col mb-5">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">
-            {format(start, "EEEE, MMMM d")}
+            {format(day.Start, "EEEE, MMMM d")}
           </h2>
           {includePagination && (
             <div className="flex items-center gap-3">
@@ -105,7 +102,7 @@ export function DayCol(props: {
           return (
             <LocationCol
               key={location.Name}
-              sessions={sessions.filter(
+              sessions={day.Sessions.filter(
                 (session) => session["Location name"][0] === location.Name
               )}
               start={start}

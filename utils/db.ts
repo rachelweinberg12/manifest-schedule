@@ -88,3 +88,29 @@ export async function getGuests() {
     });
   return guests;
 }
+
+export type Day = {
+  Start: string;
+  End: string;
+  "Start bookings": string;
+  "End bookings": string;
+  Event: string;
+  Sessions: Session[];
+};
+export async function getDays() {
+  const days: Day[] = [];
+  await base("Days")
+    .select({
+      fields: ["Start", "End", "Start bookings", "End bookings", "Event"],
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        days.push({ ...record.fields, Sessions: [] });
+      });
+      fetchNextPage();
+    });
+  const sortedDays = days.sort((a, b) => {
+    return new Date(a.Start).getTime() - new Date(b.Start).getTime();
+  });
+  return sortedDays;
+}

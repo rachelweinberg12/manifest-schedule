@@ -1,18 +1,19 @@
-import { getGuests, getLocations, getSessions } from "@/utils/db";
-import { isAfter, isBefore, isEqual } from "date-fns";
-import { days } from "@/utils/constants";
+import { getDays, getGuests, getLocations, getSessions } from "@/utils/db";
 import { AddSessionForm } from "./add-session-form";
 
 export default async function Home() {
   const sessions = await getSessions();
+  const days = await getDays();
   days.forEach((day) => {
-    day.sessions = sessions.filter(
-      (session) =>
-        (isBefore(day.start, new Date(session["Start time"])) ||
-          isEqual(day.start, new Date(session["Start time"]))) &&
-        (isAfter(day.end, new Date(session["End time"])) ||
-          isEqual(day.end, new Date(session["End time"])))
-    );
+    const dayStartMillis = new Date(day.Start).getTime();
+    const dayEndMillis = new Date(day.End).getTime();
+    day.Sessions = sessions.filter((s) => {
+      const sessionStartMillis = new Date(s["Start time"]).getTime();
+      const sessionEndMillis = new Date(s["End time"]).getTime();
+      return (
+        dayStartMillis >= sessionStartMillis && dayEndMillis <= sessionEndMillis
+      );
+    });
   });
   const locations = await getLocations();
   const guests = await getGuests();

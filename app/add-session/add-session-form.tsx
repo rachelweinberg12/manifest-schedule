@@ -2,9 +2,8 @@
 import clsx from "clsx";
 import { Fragment, useEffect, useState } from "react";
 import { Input } from "./input";
-import { Day } from "@/utils/constants";
 import { format } from "date-fns";
-import { Session, Location, Guest } from "@/utils/db";
+import { Session, Location, Guest, Day } from "@/utils/db";
 import { Combobox, Transition } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/16/solid";
 import { XMarkIcon } from "@heroicons/react/24/outline";
@@ -40,7 +39,6 @@ export function AddSessionForm(props: {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [day, setDay] = useState(initDay ?? days[0]);
-  console.log(day, day.start, typeof day.start);
   const [location, setLocation] = useState(
     locations.find((l) => l.Name === initLocation)?.Name
   );
@@ -221,8 +219,8 @@ function getAvailableStartTimes(
   );
   const startTimes: StartTime[] = [];
   for (
-    let t = day.start.getTime();
-    t < day.end.getTime();
+    let t = new Date(day.Start).getTime();
+    t < new Date(day.End).getTime();
     t += 30 * 60 * 1000
   ) {
     const formattedTime = DateTime.fromMillis(t)
@@ -247,7 +245,7 @@ function getAvailableStartTimes(
         );
         const latestEndTime = nextSession
           ? new Date(nextSession["Start time"]).getTime()
-          : day.end.getTime();
+          : new Date(day.End).getTime();
         startTimes.push({
           formattedTime,
           time: t,
@@ -424,13 +422,13 @@ function SelectDay(props: {
     <fieldset>
       <div className="space-y-4">
         {days.map((d) => {
-          const formattedDay = format(d.start, "EEEE, MMMM d");
+          const formattedDay = format(d.Start, "EEEE, MMMM d");
           return (
             <div key={formattedDay} className="flex items-center">
               <input
                 id={formattedDay}
                 type="radio"
-                checked={d.start === day.start}
+                checked={d.Start === day.Start}
                 onChange={() => setDay(d)}
                 className="h-4 w-4 border-gray-300 text-rose-400 focus:ring-rose-400"
               />

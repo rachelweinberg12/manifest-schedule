@@ -1,21 +1,21 @@
-import { getLocations, getSessions } from "@/utils/db";
-import { isAfter, isBefore, isEqual } from "date-fns";
+import { getDays, getLocations, getSessions } from "@/utils/db";
 import { DayCol } from "./day";
 import { Filter } from "./filter";
 import { Suspense } from "react";
-import { days } from "@/utils/constants";
 
 export default async function Home() {
   const sessions = await getSessions();
-  console.log(sessions);
+  const days = await getDays();
   days.forEach((day) => {
-    day.sessions = sessions.filter(
-      (session) =>
-        (isBefore(day.start, new Date(session["Start time"])) ||
-          isEqual(day.start, new Date(session["Start time"]))) &&
-        (isAfter(day.end, new Date(session["End time"])) ||
-          isEqual(day.end, new Date(session["End time"])))
-    );
+    const dayStartMillis = new Date(day.Start).getTime();
+    const dayEndMillis = new Date(day.End).getTime();
+    day.Sessions = sessions.filter((s) => {
+      const sessionStartMillis = new Date(s["Start time"]).getTime();
+      const sessionEndMillis = new Date(s["End time"]).getTime();
+      return (
+        dayStartMillis <= sessionStartMillis && dayEndMillis >= sessionEndMillis
+      );
+    });
   });
   const locations = await getLocations();
   return (
@@ -23,11 +23,7 @@ export default async function Home() {
       <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-24 sm:p-10 p-4">
         <Filter locations={locations} />
         {days.map((day) => (
-          <DayCol
-            key={day.start.toISOString()}
-            {...day}
-            locations={locations}
-          />
+          <DayCol key={day.Start} day={day} locations={locations} />
         ))}
       </main>
     </Suspense>

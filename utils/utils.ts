@@ -1,4 +1,4 @@
-import { Day } from "./constants";
+import { Day } from "./db";
 
 export const getPercentThroughDay = (now: Date, start: Date, end: Date) =>
   ((now.getTime() - start.getTime()) / (end.getTime() - start.getTime())) * 100;
@@ -17,6 +17,7 @@ export const convertParamDateTime = (date: string, time: string) => {
 
 export const dateOnDay = (date: Date, day: Day) => {
   return (
-    date.getTime() >= day.start.getTime() && date.getTime() <= day.end.getTime()
+    date.getTime() >= new Date(day.Start).getTime() &&
+    date.getTime() <= new Date(day.End).getTime()
   );
 };

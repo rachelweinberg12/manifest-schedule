@@ -1,6 +1,5 @@
 import { Guest, Session, Location, getSessions } from "@/utils/db";
-import { Day } from "@/utils/constants";
-import { getDay, getMonth } from "date-fns";
+import { Day } from "@/utils/db";
 import { DateTime } from "luxon";
 
 type SessionParams = {
@@ -33,8 +32,7 @@ export async function POST(req: Request) {
     startTimeString,
     duration,
   } = (await req.json()) as SessionParams;
-  console.log(typeof day.start);
-  const dayStartDT = DateTime.fromJSDate(new Date(day.start));
+  const dayStartDT = DateTime.fromJSDate(new Date(day.Start));
   const dayISOFormatted = dayStartDT.toFormat("yyyy-MM-dd");
   const [rawHour, rawMinute, ampm] = startTimeString.split(/[: ]/);
   const hourNum = parseInt(rawHour);
@@ -55,7 +53,6 @@ export async function POST(req: Request) {
     "startTimeStamp",
     startTimeStamp
   );
-  console.log("duration", duration);
   const session: SessionInsert = {
     Title: title,
     Description: description,

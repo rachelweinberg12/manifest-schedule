@@ -81,7 +81,6 @@ export function Tooltip(props: {
       >
         {children}
       </span>
-      {/* conditionally render tooltip and fade in/out */}
       <Transition
         show={open}
         enter="transition ease-out duration-50"
@@ -90,7 +89,6 @@ export function Tooltip(props: {
         leave={noFade ? "" : "transition ease-in duration-150"}
         leaveFrom="opacity-100"
         leaveTo="opacity-0"
-        // div attributes
         role="tooltip"
         ref={refs.setFloating}
         style={{ position: strategy, top: y ?? 0, left: x ?? 0 }}
