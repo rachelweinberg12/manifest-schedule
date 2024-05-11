@@ -1,7 +1,7 @@
 import { getDays, getEvents, getLocations, getSessions } from "@/utils/db";
 import { Suspense } from "react";
 import { EventSelect } from "./event-select";
-import { EventDisplay } from "./event";
+import { EventDisplay } from "./[eventSlug]/event";
 
 export default async function Home() {
   const [events, days, sessions, locations] = await Promise.all([

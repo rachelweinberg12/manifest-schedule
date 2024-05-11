@@ -4,7 +4,8 @@ import {
   getLocations,
   getSessionsByEvent,
 } from "@/utils/db";
-import { EventDisplay } from "../event";
+import { EventDisplay } from "./event";
+import { Suspense } from "react";
 
 export default async function EventSchedule(props: {
   params: { eventSlug: string };
@@ -28,5 +29,9 @@ export default async function EventSchedule(props: {
       );
     });
   });
-  return <EventDisplay event={event} days={days} locations={locations} />;
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <EventDisplay event={event} days={days} locations={locations} />
+    </Suspense>
+  );
 }

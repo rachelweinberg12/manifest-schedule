@@ -1,6 +1,6 @@
 import { Session } from "@/utils/db";
 import clsx from "clsx";
-import { locationColors } from "./class-constants";
+import { locationColors } from "../class-constants";
 import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
 import { Location } from "@/utils/db";
 import { Tooltip } from "./tooltip";

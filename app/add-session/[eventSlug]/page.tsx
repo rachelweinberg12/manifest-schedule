@@ -1,5 +1,6 @@
 import { getDays, getGuests, getLocations, getSessions } from "@/utils/db";
 import { AddSessionForm } from "./add-session-form";
+import { Suspense } from "react";
 
 export default async function Home() {
   const [days, sessions, locations, guests] = await Promise.all([
@@ -20,13 +21,15 @@ export default async function Home() {
     });
   });
   return (
-    <div className="p-8 max-w-2xl mx-auto pb-24">
-      <AddSessionForm
-        days={days}
-        locations={locations}
-        sessions={sessions}
-        guests={guests}
-      />
-    </div>
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="max-w-2xl mx-auto pb-24">
+        <AddSessionForm
+          days={days}
+          locations={locations}
+          sessions={sessions}
+          guests={guests}
+        />
+      </div>
+    </Suspense>
   );
 }

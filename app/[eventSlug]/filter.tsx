@@ -9,7 +9,7 @@ import {
 import { orderedLocations } from "./day";
 import { useState } from "react";
 import clsx from "clsx";
-import { locationColors } from "./class-constants";
+import { locationColors } from "../class-constants";
 import { arraysEqual } from "@/utils/utils";
 
 export function Filter(props: { locations: Location[] }) {
