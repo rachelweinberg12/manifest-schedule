@@ -122,7 +122,6 @@ function SelectLocationsToShow(props: {
   );
   const pathname = usePathname();
   const { replace } = useRouter();
-  console.log(includedLocations);
   return (
     <>
       {locationOptions.map((location) => (
