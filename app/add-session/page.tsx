@@ -2,8 +2,12 @@ import { getDays, getGuests, getLocations, getSessions } from "@/utils/db";
 import { AddSessionForm } from "./add-session-form";
 
 export default async function Home() {
-  const sessions = await getSessions();
-  const days = await getDays();
+  const [days, sessions, locations, guests] = await Promise.all([
+    getDays(),
+    getSessions(),
+    getLocations(),
+    getGuests(),
+  ]);
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();
     const dayEndMillis = new Date(day.End).getTime();
@@ -15,8 +19,6 @@ export default async function Home() {
       );
     });
   });
-  const locations = await getLocations();
-  const guests = await getGuests();
   return (
     <div className="p-8 max-w-2xl mx-auto pb-24">
       <AddSessionForm

@@ -4,8 +4,11 @@ import { Filter } from "./filter";
 import { Suspense } from "react";
 
 export default async function Home() {
-  const sessions = await getSessions();
-  const days = await getDays();
+  const [days, sessions, locations] = await Promise.all([
+    getDays(),
+    getSessions(),
+    getLocations(),
+  ]);
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();
     const dayEndMillis = new Date(day.End).getTime();
@@ -17,7 +20,6 @@ export default async function Home() {
       );
     });
   });
-  const locations = await getLocations();
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <main className="flex min-h-screen flex-col items-center justify-between lg:p-24 gap-24 sm:p-10 p-4">
