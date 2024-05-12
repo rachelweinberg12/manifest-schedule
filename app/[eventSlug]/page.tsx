@@ -18,6 +18,7 @@ export default async function EventSchedule(props: {
     getSessionsByEvent(eventName),
     getLocations(),
   ]);
+  console.log("EventSchedule", days, sessions, locations);
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();
     const dayEndMillis = new Date(day.End).getTime();
@@ -29,6 +30,7 @@ export default async function EventSchedule(props: {
       );
     });
   });
+  console.log("EventSchedule", event);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <EventDisplay event={event} days={days} locations={locations} />
