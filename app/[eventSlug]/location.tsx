@@ -43,49 +43,22 @@ function insertBlankSessions(
   dayEnd: Date
 ) {
   const sessionsWithBlanks: Session[] = [];
-  // let currentTime = new Date(dayStart);
-  // while (isBefore(currentTime, dayEnd)) {
-  //   console.log("currentTime", currentTime.toISOString());
-  //   const sessionNow = sessions.find((session) =>
-  //     isEqual(new Date(session["Start time"]), currentTime)
-  //   );
-  //   if (!!sessionNow) {
-  //     sessionsWithBlanks.push(sessionNow);
-  //     currentTime = new Date(sessionNow["End time"]);
-  //   } else {
-  //     const currentEnd = add(new Date(currentTime), { minutes: 30 });
-  //     sessionsWithBlanks.push({
-  //       "Start time": currentTime.toISOString(),
-  //       "End time": currentEnd.toISOString(),
-  //       Title: "",
-  //       Description: "",
-  //       Hosts: [],
-  //       "Host name": [],
-  //       "Host email": "",
-  //       Location: [],
-  //       "Location name": [""],
-  //       Area: [],
-  //       Capacity: [],
-  //     });
-  //     currentTime = currentEnd;
-  //   }
-  // }
   for (
     let currentTime = dayStart.getTime();
     currentTime < dayEnd.getTime();
     currentTime += 1800000
   ) {
-    console.log("currentTime", currentTime);
     const sessionNow = sessions.find((session) => {
       const startTime = new Date(session["Start time"]).getTime();
       const endTime = new Date(session["End time"]).getTime();
-      return startTime <= currentTime && endTime >= currentTime;
+      return startTime <= currentTime && endTime > currentTime;
     });
-    if (
-      !!sessionNow &&
-      new Date(sessionNow["Start time"]).getTime() === currentTime
-    ) {
-      sessionsWithBlanks.push(sessionNow);
+    if (!!sessionNow) {
+      if (new Date(sessionNow["Start time"]).getTime() === currentTime) {
+        sessionsWithBlanks.push(sessionNow);
+      } else {
+        continue;
+      }
     } else {
       sessionsWithBlanks.push({
         "Start time": new Date(currentTime).toISOString(),

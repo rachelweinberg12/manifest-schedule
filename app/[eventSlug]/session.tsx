@@ -22,6 +22,17 @@ export function SessionCard(props: {
     startTime > new Date().getTime() &&
     startTime >= new Date(day["Start bookings"]).getTime() &&
     startTime < new Date(day["End bookings"]).getTime();
+  if (location.Name === "Old Restaurant" || location.Name === "B Ground") {
+    console.log(
+      "isBookable",
+      isBookable,
+      location.Name,
+      new Date(startTime),
+      startTime > new Date().getTime(),
+      startTime >= new Date(day["Start bookings"]).getTime(),
+      startTime < new Date(day["End bookings"]).getTime()
+    );
+  }
   return isBookable ? (
     <BookableSessionCard
       eventName={day["Event name"][0]}
