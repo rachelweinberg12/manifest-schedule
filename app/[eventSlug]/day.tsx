@@ -98,8 +98,8 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
           return (
             <LocationCol
               key={location.Name}
-              sessions={day.Sessions.filter(
-                (session) => session["Location name"][0] === location.Name
+              sessions={day.Sessions.filter((session) =>
+                session["Location name"].includes(location.Name)
               )}
               day={day}
               location={location}

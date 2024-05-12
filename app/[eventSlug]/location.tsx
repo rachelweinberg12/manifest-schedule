@@ -1,6 +1,5 @@
 import { Session, Location, Day } from "@/utils/db";
 import { SessionCard } from "./session";
-import { add, isBefore, isEqual } from "date-fns";
 import { getNumHalfHours } from "@/utils/utils";
 import clsx from "clsx";
 
@@ -71,7 +70,7 @@ function insertBlankSessions(
         Location: [],
         "Location name": [""],
         Area: [],
-        Capacity: [],
+        Capacity: 0,
       });
     }
   }

@@ -30,7 +30,6 @@ export default async function EventSchedule(props: {
       );
     });
   });
-  console.log("EventSchedule", event);
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <EventDisplay event={event} days={days} locations={locations} />

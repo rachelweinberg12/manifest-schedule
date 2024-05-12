@@ -22,17 +22,6 @@ export function SessionCard(props: {
     startTime > new Date().getTime() &&
     startTime >= new Date(day["Start bookings"]).getTime() &&
     startTime < new Date(day["End bookings"]).getTime();
-  if (location.Name === "Old Restaurant" || location.Name === "B Ground") {
-    console.log(
-      "isBookable",
-      isBookable,
-      location.Name,
-      new Date(startTime),
-      startTime > new Date().getTime(),
-      startTime >= new Date(day["Start bookings"]).getTime(),
-      startTime < new Date(day["End bookings"]).getTime()
-    );
-  }
   return isBookable ? (
     <BookableSessionCard
       eventName={day["Event name"][0]}
@@ -101,7 +90,7 @@ export function RealSessionCard(props: {
       <div className="flex justify-between mt-2 gap-4 text-xs text-gray-500">
         <div className="flex gap-1">
           <UserIcon className="h-4 w-4" />
-          <span>{location.Capacity}</span>
+          <span>{session.Capacity}</span>
         </div>
         <div className="flex gap-1">
           <ClockIcon className="h-4 w-4" />

@@ -16,7 +16,7 @@ export type Session = {
   Location: string[];
   "Location name": string[];
   Area: string[];
-  Capacity: number[];
+  Capacity: number;
 };
 export async function getSessions() {
   const sessions: Session[] = [];
