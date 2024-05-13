@@ -16,7 +16,7 @@ export function EventDisplay(props: {
   );
   return (
     <div className="flex flex-col items-start w-full">
-      <h1 className="text-4xl font-bold text-center mt-5">
+      <h1 className="sm:text-4xl text-3xl font-bold mt-5">
         {event.Name} Schedule
       </h1>
       <div className="flex text-gray-500 text-sm mt-1 gap-5 font-medium">
