@@ -101,8 +101,8 @@ export function RealSessionCard(props: {
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
   const TooltipContents = () => (
     <>
-      <h1 className="text-lg font-bold">{session.Title}</h1>
-      <p className="text-xs text-gray-500 mb-2">{formattedHostNames}</p>
+      <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
+      <p className="text-xs text-gray-500 mb-2 mt-1">{formattedHostNames}</p>
       <p className="text-sm">{session.Description}</p>
       <div className="flex justify-between mt-2 gap-4 text-xs text-gray-500">
         <div className="flex gap-1">
