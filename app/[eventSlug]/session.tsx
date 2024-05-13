@@ -81,7 +81,7 @@ export function RealSessionCard(props: {
   location: Location;
 }) {
   const { session, numHalfHours, location } = props;
-  const formattedHostNames = session["Host name"].join(", ");
+  const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
   const TooltipContents = () => (
     <>
       <h1 className="text-lg font-bold">{session.Title}</h1>

@@ -83,7 +83,7 @@ export function AddSessionForm(props: {
     });
     if (res.ok) {
       console.log("Session added successfully");
-      router.push("/add-session/confirmation");
+      router.push(`/${eventName.replace(" ", "-")}/confirmation`);
     } else {
       console.error("Failed to add session");
     }
