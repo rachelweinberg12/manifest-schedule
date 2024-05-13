@@ -124,7 +124,6 @@ export function RealSessionCard(props: {
       </div>
     </>
   );
-  const isMain = location.Type === "main";
   return (
     <Tooltip
       content={<TooltipContents />}
@@ -133,9 +132,7 @@ export function RealSessionCard(props: {
       <div
         className={clsx(
           "py-1 px-1.5 rounded font-roboto h-full",
-          isMain
-            ? `bg-${location.Color}-200 border-2 border-${location.Color}-400`
-            : `bg-${location.Color}-200`
+          `bg-${location.Color}-200`
         )}
       >
         <p className="font-medium text-xs leading-tight line-clamp-2 text-left">

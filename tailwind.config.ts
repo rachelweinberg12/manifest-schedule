@@ -18,6 +18,16 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
+      gridRow: {
+        "span-13": "span 13 / span 13",
+        "span-14": "span 14 / span 14",
+        "span-15": "span 15 / span 15",
+        "span-16": "span 16 / span 16",
+        "span-17": "span 17 / span 17",
+        "span-18": "span 18 / span 18",
+        "span-19": "span 19 / span 19",
+        "span-20": "span 20 / span 20",
+      },
     },
   },
   plugins: [require("@tailwindcss/forms")],
