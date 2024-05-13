@@ -76,10 +76,6 @@ function SelectLocationsToShow(props: {
               }
               replace(`${pathname}?${urlSearchParams.toString()}`);
               const end = new Date();
-              console.log(
-                "Time to update URL:",
-                end.getTime() - start.getTime()
-              );
             }}
           />
           <label

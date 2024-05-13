@@ -180,13 +180,23 @@ export type Day = {
   "Start bookings": string;
   "End bookings": string;
   "Event name": string;
+  Event: string[];
+  ID: string;
   Sessions: Session[];
 };
 export async function getDays() {
   const days: Day[] = [];
   await base("Days")
     .select({
-      fields: ["Start", "End", "Start bookings", "End bookings", "Event name"],
+      fields: [
+        "Start",
+        "End",
+        "Start bookings",
+        "End bookings",
+        "Event name",
+        "Event",
+        "ID",
+      ],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
@@ -197,6 +207,7 @@ export async function getDays() {
   const sortedDays = days.sort((a, b) => {
     return new Date(a.Start).getTime() - new Date(b.Start).getTime();
   });
+  console.log("sortedDays", sortedDays);
   return sortedDays;
 }
 
@@ -204,7 +215,15 @@ export async function getDaysByEvent(eventName: string) {
   const days: Day[] = [];
   await base("Days")
     .select({
-      fields: ["Start", "End", "Start bookings", "End bookings", "Event name"],
+      fields: [
+        "Start",
+        "End",
+        "Start bookings",
+        "End bookings",
+        "Event name",
+        "Event",
+        "ID",
+      ],
       filterByFormula: `{Event name} = "${eventName}"`,
     })
     .eachPage(function page(records: any, fetchNextPage: any) {

@@ -18,6 +18,8 @@ type SessionInsert = {
   "End time": string;
   Hosts: string[];
   Location: string[];
+  Event: string[];
+  Day: string[];
 };
 
 export const dynamic = "force-dynamic"; // defaults to auto
@@ -42,17 +44,6 @@ export async function POST(req: Request) {
   const startTimeStamp = new Date(
     `${dayISOFormatted}T${hourStr}:${minuteStr}:00-07:00`
   );
-  console.log(
-    dayStartDT,
-    dayISOFormatted,
-    rawHour,
-    rawMinute,
-    ampm,
-    hourStr,
-    minuteStr,
-    "startTimeStamp",
-    startTimeStamp
-  );
   const session: SessionInsert = {
     Title: title,
     Description: description,
@@ -62,9 +53,10 @@ export async function POST(req: Request) {
     "End time": new Date(
       startTimeStamp.getTime() + duration * 60 * 1000
     ).toISOString(),
+    Event: [day["Event"][0]],
+    Day: [day.ID],
   };
   const existingSessions = await getSessions();
-  console.log("existingSessions", existingSessions.length);
   const sessionValid = validateSession(session, existingSessions);
   if (sessionValid) {
     const Airtable = require("airtable");

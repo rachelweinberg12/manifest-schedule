@@ -18,7 +18,6 @@ export default async function EventSchedule(props: {
     getSessionsByEvent(eventName),
     getLocations(),
   ]);
-  console.log("EventSchedule", days, sessions, locations);
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();
     const dayEndMillis = new Date(day.End).getTime();

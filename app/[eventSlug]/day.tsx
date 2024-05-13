@@ -114,7 +114,6 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
 function TimestampCol(props: { start: Date; end: Date }) {
   const { start, end } = props;
   const numHalfHours = getNumHalfHours(start, end);
-  console.log(numHalfHours);
   return (
     <div
       className={clsx(
