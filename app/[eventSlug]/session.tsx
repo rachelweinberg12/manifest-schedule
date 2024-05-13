@@ -17,11 +17,28 @@ export function SessionCard(props: {
   const numHalfHours = sessionLength / 1000 / 60 / 30;
   const isBlank = !session.Title;
   const isBookable =
-    isBlank &&
-    location.Bookable &&
+    !!isBlank &&
+    !!location.Bookable &&
     startTime > new Date().getTime() &&
     startTime >= new Date(day["Start bookings"]).getTime() &&
     startTime < new Date(day["End bookings"]).getTime();
+  if (
+    day.Start === "2024-06-09T17:00:00.000Z" &&
+    location.Name === "Rat Park"
+  ) {
+    console.log("SESSION CARD");
+    console.log(
+      DateTime.fromISO(session["Start time"])
+        .setZone("America/Los_Angeles")
+        .toFormat("h:mm a"),
+      " - ",
+      DateTime.fromISO(session["End time"])
+        .setZone("America/Los_Angeles")
+        .toFormat("h:mm a")
+    );
+    console.log("isBlank", isBlank);
+    console.log("isBookable", isBookable);
+  }
   return isBookable ? (
     <BookableSessionCard
       eventName={day["Event name"][0]}

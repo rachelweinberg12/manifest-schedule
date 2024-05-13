@@ -52,6 +52,12 @@ export const dayGridRowVars = [
   "grid-rows-[repeat(22,minmax(0,1fr))]",
   "grid-rows-[repeat(23,minmax(0,1fr))]",
   "grid-rows-[repeat(24,minmax(0,1fr))]",
+  "grid-rows-[repeat(25,minmax(0,1fr))]",
+  "grid-rows-[repeat(26,minmax(0,1fr))]",
+  "grid-rows-[repeat(27,minmax(0,1fr))]",
+  "grid-rows-[repeat(28,minmax(0,1fr))]",
+  "grid-rows-[repeat(29,minmax(0,1fr))]",
+  "grid-rows-[repeat(30,minmax(0,1fr))]",
 ];
 
 export const dayGridColVars = [
