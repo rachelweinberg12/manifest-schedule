@@ -138,11 +138,7 @@ function TimestampCol(props: { start: Date; end: Date }) {
 
 function NowBar(props: { start: Date; end: Date }) {
   const { start, end } = props;
-  const percentThroughDay = getPercentThroughDay(
-    new Date("2024-06-08T11:36-07:00"),
-    start,
-    end
-  );
+  const percentThroughDay = getPercentThroughDay(new Date(), start, end);
   if (percentThroughDay < 100 && percentThroughDay > 0) {
     return (
       <div
