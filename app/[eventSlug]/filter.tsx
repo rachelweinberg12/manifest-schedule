@@ -13,95 +13,20 @@ import { arraysEqual } from "@/utils/utils";
 export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
   const searchParams = useSearchParams();
-  return (
-    <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
-      <SelectLocCategoryToShow
-        locations={locations}
-        searchParams={searchParams ?? undefined}
-      />
-    </div>
-  );
-}
-
-// TODO: store in airtable
-const MAIN_SESSION_SPACES = ["Rat Park", "1E Main"];
-type locationCategory = {
-  name: string;
-  locations: Location[];
-  current: boolean;
-};
-function SelectLocCategoryToShow(props: {
-  locations: Location[];
-  searchParams?: ReadonlyURLSearchParams;
-}) {
-  const { locations, searchParams } = props;
-  const urlSearchParams = new URLSearchParams(searchParams);
-  const pathname = usePathname();
-  const { replace } = useRouter();
-  const locCategories = [
-    {
-      name: "all",
-      locations: locations,
-    },
-    {
-      name: "main",
-      locations: locations.filter((loc) =>
-        MAIN_SESSION_SPACES.includes(loc.Name)
-      ),
-    },
-    {
-      name: "side",
-      locations: locations.filter(
-        (loc) => !MAIN_SESSION_SPACES.includes(loc.Name)
-      ),
-    },
-  ] as locationCategory[];
-  const locationsFromParams = urlSearchParams.getAll("loc");
+  const locationsFromParams = searchParams.getAll("loc");
   const [includedLocations, setIncludedLocations] = useState(
     locationsFromParams.length === 0
       ? locations.map((loc) => loc.Name)
       : locationsFromParams
   );
-  const onSelectCategory = (category: locationCategory) => {
-    locCategories.forEach((cat) => {
-      cat.current = cat.name === category.name;
-    });
-    urlSearchParams.delete("loc");
-    category.locations.forEach((loc) => {
-      urlSearchParams.append("loc", loc.Name);
-    });
-    setIncludedLocations(category.locations.map((loc) => loc.Name));
-    replace(`${pathname}?${urlSearchParams.toString()}`);
-  };
   return (
-    <div>
-      <div className="flex space-x-4">
-        {locCategories.map((cat) => (
-          <button
-            key={cat.name}
-            onClick={() => onSelectCategory(cat)}
-            className={clsx(
-              arraysEqual(
-                cat.locations.map((loc) => loc.Name),
-                includedLocations
-              )
-                ? "bg-gray-100 text-gray-700"
-                : "text-gray-500 hover:text-gray-700",
-              "rounded-md px-3 py-2 text-sm font-medium"
-            )}
-          >
-            {cat.name.toLocaleUpperCase()}
-          </button>
-        ))}
-      </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 xl:grid-cols-6 2xl:grid-cols-8 gap-4 mt-3">
-        <SelectLocationsToShow
-          locations={locations}
-          searchParams={searchParams}
-          includedLocations={includedLocations}
-          setIncludedLocations={setIncludedLocations}
-        />
-      </div>
+    <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
+      <SelectLocationsToShow
+        locations={locations}
+        searchParams={searchParams}
+        includedLocations={includedLocations}
+        setIncludedLocations={setIncludedLocations}
+      />
     </div>
   );
 }
@@ -118,7 +43,7 @@ function SelectLocationsToShow(props: {
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
-    <>
+    <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-4">
       {locations.map((location) => (
         <div key={location.Name} className="flex items-center">
           <input
@@ -165,6 +90,6 @@ function SelectLocationsToShow(props: {
           </label>
         </div>
       ))}
-    </>
+    </div>
   );
 }
