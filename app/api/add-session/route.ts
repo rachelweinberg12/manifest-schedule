@@ -20,6 +20,7 @@ type SessionInsert = {
   Location: string[];
   Event: string[];
   Day: string[];
+  "Attendee scheduled": boolean;
 };
 
 export const dynamic = "force-dynamic"; // defaults to auto
@@ -55,6 +56,7 @@ export async function POST(req: Request) {
     ).toISOString(),
     Event: [day["Event"][0]],
     Day: [day.ID],
+    "Attendee scheduled": true,
   };
   const existingSessions = await getSessions();
   const sessionValid = validateSession(session, existingSessions);

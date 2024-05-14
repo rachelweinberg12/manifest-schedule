@@ -245,7 +245,7 @@ function getAvailableStartTimes(
         );
         const latestEndTime = nextSession
           ? new Date(nextSession["Start time"]).getTime()
-          : new Date(day.End).getTime();
+          : new Date(day["End bookings"]).getTime();
         startTimes.push({
           formattedTime,
           time: t,
