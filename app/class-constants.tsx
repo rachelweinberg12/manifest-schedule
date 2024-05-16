@@ -19,6 +19,16 @@ export const rowSpanVars = [
   "row-span-18",
   "row-span-19",
   "row-span-20",
+  "row-span-21",
+  "row-span-22",
+  "row-span-23",
+  "row-span-24",
+  "row-span-25",
+  "row-span-26",
+  "row-span-27",
+  "row-span-28",
+  "row-span-29",
+  "row-span-30",
 ];
 
 export const allLocationColors = [
