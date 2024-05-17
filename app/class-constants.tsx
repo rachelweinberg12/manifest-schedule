@@ -39,8 +39,9 @@ export const allLocationColors = [
   "bg-green-200 bg-green-100 bg-green-400 border-green-400 focus:ring-green-400 text-green-400",
   "bg-teal-200 bg-teal-100 bg-teal-400 border-teal-400 focus:ring-teal-400 text-teal-400",
   "bg-cyan-200 bg-cyan-100 bg-cyan-400 border-cyan-400 focus:ring-cyan-400 text-cyan-400",
-  "bg-sky-200 bg-blue-100 bg-blue-400 border-blue-400 focus:ring-blue-400 text-blue-400",
-  "bg-violet-200 bg-violet-100 bg-violet-400 border-violet-400 focus:ring-violet-400 text-violet-400",
+  "bg-blue-200 bg-blue-100 bg-blue-400 border-blue-400 focus:ring-blue-400 text-blue-400",
+  "bg-indigo-200 bg-indigo-100 bg-indigo-400 border-indigo-400 focus:ring-indigo-400 text-indigo-400",
+  "bg-purple-200 bg-purple-100 bg-purple-400 border-purple-400 focus:ring-purple-400 text-purple-400",
   "bg-fuchsia-200 bg-fuchsia-100 bg-fuchsia-400 border-fuchsia-400 focus:ring-fuchsia-400 text-fuchsia-400",
   "bg-pink-200 bg-pink-100 bg-pink-400 border-pink-400 focus:ring-pink-400 text-pink-400",
 ];
