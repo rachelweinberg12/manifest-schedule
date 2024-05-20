@@ -3,6 +3,7 @@ import {
   getGuestsByEvent,
   getBookableLocations,
   getSessionsByEvent,
+  getEventByName,
 } from "@/utils/db";
 import { AddSessionForm } from "./add-session-form";
 import { Suspense } from "react";
@@ -12,7 +13,8 @@ export default async function AddSession(props: {
 }) {
   const { eventSlug } = props.params;
   const eventName = eventSlug.replace(/-/g, " ");
-  const [days, sessions, guests, locations] = await Promise.all([
+  const [event, days, sessions, guests, locations] = await Promise.all([
+    getEventByName(eventName),
     getDaysByEvent(eventName),
     getSessionsByEvent(eventName),
     getGuestsByEvent(eventName),
@@ -29,13 +31,17 @@ export default async function AddSession(props: {
       );
     });
   });
+  const filteredLocations = locations.filter(
+    (location) =>
+      location.Bookable && event["Location names"].includes(location.Name)
+  );
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="max-w-2xl mx-auto pb-24">
         <AddSessionForm
           eventName={eventName}
           days={days}
-          locations={locations}
+          locations={filteredLocations}
           sessions={sessions}
           guests={guests}
         />

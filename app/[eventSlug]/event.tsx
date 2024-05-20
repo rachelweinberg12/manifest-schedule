@@ -41,7 +41,11 @@ export function EventDisplay(props: {
         </a>
       </div>
       <p className="text-gray-900 mt-3 mb-5">{event.Description}</p>
-      <Filter locations={locations} />
+      <Filter
+        locations={locations.filter((loc) =>
+          event["Location names"].includes(loc.Name)
+        )}
+      />
       <div className="flex flex-col gap-24 mt-12">
         {daysForEvent.map((day) => (
           <DayCol key={day.Start} day={day} locations={locations} />

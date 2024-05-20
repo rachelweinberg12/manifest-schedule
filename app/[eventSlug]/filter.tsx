@@ -8,7 +8,6 @@ import {
 } from "next/navigation";
 import { useState } from "react";
 import clsx from "clsx";
-import { arraysEqual } from "@/utils/utils";
 
 export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
