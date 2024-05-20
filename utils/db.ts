@@ -255,7 +255,9 @@ export async function getEvents() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        events.push(record.fields);
+        if (record.fields.Start && record.fields.End) {
+          events.push(record.fields);
+        }
       });
       fetchNextPage();
     });
