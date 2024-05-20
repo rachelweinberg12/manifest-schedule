@@ -72,7 +72,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       </div>
       <div
         className={clsx(
-          "grid divide-x divide-gray-100 h-5/6",
+          "grid divide-x divide-gray-100 h-5/6 w-full",
           `grid-cols-[60px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
         )}
       >
@@ -172,7 +172,7 @@ function PaginationButtons(props: {
       <button
         type="button"
         disabled={displayStartIdx === 0}
-        className="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
+        className="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-500 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
         onClick={() =>
           setDisplayStartIdx(
             Math.max(0, displayStartIdx - numDisplayedLocations)
@@ -186,7 +186,7 @@ function PaginationButtons(props: {
         disabled={
           displayStartIdx + numDisplayedLocations >= numIncludedLocations
         }
-        className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-400 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
+        className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-500 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
         onClick={() =>
           setDisplayStartIdx(
             Math.min(
