@@ -49,7 +49,7 @@ export default async function Home() {
               </div>
               <p className="text-gray-900 mt-2">{event.Description}</p>
               <Link
-                href={`/event/${event.Name.replace(" ", "-")}`}
+                href={`/${event.Name.replace(" ", "-")}`}
                 className="font-semibold text-rose-400 hover:text-rose-500 flex gap-1 items-center text-sm justify-end mt-2"
               >
                 View schedule
