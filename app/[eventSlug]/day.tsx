@@ -81,7 +81,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
           <span key={loc.Name} className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between">
             <img key={loc.Name} src={loc.ImageUrl} alt={loc.Name} className="w-full h-full object-cover" style={{maxHeight: 200}}/>
             <h3 className="text-md font-bold">{loc.Name}</h3> 
-            <p className="text-xs mt-1 text-gray-500">max {loc.Capacity}</p>
+            <p className="text-xs mt-1 text-gray-500">{loc.Capacity ? `max ${loc.Capacity}` : <br/>}</p>
           </span>
         ))}
       </div>
