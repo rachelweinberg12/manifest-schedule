@@ -52,6 +52,7 @@ export const allLocationColors = [
   "bg-purple-200 bg-purple-100 bg-purple-400 border-purple-400 focus:ring-purple-400 text-purple-400",
   "bg-fuchsia-200 bg-fuchsia-100 bg-fuchsia-400 border-fuchsia-400 focus:ring-fuchsia-400 text-fuchsia-400",
   "bg-pink-200 bg-pink-100 bg-pink-400 border-pink-400 focus:ring-pink-400 text-pink-400",
+  "bg-gray-200 bg-gray-100 bg-gray-400 border-gray-400 focus:ring-gray-400 text-gray-400",
 ];
 
 export const dayGridRowVars = [
