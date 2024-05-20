@@ -1,6 +1,5 @@
-import { getDays, getEvents, getLocations, getSessions } from "@/utils/db";
+import { getEvents } from "@/utils/db";
 import { Suspense } from "react";
-import { EventDisplay } from "./[eventSlug]/event";
 import {
   ArrowRightIcon,
   CalendarIcon,
