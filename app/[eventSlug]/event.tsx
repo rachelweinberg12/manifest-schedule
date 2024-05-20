@@ -14,6 +14,9 @@ export function EventDisplay(props: {
   const daysForEvent = days.filter(
     (day) => day["Event name"][0] === event.Name
   );
+  const locationsForEvent = locations.filter((loc) =>
+    event["Location names"].includes(loc.Name)
+  );
   return (
     <div className="flex flex-col items-start w-full">
       <h1 className="sm:text-4xl text-3xl font-bold mt-5">
@@ -48,7 +51,7 @@ export function EventDisplay(props: {
       />
       <div className="flex flex-col gap-24 mt-12">
         {daysForEvent.map((day) => (
-          <DayCol key={day.Start} day={day} locations={locations} />
+          <DayCol key={day.Start} day={day} locations={locationsForEvent} />
         ))}
       </div>
     </div>
