@@ -78,8 +78,9 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       >
         <span className="p-1 border-b border-gray-100" />
         {displayedLocations.map((loc) => (
-          <span key={loc.Name} className="text-sm p-1 border-b border-gray-100">
-            {loc.Name}
+          <span key={loc.Name} className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between">
+            <h3 className="text-md font-bold">{loc.Name}</h3> 
+            <p className="text-xs mt-1 text-gray-500">max {loc.Capacity}</p>
           </span>
         ))}
       </div>
