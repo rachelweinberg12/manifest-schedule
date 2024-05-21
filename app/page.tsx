@@ -29,13 +29,13 @@ export default async function Home() {
                 <span className="flex gap-1 items-center">
                   <CalendarIcon className="h-4 w-4 stroke-2" />
                   <span>
-                    {DateTime.fromFormat(event.Start, "yyyy-MM-dd", {
-                      zone: "America/Los_Angeles",
-                    }).toFormat("LLL d")}
+                    {DateTime.fromISO(`${event.Start}T12:00:00.000-07:00`)
+                      .setZone("America/Los_Angeles")
+                      .toFormat("LLL d")}
                     {" - "}
-                    {DateTime.fromFormat(event.End, "yyyy-MM-dd", {
-                      zone: "America/Los_Angeles",
-                    }).toFormat("LLL d")}
+                    {DateTime.fromISO(`${event.End}T12:00:00.000-07:00`)
+                      .setZone("America/Los_Angeles")
+                      .toFormat("LLL d")}
                   </span>
                 </span>
                 <a
