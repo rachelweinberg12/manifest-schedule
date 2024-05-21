@@ -11,7 +11,7 @@ import {
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { MapModal } from "./modal";
+import { ExportScheduleModal, MapModal } from "./modals";
 
 type NavItem = {
   name: string;
@@ -47,12 +47,6 @@ export default function Example() {
               </div>
               <div className="flex justify-between w-full items-center">
                 <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                  <Link
-                    href="/"
-                    className="hidden items-center pr-2 sm:static sm:inset-auto sm:ml-4 sm:pr-0"
-                  >
-                    <CalendarIcon className="block h-8 w-auto text-rose-400" />
-                  </Link>
                   <div className="hidden sm:ml-10 sm:block">
                     <div className="flex space-x-4">
                       {navigation.map((item) => (
@@ -61,7 +55,10 @@ export default function Example() {
                     </div>
                   </div>
                 </div>
-                <MapModal />
+                <div className="flex items-center gap-3">
+                  <MapModal />
+                  <ExportScheduleModal />
+                </div>
               </div>
             </div>
           </div>

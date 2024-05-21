@@ -2,7 +2,10 @@
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
 import Image from "next/image";
-import { MapIcon } from "@heroicons/react/24/outline";
+import {
+  ArrowTopRightOnSquareIcon,
+  MapIcon,
+} from "@heroicons/react/24/outline";
 
 export function MapModal() {
   const [open, setOpen] = useState(false);
@@ -10,11 +13,76 @@ export function MapModal() {
     <div>
       <button
         type="button"
-        className="relative inline-flex items-center justify-center rounded-md p-2 text-rose-400 hover:bg-rose-50 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400"
+        className="relative inline-flex items-center justify-center rounded-md p-1.5 bg-rose-400 text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400"
         onClick={() => setOpen(true)}
       >
-        <MapIcon className="h-6 w-6 stroke-2" aria-hidden="true" />
+        <MapIcon className="h-5 w-5 stroke-2" aria-hidden="true" />
       </button>
+      <Modal open={open} setOpen={setOpen}>
+        <Image
+          src="/LighthavenMap.png"
+          alt="Map"
+          className="w-full h-full"
+          width={500}
+          height={500}
+        />
+      </Modal>
+    </div>
+  );
+}
+
+export function ExportScheduleModal() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div>
+      <button
+        type="button"
+        className="relative inline-flex items-center justify-center rounded-md p-1.5 bg-rose-400 text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400"
+        onClick={() => setOpen(true)}
+      >
+        <ArrowTopRightOnSquareIcon
+          className="h-5 w-5 stroke-2"
+          aria-hidden="true"
+        />
+      </button>
+      <Modal open={open} setOpen={setOpen}>
+        <h1 className="text-2xl font-bold">Export schedule</h1>
+        <p className="mt-2">
+          Add the schedule to an external calendar using any of the links below.
+        </p>
+        <div className="flex flex-col gap-4 mt-3 pl-4">
+          <a
+            href="https://calendar.google.com/calendar/u/0?cid=fo6ng9e5sji2mli6eisk5lctpk9eb8da@import.calendar.google.com"
+            className="text-rose-400 hover:underline"
+          >
+            Google Calendar link
+          </a>
+          <a
+            href="https://calendar.google.com/calendar/ical/fo6ng9e5sji2mli6eisk5lctpk9eb8da%40import.calendar.google.com/public/basic.ics"
+            className="text-rose-400 hover:underline"
+          >
+            iCal link
+          </a>
+          <a
+            href="https://calendar.google.com/calendar/embed?src=fo6ng9e5sji2mli6eisk5lctpk9eb8da%40import.calendar.google.com&ctz=America%2FLos_Angeles"
+            className="text-rose-400 hover:underline"
+          >
+            Public generic link
+          </a>
+        </div>
+      </Modal>
+    </div>
+  );
+}
+
+export function Modal(props: {
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  children: React.ReactNode;
+}) {
+  const { open, setOpen, children } = props;
+  return (
+    <div>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
@@ -44,15 +112,7 @@ export function MapModal() {
                 leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
               >
                 <Dialog.Panel className="relative mb-10 transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
-                  <div className="mt-2">
-                    <Image
-                      src="/LighthavenMap.png"
-                      alt="Map"
-                      className="w-full h-full"
-                      width={800}
-                      height={800}
-                    />
-                  </div>
+                  {children}
                   <div className="mt-4">
                     <button
                       type="button"
