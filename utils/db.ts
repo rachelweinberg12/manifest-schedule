@@ -78,6 +78,7 @@ export async function getSessionsByEvent(eventName: string) {
 export type Location = {
   Name: string;
   Area: string;
+  "Image url": string;
   Capacity: number;
   Type: "main" | "side";
   ID: string;
@@ -92,6 +93,7 @@ export async function getLocations() {
       fields: [
         "Name",
         "Area",
+        "Image url",
         "Capacity",
         "Type",
         "ID",
