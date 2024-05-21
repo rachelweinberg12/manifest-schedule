@@ -89,7 +89,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
             </p>
             <Image
               key={loc.Name}
-              src={loc.ImageUrl}
+              src={loc["Image url"]}
               alt={loc.Name}
               className="w-full h-full object-cover mt-1 aspect-[4/3]"
               style={{ maxHeight: 200 }}
