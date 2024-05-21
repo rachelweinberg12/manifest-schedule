@@ -9,6 +9,7 @@ import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useScreenWidth } from "@/utils/hooks";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { DateTime } from "luxon";
 
 export function DayCol(props: { locations: Location[]; day: Day }) {
@@ -78,10 +79,23 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       >
         <span className="p-1 border-b border-gray-100" />
         {displayedLocations.map((loc) => (
-          <span key={loc.Name} className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between">
-            <img key={loc.Name} src={loc.ImageUrl} alt={loc.Name} className="w-full h-full object-cover" style={{maxHeight: 200}}/>
-            <h3 className="text-md font-bold">{loc.Name}</h3> 
-            <p className="text-xs mt-1 text-gray-500">{loc.Capacity ? `max ${loc.Capacity}` : <br/>}</p>
+          <span
+            key={loc.Name}
+            className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between"
+          >
+            <h3 className="text-md font-bold">{loc.Name}</h3>
+            <p className="text-xs text-gray-500">
+              {loc.Capacity ? `max ${loc.Capacity}` : <br />}
+            </p>
+            <Image
+              key={loc.Name}
+              src={loc.ImageUrl}
+              alt={loc.Name}
+              className="w-full h-full object-cover mt-1 aspect-[4/3]"
+              style={{ maxHeight: 200 }}
+              width={500}
+              height={500}
+            />
           </span>
         ))}
       </div>
