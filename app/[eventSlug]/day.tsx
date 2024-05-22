@@ -11,6 +11,7 @@ import { useScreenWidth } from "@/utils/hooks";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { DateTime } from "luxon";
+import { Tooltip } from "./tooltip";
 
 export function DayCol(props: { locations: Location[]; day: Day }) {
   const { day, locations } = props;
@@ -79,24 +80,26 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       >
         <span className="p-1 border-b border-gray-100" />
         {displayedLocations.map((loc) => (
-          <span
-            key={loc.Name}
-            className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between"
-          >
-            <h3 className="text-md font-bold">{loc.Name}</h3>
-            <p className="text-xs text-gray-500">
-              {loc.Capacity ? `max ${loc.Capacity}` : <br />}
-            </p>
-            <Image
+          <Tooltip content={<p>{loc.Description}</p>} placement="bottom-start">
+            <span
               key={loc.Name}
-              src={loc["Image url"]}
-              alt={loc.Name}
-              className="w-full h-full object-cover mt-1 aspect-[4/3]"
-              style={{ maxHeight: 200 }}
-              width={500}
-              height={500}
-            />
-          </span>
+              className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between"
+            >
+              <h3 className="text-md font-bold">{loc.Name}</h3>
+              <p className="text-xs text-gray-500">
+                {loc.Capacity ? `max ${loc.Capacity}` : <br />}
+              </p>
+              <Image
+                key={loc.Name}
+                src={loc["Image url"]}
+                alt={loc.Name}
+                className="w-full h-full object-cover mt-1 aspect-[4/3]"
+                style={{ maxHeight: 200 }}
+                width={500}
+                height={500}
+              />
+            </span>
+          </Tooltip>
         ))}
       </div>
       <div

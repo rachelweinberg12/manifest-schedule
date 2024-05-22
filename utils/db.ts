@@ -79,6 +79,7 @@ export type Location = {
   Name: string;
   Area: string;
   "Image url": string;
+  Description: string;
   Capacity: number;
   Type: "main" | "side";
   ID: string;
@@ -94,6 +95,7 @@ export async function getLocations() {
         "Name",
         "Area",
         "Image url",
+        "Description",
         "Capacity",
         "Type",
         "ID",
