@@ -80,7 +80,11 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       >
         <span className="p-1 border-b border-gray-100" />
         {displayedLocations.map((loc) => (
-          <Tooltip content={<p>{loc.Description}</p>} placement="bottom-start">
+          <Tooltip
+            key={loc.Name}
+            content={<p className="text-sm p-2">{loc.Description}</p>}
+            placement="bottom-start"
+          >
             <span
               key={loc.Name}
               className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between"
