@@ -35,17 +35,24 @@ export async function POST(req: Request) {
     startTimeString,
     duration,
   } = (await req.json()) as SessionParams;
+  console.log(1);
   const dayStartDT = DateTime.fromJSDate(new Date(day.Start));
   const dayISOFormatted = dayStartDT.toFormat("yyyy-MM-dd");
+  console.log(2);
   const [rawHour, rawMinute, ampm] = startTimeString.split(/[: ]/);
   const hourNum = parseInt(rawHour);
   const hour24Num = ampm === "PM" ? hourNum + 12 : hourNum;
-  const hourStr = hour24Num < 10 ? `0${hour24Num}` : rawHour;
+  const hourStr = hour24Num < 10 ? `0${hour24Num}` : hour24Num.toString();
   const minuteNum = parseInt(rawMinute);
   const minuteStr = minuteNum < 10 ? `0${minuteNum}` : rawMinute;
+  console.log(
+    "formatted",
+    `${dayISOFormatted}T${hourStr}:${minuteStr}:00-07:00`
+  );
   const startTimeStamp = new Date(
     `${dayISOFormatted}T${hourStr}:${minuteStr}:00-07:00`
   );
+  console.log(3);
   const session: SessionInsert = {
     Title: title,
     Description: description,
@@ -61,6 +68,7 @@ export async function POST(req: Request) {
   };
   const existingSessions = await getSessions();
   const sessionValid = validateSession(session, existingSessions);
+  console.log("valid", sessionValid);
   if (sessionValid) {
     const Airtable = require("airtable");
     Airtable.configure({
@@ -84,6 +92,7 @@ export async function POST(req: Request) {
         });
       }
     );
+    console.log(5);
     return Response.json({ success: true });
     // return res.status(200).json({ success: true });
   } else {
