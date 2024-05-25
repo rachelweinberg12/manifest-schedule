@@ -39,7 +39,8 @@ export async function POST(req: Request) {
   const dayISOFormatted = dayStartDT.toFormat("yyyy-MM-dd");
   const [rawHour, rawMinute, ampm] = startTimeString.split(/[: ]/);
   const hourNum = parseInt(rawHour);
-  const hourStr = ampm === "PM" ? (hourNum + 12).toString() : rawHour;
+  const hour24Num = ampm === "PM" ? hourNum + 12 : hourNum;
+  const hourStr = hour24Num < 10 ? `0${hour24Num}` : rawHour;
   const minuteNum = parseInt(rawMinute);
   const minuteStr = minuteNum < 10 ? `0${minuteNum}` : rawMinute;
   const startTimeStamp = new Date(
