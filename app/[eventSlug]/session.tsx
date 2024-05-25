@@ -78,7 +78,7 @@ export function BookableSessionCard(props: {
   return (
     <div className={`row-span-${numHalfHours} my-0.5`}>
       <Link
-        className="rounded font-roboto h-full w-full bg-gray-100 flex items-center justify-center"
+        className="rounded font-roboto h-full w-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
         href={`/${eventSlug}/add-session?location=${location.Name}&time=${timeParam}&day=${dayParam}`}
       >
         <PlusIcon className="h-4 w-4 text-gray-400" />
