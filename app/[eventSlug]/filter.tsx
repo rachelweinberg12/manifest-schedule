@@ -1,11 +1,6 @@
 "use client";
 import { Location } from "@/utils/db";
-import {
-  ReadonlyURLSearchParams,
-  useSearchParams,
-  usePathname,
-  useRouter,
-} from "next/navigation";
+import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import clsx from "clsx";
 import { DocumentTextIcon, TableCellsIcon } from "@heroicons/react/24/outline";
@@ -21,6 +16,8 @@ export function Filter(props: { locations: Location[] }) {
       : locationsFromParams
   );
   const urlSearchParams = new URLSearchParams(searchParams);
+  const pathname = usePathname();
+  const { replace } = useRouter();
   return (
     <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
       <span className="text-gray-500">View</span>
@@ -28,6 +25,8 @@ export function Filter(props: { locations: Location[] }) {
         urlSearchParams={urlSearchParams}
         view={view}
         setView={setView}
+        pathname={pathname}
+        replace={replace}
       />
       <span className="text-gray-500">Locations</span>
       <SelectLocationsToShow
@@ -35,6 +34,8 @@ export function Filter(props: { locations: Location[] }) {
         urlSearchParams={urlSearchParams}
         includedLocations={includedLocations}
         setIncludedLocations={setIncludedLocations}
+        pathname={pathname}
+        replace={replace}
       />
     </div>
   );
@@ -44,8 +45,10 @@ function SelectView(props: {
   urlSearchParams: URLSearchParams;
   view: string;
   setView: (view: string) => void;
+  pathname: string;
+  replace: (url: string) => void;
 }) {
-  const { urlSearchParams, view, setView } = props;
+  const { urlSearchParams, view, setView, pathname, replace } = props;
   return (
     <div className="flex items-center gap-3">
       <button
@@ -53,8 +56,14 @@ function SelectView(props: {
           "flex gap-1 items-center rounded-md text-sm py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400",
           view === "grid"
             ? "bg-rose-400 text-white"
-            : "text-rose-400 hover:bg-rose-50"
+            : "text-gray-400 hover:bg-gray-50 ring-1 ring-inset ring-gray-300"
         )}
+        onClick={() => {
+          if (view === "grid") return;
+          setView("grid");
+          urlSearchParams.set("view", "grid");
+          replace(`${pathname}?${urlSearchParams.toString()}`);
+        }}
       >
         <TableCellsIcon className="h-4 w-4 stroke-2" />
         Grid
@@ -66,6 +75,12 @@ function SelectView(props: {
             ? "bg-rose-400 text-white"
             : "text-gray-400 hover:bg-gray-50 ring-1 ring-inset ring-gray-300"
         )}
+        onClick={() => {
+          if (view === "text") return;
+          setView("text");
+          urlSearchParams.set("view", "text");
+          replace(`${pathname}?${urlSearchParams.toString()}`);
+        }}
       >
         <DocumentTextIcon className="h-4 w-4 stroke-2" />
         Text
@@ -79,15 +94,17 @@ function SelectLocationsToShow(props: {
   urlSearchParams: URLSearchParams;
   includedLocations: string[];
   setIncludedLocations: (locations: string[]) => void;
+  pathname: string;
+  replace: (url: string) => void;
 }) {
   const {
     locations,
     urlSearchParams,
     includedLocations,
     setIncludedLocations,
+    pathname,
+    replace,
   } = props;
-  const pathname = usePathname();
-  const { replace } = useRouter();
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4">
       {locations.map((location) => (
@@ -102,7 +119,6 @@ function SelectLocationsToShow(props: {
             name={location.Name}
             checked={includedLocations.includes(location.Name)}
             onChange={(event) => {
-              const start = new Date();
               if (event.target.checked) {
                 urlSearchParams.append("loc", location.Name);
                 setIncludedLocations([...includedLocations, location.Name]);
@@ -121,7 +137,6 @@ function SelectLocationsToShow(props: {
                 );
               }
               replace(`${pathname}?${urlSearchParams.toString()}`);
-              const end = new Date();
             }}
           />
           <label
