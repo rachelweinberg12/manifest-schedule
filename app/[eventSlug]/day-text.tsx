@@ -8,6 +8,7 @@ import { useScreenWidth } from "@/utils/hooks";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "./tooltip";
+import { SessionText } from "./session-text";
 
 export function DayText(props: { locations: Location[]; day: Day }) {
   const { day, locations } = props;
@@ -36,17 +37,19 @@ export function DayText(props: { locations: Location[]; day: Day }) {
     );
   });
   return (
-    <div className="w-full">
-      <div className="flex flex-col mb-5">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">
-            {format(day.Start, "EEEE, MMMM d")}
-          </h2>
-        </div>
-      </div>
-      <div>
+    <div className="flex flex-col items-center max-w-3xl mx-auto">
+      <h2 className="text-2xl font-bold mb-5 w-full text-left">
+        {format(day.Start, "EEEE, MMMM d")}
+      </h2>
+      <div className="flex flex-col gap-8">
         {sessionsSortedByTime.map((session) => (
-          <div key={session.Title}>{session.Title}</div>
+          <SessionText
+            key={session["Start time"]}
+            session={session}
+            locations={locations.filter((loc) =>
+              session["Location name"].includes(loc.Name)
+            )}
+          />
         ))}
       </div>
     </div>

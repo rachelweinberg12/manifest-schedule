@@ -53,7 +53,7 @@ export function EventDisplay(props: {
           event["Location names"].includes(loc.Name)
         )}
       />
-      <div className="flex flex-col gap-24 mt-12">
+      <div className="flex flex-col gap-24 mt-12 w-full">
         {daysForEvent.map((day) => (
           <div key={day.Start}>
             {view === "grid" ? (
