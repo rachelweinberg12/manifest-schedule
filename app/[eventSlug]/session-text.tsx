@@ -9,9 +9,9 @@ export function SessionText(props: {
   const { session, locations } = props;
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
   return (
-    <div className="px-1.5 rounded h-full min-h-10 py-5">
+    <div className="px-1.5 rounded h-full min-h-10 pt-5 pb-8">
       <h1 className="font-bold leading-tight">{session.Title}</h1>
-      <div className="flex justify-between mt-2 items-center">
+      <div className="flex flex-col sm:flex-row justify-between mt-2 sm:items-center gap-2">
         <div className="flex gap-2 text-sm text-gray-500">
           <div className="flex gap-1">
             <span>
