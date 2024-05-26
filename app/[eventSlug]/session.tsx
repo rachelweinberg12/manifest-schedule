@@ -22,23 +22,6 @@ export function SessionCard(props: {
     startTime > new Date().getTime() &&
     startTime >= new Date(day["Start bookings"]).getTime() &&
     startTime < new Date(day["End bookings"]).getTime();
-  if (
-    day.Start === "2024-06-09T17:00:00.000Z" &&
-    location.Name === "Rat Park"
-  ) {
-    console.log("SESSION CARD");
-    console.log(
-      DateTime.fromISO(session["Start time"])
-        .setZone("America/Los_Angeles")
-        .toFormat("h:mm a"),
-      " - ",
-      DateTime.fromISO(session["End time"])
-        .setZone("America/Los_Angeles")
-        .toFormat("h:mm a")
-    );
-    console.log("isBlank", isBlank);
-    console.log("isBookable", isBookable);
-  }
   return isBookable ? (
     <BookableSessionCard
       eventName={day["Event name"][0]}
@@ -76,7 +59,7 @@ export function BookableSessionCard(props: {
     .toFormat("HH:mm");
   const eventSlug = eventName.replace(" ", "-");
   return (
-    <div className={`row-span-${numHalfHours} my-0.5`}>
+    <div className={`row-span-${numHalfHours} my-0.5 min-h-10`}>
       <Link
         className="rounded font-roboto h-full w-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center"
         href={`/${eventSlug}/add-session?location=${location.Name}&time=${timeParam}&day=${dayParam}`}
@@ -89,7 +72,7 @@ export function BookableSessionCard(props: {
 
 function BlankSessionCard(props: { numHalfHours: number }) {
   const { numHalfHours } = props;
-  return <div className={`row-span-${numHalfHours} my-0.5`} />;
+  return <div className={`row-span-${numHalfHours} my-0.5 min-h-10`} />;
 }
 
 export function RealSessionCard(props: {
@@ -131,14 +114,28 @@ export function RealSessionCard(props: {
     >
       <div
         className={clsx(
-          "py-1 px-1.5 rounded font-roboto h-full",
+          "py-1 px-1.5 rounded font-roboto h-full min-h-10",
           `bg-${location.Color}-200 border-2 border-${location.Color}-400`
         )}
       >
-        <p className="font-medium text-xs leading-tight line-clamp-2 text-left">
+        <p
+          className={clsx(
+            "font-medium text-xs leading-tight text-left",
+            numHalfHours > 1 ? "line-clamp-2" : "line-clamp-1"
+          )}
+        >
           {session.Title}
         </p>
-        <p className="text-[10px] leading-tight text-left">
+        <p
+          className={clsx(
+            "text-[10px] leading-tight text-left ",
+            numHalfHours > 2
+              ? "line-clamp-3"
+              : numHalfHours > 1
+              ? "line-clamp-2"
+              : "line-clamp-1"
+          )}
+        >
           {formattedHostNames}
         </p>
       </div>
