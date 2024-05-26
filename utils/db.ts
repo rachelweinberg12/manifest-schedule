@@ -86,6 +86,7 @@ export type Location = {
   Color: string;
   Hidden: boolean;
   Bookable: boolean;
+  Index: number;
 };
 export async function getLocations() {
   const locations: Location[] = [];
@@ -102,6 +103,7 @@ export async function getLocations() {
         "Color",
         "Hidden",
         "Bookable",
+        "Index",
       ],
       filterByFormula: `{Hidden} = FALSE()`,
       sort: [{ field: "Index", direction: "asc" }],

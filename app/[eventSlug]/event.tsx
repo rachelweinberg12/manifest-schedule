@@ -1,9 +1,11 @@
 "use client";
 import { Day, Location, Event } from "@/utils/db";
-import { Filter } from "./filter";
-import { DayCol } from "./day";
+import { ScheduleSettings } from "./schedule-settings";
+import { DayGrid } from "./day-grid";
 import { CalendarIcon, LinkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
+import { useSearchParams } from "next/navigation";
+import { DayText } from "./day-text";
 
 export function EventDisplay(props: {
   event: Event;
@@ -17,6 +19,8 @@ export function EventDisplay(props: {
   const locationsForEvent = locations.filter((loc) =>
     event["Location names"].includes(loc.Name)
   );
+  const searchParams = useSearchParams();
+  const view = searchParams.get("view") ?? "grid";
   return (
     <div className="flex flex-col items-start w-full">
       <h1 className="sm:text-4xl text-3xl font-bold mt-5">
@@ -44,14 +48,20 @@ export function EventDisplay(props: {
         </a>
       </div>
       <p className="text-gray-900 mt-3 mb-5">{event.Description}</p>
-      <Filter
+      <ScheduleSettings
         locations={locations.filter((loc) =>
           event["Location names"].includes(loc.Name)
         )}
       />
       <div className="flex flex-col gap-24 mt-12">
         {daysForEvent.map((day) => (
-          <DayCol key={day.Start} day={day} locations={locationsForEvent} />
+          <div key={day.Start}>
+            {view === "grid" ? (
+              <DayGrid day={day} locations={locationsForEvent} />
+            ) : (
+              <DayText day={day} locations={locationsForEvent} />
+            )}
+          </div>
         ))}
       </div>
     </div>

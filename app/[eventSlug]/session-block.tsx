@@ -5,7 +5,7 @@ import { Tooltip } from "./tooltip";
 import { DateTime } from "luxon";
 import Link from "next/link";
 
-export function SessionCard(props: {
+export function SessionBlock(props: {
   session: Session;
   location: Location;
   day: Day;

@@ -5,7 +5,7 @@ import { useState } from "react";
 import clsx from "clsx";
 import { DocumentTextIcon, TableCellsIcon } from "@heroicons/react/24/outline";
 
-export function Filter(props: { locations: Location[] }) {
+export function ScheduleSettings(props: { locations: Location[] }) {
   const { locations } = props;
   const searchParams = useSearchParams();
   const locationsFromParams = searchParams.getAll("loc");

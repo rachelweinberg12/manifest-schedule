@@ -1,5 +1,5 @@
 import { Session, Location, Day } from "@/utils/db";
-import { SessionCard } from "./session";
+import { SessionBlock } from "./session-block";
 import { getNumHalfHours } from "@/utils/utils";
 import clsx from "clsx";
 
@@ -24,7 +24,7 @@ export function LocationCol(props: {
         )}
       >
         {sessionsWithBlanks.map((session) => (
-          <SessionCard
+          <SessionBlock
             day={day}
             key={session["Start time"]}
             session={session}
