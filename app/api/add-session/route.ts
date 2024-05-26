@@ -41,7 +41,7 @@ export async function POST(req: Request) {
   console.log(2);
   const [rawHour, rawMinute, ampm] = startTimeString.split(/[: ]/);
   const hourNum = parseInt(rawHour);
-  const hour24Num = ampm === "PM" ? hourNum + 12 : hourNum;
+  const hour24Num = ampm === "PM" && hourNum !== 12 ? hourNum + 12 : hourNum;
   const hourStr = hour24Num < 10 ? `0${hour24Num}` : hour24Num.toString();
   const minuteNum = parseInt(rawMinute);
   const minuteStr = minuteNum < 10 ? `0${minuteNum}` : rawMinute;
