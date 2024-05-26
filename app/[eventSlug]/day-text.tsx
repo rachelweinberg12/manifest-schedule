@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import { Tooltip } from "./tooltip";
 import { SessionText } from "./session-text";
+import { Input } from "./input";
 
 export function DayText(props: { locations: Location[]; day: Day }) {
   const { day, locations } = props;
@@ -19,12 +20,16 @@ export function DayText(props: { locations: Location[]; day: Day }) {
   );
   const includedLocations =
     locationsFromParams.length === 0 ? locations : locationsFromParams;
-  const includedSessions = day.Sessions.filter((session) => {
+  const includedSessionsByLocation = day.Sessions.filter((session) => {
     return includedLocations.some((location) =>
       session["Location name"].includes(location.Name)
     );
   });
-  const sessionsSortedByLocation = includedSessions.sort((a, b) => {
+  const [search, setSearch] = useState("");
+  const includedSessionsBySearch = includedSessionsByLocation.filter(
+    (session) => session.Title.toLowerCase().includes(search.toLowerCase())
+  );
+  const sessionsSortedByLocation = includedSessionsBySearch.sort((a, b) => {
     return (
       (locations.find((loc) => loc.Name === a["Location name"][0])?.Index ??
         0) -
@@ -38,7 +43,13 @@ export function DayText(props: { locations: Location[]; day: Day }) {
   });
   return (
     <div className="flex flex-col items-center max-w-3xl mx-auto">
-      <h2 className="text-2xl font-bold mb-5 w-full text-left">
+      <Input
+        className="w-full mb-5"
+        placeholder="Search sessions"
+        value={search}
+        onChange={(event) => setSearch(event.target.value)}
+      />
+      <h2 className="text-2xl font-bold w-full text-left">
         {format(day.Start, "EEEE, MMMM d")}
       </h2>
       <div className="flex flex-col divide-y divide-gray-300">
