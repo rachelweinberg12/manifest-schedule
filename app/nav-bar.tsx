@@ -3,7 +3,6 @@ import { Disclosure } from "@headlessui/react";
 import {
   ArrowTrendingUpIcon,
   Bars3Icon,
-  CalendarIcon,
   PencilIcon,
   SunIcon,
   XMarkIcon,

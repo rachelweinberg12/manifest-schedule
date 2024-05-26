@@ -8,21 +8,31 @@ import {
 } from "next/navigation";
 import { useState } from "react";
 import clsx from "clsx";
+import { DocumentTextIcon, TableCellsIcon } from "@heroicons/react/24/outline";
 
 export function Filter(props: { locations: Location[] }) {
   const { locations } = props;
   const searchParams = useSearchParams();
   const locationsFromParams = searchParams.getAll("loc");
+  const [view, setView] = useState(searchParams.get("view") ?? "grid");
   const [includedLocations, setIncludedLocations] = useState(
     locationsFromParams.length === 0
       ? locations.map((loc) => loc.Name)
       : locationsFromParams
   );
+  const urlSearchParams = new URLSearchParams(searchParams);
   return (
     <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
+      <span className="text-gray-500">View</span>
+      <SelectView
+        urlSearchParams={urlSearchParams}
+        view={view}
+        setView={setView}
+      />
+      <span className="text-gray-500">Locations</span>
       <SelectLocationsToShow
         locations={locations}
-        searchParams={searchParams}
+        urlSearchParams={urlSearchParams}
         includedLocations={includedLocations}
         setIncludedLocations={setIncludedLocations}
       />
@@ -30,15 +40,52 @@ export function Filter(props: { locations: Location[] }) {
   );
 }
 
+function SelectView(props: {
+  urlSearchParams: URLSearchParams;
+  view: string;
+  setView: (view: string) => void;
+}) {
+  const { urlSearchParams, view, setView } = props;
+  return (
+    <div className="flex items-center gap-3">
+      <button
+        className={clsx(
+          "flex gap-1 items-center rounded-md text-sm py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400",
+          view === "grid"
+            ? "bg-rose-400 text-white"
+            : "text-rose-400 hover:bg-rose-50"
+        )}
+      >
+        <TableCellsIcon className="h-4 w-4 stroke-2" />
+        Grid
+      </button>
+      <button
+        className={clsx(
+          "flex gap-1 items-center rounded-md text-sm py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400",
+          view === "text"
+            ? "bg-rose-400 text-white"
+            : "text-gray-400 hover:bg-gray-50 ring-1 ring-inset ring-gray-300"
+        )}
+      >
+        <DocumentTextIcon className="h-4 w-4 stroke-2" />
+        Text
+      </button>
+    </div>
+  );
+}
+
 function SelectLocationsToShow(props: {
   locations: Location[];
-  searchParams?: ReadonlyURLSearchParams;
+  urlSearchParams: URLSearchParams;
   includedLocations: string[];
   setIncludedLocations: (locations: string[]) => void;
 }) {
-  const { locations, searchParams, includedLocations, setIncludedLocations } =
-    props;
-  const urlSearchParams = new URLSearchParams(searchParams);
+  const {
+    locations,
+    urlSearchParams,
+    includedLocations,
+    setIncludedLocations,
+  } = props;
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
