@@ -1,5 +1,5 @@
 "use client";
-import { Location, Day } from "@/utils/db";
+import { Location, Day, Session } from "@/utils/db";
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { SessionText } from "./session-text";
@@ -21,7 +21,7 @@ export function DayText(props: {
     return (
       includedLocations.some((location) =>
         session["Location name"].includes(location.Name)
-      ) && session.Title.toLowerCase().includes(search.toLowerCase())
+      ) && sessionMatchesSearch(session, search)
     );
   });
   const sessionsSortedByLocation = includedSessions.sort((a, b) => {
@@ -62,4 +62,20 @@ export function DayText(props: {
       </div>
     </div>
   );
+}
+
+function sessionMatchesSearch(session: Session, search: string) {
+  return (
+    checkStringForSearch(search, session.Title ?? "") ||
+    checkStringForSearch(search, session.Description ?? "") ||
+    checkStringForSearch(
+      search,
+      (session["Host name"] ?? []).join(" ") ?? ""
+    ) ||
+    checkStringForSearch(search, session["Location name"].join(" ") ?? "")
+  );
+}
+
+function checkStringForSearch(search: string, string: string) {
+  return string.toLowerCase().includes(search.toLowerCase());
 }
