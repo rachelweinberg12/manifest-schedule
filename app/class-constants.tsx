@@ -99,16 +99,16 @@ export const dayGridRowVars = [
 ];
 
 export const dayGridColVars = [
-  "grid-cols-[60px_repeat(1,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(2,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(3,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(4,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(5,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(6,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(7,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(8,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(9,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(10,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(11,minmax(0,2fr))]",
-  "grid-cols-[60px_repeat(12,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(1,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(2,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(3,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(4,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(5,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(6,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(7,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(8,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(9,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(10,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(11,minmax(0,2fr))]",
+  "grid-cols-[55px_repeat(12,minmax(0,2fr))]",
 ];

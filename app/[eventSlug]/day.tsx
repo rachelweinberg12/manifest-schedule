@@ -75,7 +75,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       <div
         className={clsx(
           "grid divide-x divide-gray-100 h-5/6 w-full",
-          `grid-cols-[60px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
+          `grid-cols-[55px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
         )}
       >
         <span className="p-1 border-b border-gray-100" />
@@ -87,17 +87,19 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
           >
             <span
               key={loc.Name}
-              className="text-sm p-1 border-b border-gray-100 flex flex-col justify-between"
+              className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
             >
-              <h3 className="text-md font-bold">{loc.Name}</h3>
-              <p className="text-xs text-gray-500">
-                {loc.Capacity ? `max ${loc.Capacity}` : <br />}
-              </p>
+              <div>
+                <h3 className="font-semibold text-xs sm:text-sm">{loc.Name}</h3>
+                <p className="text-xs text-gray-500">
+                  {loc.Capacity ? `max ${loc.Capacity}` : <br />}
+                </p>
+              </div>
               <Image
                 key={loc.Name}
                 src={loc["Image url"]}
                 alt={loc.Name}
-                className="w-full h-full object-cover mt-1 aspect-[4/3]"
+                className="w-full mt-1 aspect-[4/3]"
                 style={{ maxHeight: 200 }}
                 width={500}
                 height={500}
@@ -109,7 +111,7 @@ export function DayCol(props: { locations: Location[]; day: Day }) {
       <div
         className={clsx(
           "grid divide-x divide-gray-100 relative",
-          `grid-cols-[60px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
+          `grid-cols-[55px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
         )}
       >
         <NowBar start={start} end={end} />
@@ -226,13 +228,13 @@ function PaginationButtons(props: {
 }
 
 const MAX_COLS = {
-  xxs: 2,
+  xxs: 3,
   xs: 3,
-  sm: 4,
-  md: 5,
-  lg: 6,
-  xl: 8,
-  "2xl": 10,
+  sm: 5,
+  md: 6,
+  lg: 7,
+  xl: 9,
+  "2xl": 12,
 };
 
 function getBreakpoint(screenWidth: number) {

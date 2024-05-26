@@ -110,7 +110,7 @@ export function RealSessionCard(props: {
   return (
     <Tooltip
       content={<TooltipContents />}
-      className={`row-span-${numHalfHours} my-0.5`}
+      className={`row-span-${numHalfHours} my-0.5 overflow-hidden`}
     >
       <div
         className={clsx(
