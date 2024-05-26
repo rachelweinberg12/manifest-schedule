@@ -41,7 +41,7 @@ export function DayText(props: { locations: Location[]; day: Day }) {
       <h2 className="text-2xl font-bold mb-5 w-full text-left">
         {format(day.Start, "EEEE, MMMM d")}
       </h2>
-      <div className="flex flex-col gap-8">
+      <div className="flex flex-col divide-y divide-gray-300">
         {sessionsSortedByTime.map((session) => (
           <SessionText
             key={session["Start time"]}
