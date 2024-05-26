@@ -6,6 +6,8 @@ import { CalendarIcon, LinkIcon } from "@heroicons/react/24/outline";
 import { DateTime } from "luxon";
 import { useSearchParams } from "next/navigation";
 import { DayText } from "./day-text";
+import { Input } from "./input";
+import { useState } from "react";
 
 export function EventDisplay(props: {
   event: Event;
@@ -21,6 +23,7 @@ export function EventDisplay(props: {
   );
   const searchParams = useSearchParams();
   const view = searchParams.get("view") ?? "grid";
+  const [search, setSearch] = useState("");
   return (
     <div className="flex flex-col items-start w-full">
       <h1 className="sm:text-4xl text-3xl font-bold mt-5">
@@ -48,18 +51,32 @@ export function EventDisplay(props: {
         </a>
       </div>
       <p className="text-gray-900 mt-3 mb-5">{event.Description}</p>
-      <ScheduleSettings
-        locations={locations.filter((loc) =>
-          event["Location names"].includes(loc.Name)
-        )}
-      />
-      <div className="flex flex-col gap-24 mt-12 w-full">
+      <div className="mb-10 w-full">
+        <ScheduleSettings
+          locations={locations.filter((loc) =>
+            event["Location names"].includes(loc.Name)
+          )}
+        />
+      </div>
+      {view === "text" && (
+        <Input
+          className="w-full mb-5"
+          placeholder="Search sessions"
+          value={search}
+          onChange={(event) => setSearch(event.target.value)}
+        />
+      )}
+      <div className="flex flex-col gap-12 w-full">
         {daysForEvent.map((day) => (
           <div key={day.Start}>
             {view === "grid" ? (
               <DayGrid day={day} locations={locationsForEvent} />
             ) : (
-              <DayText day={day} locations={locationsForEvent} />
+              <DayText
+                day={day}
+                search={search}
+                locations={locationsForEvent}
+              />
             )}
           </div>
         ))}
