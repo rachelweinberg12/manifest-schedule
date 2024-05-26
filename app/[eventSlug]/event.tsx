@@ -60,7 +60,7 @@ export function EventDisplay(props: {
       </div>
       {view === "text" && (
         <Input
-          className="w-full mb-5"
+          className="max-w-3xl w-full mb-5 mx-auto"
           placeholder="Search sessions"
           value={search}
           onChange={(event) => setSearch(event.target.value)}
