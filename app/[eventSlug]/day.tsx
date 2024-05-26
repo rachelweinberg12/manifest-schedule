@@ -193,25 +193,25 @@ function PaginationButtons(props: {
     numIncludedLocations,
   } = props;
   return (
-    <span className="isolate inline-flex rounded-md shadow-sm">
+    <span className="isolate inline-flex rounded-md shadow-sm gap-0.5">
       <button
         type="button"
         disabled={displayStartIdx === 0}
-        className="relative inline-flex items-center rounded-l-md bg-white px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-500 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
+        className="relative inline-flex items-center rounded-l-md bg-rose-400 ring-1 ring-rose-500 px-2 py-2 text-white hover:bg-rose-500 focus:z-10 disabled:cursor-default disabled:opacity-40"
         onClick={() =>
           setDisplayStartIdx(
             Math.max(0, displayStartIdx - numDisplayedLocations)
           )
         }
       >
-        <ChevronLeftIcon className="h-4 w-4" aria-hidden="true" />
+        <ChevronLeftIcon className="h-4 w-4 stroke-2" aria-hidden="true" />
       </button>
       <button
         type="button"
         disabled={
           displayStartIdx + numDisplayedLocations >= numIncludedLocations
         }
-        className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-2 py-2 text-gray-500 ring-1 ring-inset ring-gray-500 hover:bg-gray-50 focus:z-10 disabled:cursor-default disabled:opacity-40"
+        className="relative -ml-px inline-flex items-center rounded-r-md  bg-rose-400 ring-1 ring-rose-500  px-2 py-2 text-white hover:bg-rose-500 focus:z-10 disabled:cursor-default disabled:opacity-40"
         onClick={() =>
           setDisplayStartIdx(
             Math.min(
@@ -221,7 +221,7 @@ function PaginationButtons(props: {
           )
         }
       >
-        <ChevronRightIcon className="h-4 w-4" aria-hidden="true" />
+        <ChevronRightIcon className="h-4 w-4 stroke-2" aria-hidden="true" />
       </button>
     </span>
   );
