@@ -1,7 +1,7 @@
 "use client";
 import clsx from "clsx";
 import { Fragment, useEffect, useState } from "react";
-import { Input } from "./input";
+import { Input } from "../input";
 import { format } from "date-fns";
 import { Session, Location, Guest, Day } from "@/utils/db";
 import { Combobox, Transition } from "@headlessui/react";

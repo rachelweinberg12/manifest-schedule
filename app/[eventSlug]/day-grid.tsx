@@ -1,6 +1,6 @@
 "use client";
 import { Location, Day } from "@/utils/db";
-import { LocationCol } from "./location";
+import { LocationCol } from "./location-col";
 import { format } from "date-fns";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
@@ -13,7 +13,7 @@ import Image from "next/image";
 import { DateTime } from "luxon";
 import { Tooltip } from "./tooltip";
 
-export function DayCol(props: { locations: Location[]; day: Day }) {
+export function DayGrid(props: { locations: Location[]; day: Day }) {
   const { day, locations } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams?.getAll("loc");
