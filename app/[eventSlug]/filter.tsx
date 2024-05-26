@@ -20,23 +20,27 @@ export function Filter(props: { locations: Location[] }) {
   const { replace } = useRouter();
   return (
     <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
-      <span className="text-gray-500">View</span>
-      <SelectView
-        urlSearchParams={urlSearchParams}
-        view={view}
-        setView={setView}
-        pathname={pathname}
-        replace={replace}
-      />
-      <span className="text-gray-500">Locations</span>
-      <SelectLocationsToShow
-        locations={locations}
-        urlSearchParams={urlSearchParams}
-        includedLocations={includedLocations}
-        setIncludedLocations={setIncludedLocations}
-        pathname={pathname}
-        replace={replace}
-      />
+      <div className="flex flex-col gap-2">
+        <span className="text-gray-500">View</span>
+        <SelectView
+          urlSearchParams={urlSearchParams}
+          view={view}
+          setView={setView}
+          pathname={pathname}
+          replace={replace}
+        />
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="text-gray-500">Locations</span>
+        <SelectLocationsToShow
+          locations={locations}
+          urlSearchParams={urlSearchParams}
+          includedLocations={includedLocations}
+          setIncludedLocations={setIncludedLocations}
+          pathname={pathname}
+          replace={replace}
+        />
+      </div>
     </div>
   );
 }
