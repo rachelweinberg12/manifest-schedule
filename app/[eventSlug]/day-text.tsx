@@ -36,17 +36,18 @@ export function DayText(props: {
       new Date(a["Start time"]).getTime() - new Date(b["Start time"]).getTime()
     );
   });
+  console.log(sessionsSortedByTime.length);
   return (
     <div className="flex flex-col max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold w-full text-left">
         {format(day.Start, "EEEE, MMMM d")}
       </h2>
       <div className="flex flex-col divide-y divide-gray-300">
-        {sessionsSortedByTime.length ? (
+        {sessionsSortedByTime.length > 0 ? (
           <>
             {sessionsSortedByTime.map((session) => (
               <SessionText
-                key={`${session["Title"]} + ${session["Start time"]}`}
+                key={`${session["Title"]} + ${session["Start time"]} + ${session["End time"]}`}
                 session={session}
                 locations={locations.filter((loc) =>
                   session["Location name"].includes(loc.Name)
