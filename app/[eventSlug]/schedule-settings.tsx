@@ -24,7 +24,7 @@ export function ScheduleSettings(props: {
   const { replace } = useRouter();
   return (
     <div className="flex flex-col gap-5 w-full rounded-md border border-gray-100 p-2">
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <span className="text-gray-500">Locations</span>
         <SelectLocationsToShow
           locations={locations}
@@ -35,7 +35,7 @@ export function ScheduleSettings(props: {
           replace={replace}
         />
       </div>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-1">
         <span className="text-gray-500">View</span>
         <SelectView
           urlSearchParams={urlSearchParams}
@@ -45,8 +45,8 @@ export function ScheduleSettings(props: {
           replace={replace}
         />
       </div>
-      <div className="flex flex-col gap-2">
-        <span className="text-gray-500">Showing schedule for</span>
+      <div className="flex flex-col gap-1">
+        <span className="text-gray-500">Showing schedule for...</span>
         <UserSelect guests={guests} />
       </div>
     </div>
