@@ -34,24 +34,38 @@ export function MapModal() {
   );
 }
 
-export function CurrentUserModal({open, close, guests, session, rsvp}: {open: boolean, close: () => void, guests: Guest[], session: Session, rsvp: () => void}) {
-  const {user} = useContext(UserContext);
+export function CurrentUserModal({
+  open,
+  close,
+  guests,
+  rsvp,
+}: {
+  open: boolean;
+  close: () => void;
+  guests: Guest[];
+  session: Session;
+  rsvp: () => void;
+}) {
+  const { user } = useContext(UserContext);
   return (
     <Modal open={open} setOpen={close} hideClose={!!user}>
       <h1 className="text-2xl font-bold">Who do you want to RSVP as?</h1>
-      <UserSelect guests={guests}>
-        <p>RSVPing as:</p>
-      </UserSelect>
-      {user && <button
-        type="button"
-        className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm"
-        onClick={() => {
-          rsvp();
-          close();
-        }}
+      <div>
+        <span className="text-gray-500">RSVPing as</span>
+        <UserSelect guests={guests} />
+      </div>
+      {user && (
+        <button
+          type="button"
+          className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm"
+          onClick={() => {
+            rsvp();
+            close();
+          }}
         >
-        RSVP
-      </button>}
+          RSVP
+        </button>
+      )}
     </Modal>
   );
 }
@@ -139,15 +153,17 @@ export function Modal(props: {
               >
                 <Dialog.Panel className="relative mb-10 transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                   {children}
-                  {!hideClose && <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm"
-                      onClick={() => setOpen(false)}
-                    >
-                      Close
-                    </button>
-                  </div>}
+                  {!hideClose && (
+                    <div className="mt-4">
+                      <button
+                        type="button"
+                        className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm"
+                        onClick={() => setOpen(false)}
+                      >
+                        Close
+                      </button>
+                    </div>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>
