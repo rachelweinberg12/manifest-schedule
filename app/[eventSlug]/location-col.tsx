@@ -25,16 +25,19 @@ export function LocationCol(props: {
           `grid-rows-[repeat(${numHalfHours},minmax(0,1fr))]`
         )}
       >
-        {sessionsWithBlanks.map((session) => (
-          <SessionBlock
-            day={day}
-            key={session["Start time"]}
-            session={session}
-            location={location}
-            guests={guests}
-            rsvps={rsvps.filter((rsvp) => rsvp.Session?.[0] === session.id)}
+        {sessionsWithBlanks.map((session) => {
+          const filteredRSVPs = rsvps.filter((rsvp) => rsvp.Session?.[0] === session.id)
+          const lowerOpacity = rsvps.length > 0 && filteredRSVPs.length === 0
+          return <SessionBlock
+              day={day}
+              key={session["Start time"]}
+              session={session}
+              location={location}
+              guests={guests}
+              rsvpsForEvent={filteredRSVPs}
+              rsvps={rsvps}
           />
-        ))}
+        })}
       </div>
     </div>
   );

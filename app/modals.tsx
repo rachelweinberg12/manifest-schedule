@@ -34,7 +34,7 @@ export function MapModal() {
   );
 }
 
-export function CurrentUserModal({open, close, guests, session}: {open: boolean, close: () => void, guests: Guest[], session: Session}) {
+export function CurrentUserModal({open, close, guests, session, rsvp}: {open: boolean, close: () => void, guests: Guest[], session: Session, rsvp: () => void}) {
   const {user} = useContext(UserContext);
   return (
     <Modal open={open} setOpen={close} hideClose={!!user}>
@@ -45,8 +45,11 @@ export function CurrentUserModal({open, close, guests, session}: {open: boolean,
       {user && <button
         type="button"
         className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm"
-        onClick={close}
-      >
+        onClick={() => {
+          rsvp();
+          close();
+        }}
+        >
         RSVP
       </button>}
     </Modal>
