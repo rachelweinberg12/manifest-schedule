@@ -1,5 +1,5 @@
 "use client";
-import { Location, Day } from "@/utils/db";
+import { Location, Day, Guest, RSVP } from "@/utils/db";
 import { LocationCol } from "./location-col";
 import { format } from "date-fns";
 import clsx from "clsx";
@@ -13,8 +13,8 @@ import Image from "next/image";
 import { DateTime } from "luxon";
 import { Tooltip } from "./tooltip";
 
-export function DayGrid(props: { locations: Location[]; day: Day }) {
-  const { day, locations } = props;
+export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[], rsvps: RSVP[] }) {
+  const { day, locations, guests, rsvps } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams?.getAll("loc");
   const locationsFromParams = locations.filter((loc) =>
@@ -126,6 +126,8 @@ export function DayGrid(props: { locations: Location[]; day: Day }) {
               sessions={day.Sessions.filter((session) =>
                 session["Location name"].includes(location.Name)
               )}
+              guests={guests}
+              rsvps={rsvps}
               day={day}
               location={location}
             />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Montserrat, Roboto } from "next/font/google";
 import "./globals.css";
 import NavBar from "./nav-bar";
+import { Context } from "./context";
 
 const inter = Inter({ subsets: ["latin"] });
 const roboto = Roboto({
@@ -33,8 +34,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={fontVars}>
       <body className="font-monteserrat">
-        <NavBar />
-        <main className="lg:px-24 sm:px-10 py-24 p-6">{children}</main>
+        <Context>
+          <NavBar />
+          <main className="lg:px-24 sm:px-10 py-24 p-6">{children}</main>
+        </Context>
       </body>
     </html>
   );

@@ -265,7 +265,7 @@ function getAvailableStartTimes(
   return startTimes;
 }
 
-function SelectHosts(props: {
+export function SelectHosts(props: {
   guests: Guest[];
   hosts: Guest[];
   setHosts: (hosts: Guest[]) => void;

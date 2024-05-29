@@ -40,19 +40,19 @@ export const rowSpanVars = [
 ];
 
 export const allLocationColors = [
-  "bg-rose-200 bg-rose-100 bg-rose-400 border-rose-400 focus:ring-rose-400 text-rose-400 text-rose-500 bg-rose-100",
-  "bg-orange-200 bg-orange-100 bg-orange-400 border-orange-400 focus:ring-orange-400 text-orange-400 text-orange-500 bg-orange-100",
-  "bg-yellow-200 bg-yellow-100 bg-yellow-400 border-yellow-400 focus:ring-yellow-400 text-yellow-400 text-yellow-500 bg-yellow-100",
-  "bg-lime-200 bg-lime-100 bg-lime-400 border-lime-400 focus:ring-lime-400 text-lime-400 text-lime-500 bg-lime-100",
-  "bg-green-200 bg-green-100 bg-green-400 border-green-400 focus:ring-green-400 text-green-400  text-green-500 bg-green-100",
-  "bg-teal-200 bg-teal-100 bg-teal-400 border-teal-400 focus:ring-teal-400 text-teal-400 text-teal-500 bg-teal-100",
-  "bg-cyan-200 bg-cyan-100 bg-cyan-400 border-cyan-400 focus:ring-cyan-400 text-cyan-400 text-cyan-500 bg-cyan-100",
-  "bg-blue-200 bg-blue-100 bg-blue-400 border-blue-400 focus:ring-blue-400 text-blue-400 text-blue-500 bg-blue-100",
-  "bg-indigo-200 bg-indigo-100 bg-indigo-400 border-indigo-400 focus:ring-indigo-400 text-indigo-400 text-indigo-500 bg-indigo-100",
-  "bg-purple-200 bg-purple-100 bg-purple-400 border-purple-400 focus:ring-purple-400 text-purple-400 text-purple-500 bg-purple-100",
-  "bg-fuchsia-200 bg-fuchsia-100 bg-fuchsia-400 border-fuchsia-400 focus:ring-fuchsia-400 text-fuchsia-400 text-fuchsia-500 bg-fuchsia-100",
-  "bg-pink-200 bg-pink-100 bg-pink-400 border-pink-400 focus:ring-pink-400 text-pink-400 text-pink-500 bg-pink-100",
-  "bg-gray-200 bg-gray-100 bg-gray-400 border-gray-400 focus:ring-gray-400 text-gray-400 text-gray-500 bg-gray-100",
+  "bg-rose-500 bg-rose-200 bg-rose-100 bg-rose-400 border-rose-400 border-rose-600 focus:ring-rose-400 text-rose-400 text-rose-500 bg-rose-100",
+  "bg-orange-500 bg-orange-200 bg-orange-100 bg-orange-400 border-orange-400 border-orange-600 focus:ring-orange-400 text-orange-400 text-orange-500 bg-orange-100",
+  "bg-yellow-500 bg-yellow-200 bg-yellow-100 bg-yellow-400 border-yellow-400 border-yellow-600 focus:ring-yellow-400 text-yellow-400 text-yellow-500 bg-yellow-100",
+  "bg-lime-500 bg-lime-200 bg-lime-100 bg-lime-400 border-lime-400 border-lime-600 focus:ring-lime-400 text-lime-400 text-lime-500 bg-lime-100",
+  "bg-green-500 bg-green-200 bg-green-100 bg-green-400 border-green-400 border-green-600 focus:ring-green-400 text-green-400  text-green-500 bg-green-100",
+  "bg-teal-500 bg-teal-200 bg-teal-100 bg-teal-400 border-teal-400 border-teal-600 focus:ring-teal-400 text-teal-400 text-teal-500 bg-teal-100",
+  "bg-cyan-500 bg-cyan-200 bg-cyan-100 bg-cyan-400 border-cyan-400 border-cyan-600 focus:ring-cyan-400 text-cyan-400 text-cyan-500 bg-cyan-100",
+  "bg-blue-500 bg-blue-200 bg-blue-100 bg-blue-400 border-blue-400 border-blue-600 focus:ring-blue-400 text-blue-400 text-blue-500 bg-blue-100",
+  "bg-indigo-500 bg-indigo-200 bg-indigo-100 bg-indigo-400 border-indigo-400 border-indigo-600 focus:ring-indigo-400 text-indigo-400 text-indigo-500 bg-indigo-100",
+  "bg-purple-500 bg-purple-200 bg-purple-100 bg-purple-400 border-purple-400 border-purple-600 focus:ring-purple-400 text-purple-400 text-purple-500 bg-purple-100",
+  "bg-fuchsia-500 bg-fuchsia-200 bg-fuchsia-100 bg-fuchsia-400 border-fuchsia-400 border-fuchsia-600 focus:ring-fuchsia-400 text-fuchsia-400 text-fuchsia-500 bg-fuchsia-100",
+  "bg-pink-500 bg-pink-200 bg-pink-100 bg-pink-400 border-pink-400 border-pink-600 focus:ring-pink-400 text-pink-400 text-pink-500 bg-pink-100",
+  "bg-gray-500 bg-gray-200 bg-gray-100 bg-gray-400 border-gray-400 border-gray-600 focus:ring-gray-400 text-gray-400 text-gray-500 bg-gray-100",
 ];
 
 export const dayGridRowVars = [
