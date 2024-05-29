@@ -38,6 +38,7 @@ export function CurrentUserModal({
   open,
   close,
   guests,
+  session,
   rsvp,
 }: {
   open: boolean;
@@ -49,15 +50,17 @@ export function CurrentUserModal({
   const { user } = useContext(UserContext);
   return (
     <Modal open={open} setOpen={close} hideClose={!!user}>
-      <h1 className="text-2xl font-bold">Who do you want to RSVP as?</h1>
-      <div>
-        <span className="text-gray-500">RSVPing as</span>
+      <h1 className="text-2xl font-bold">
+        RSVP to &quot;{session.Title}&quot;
+      </h1>
+      <div className="mt-2">
+        <span className="text-gray-500">RSVPing as...</span>
         <UserSelect guests={guests} />
       </div>
       {user && (
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm"
+          className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm mt-2"
           onClick={() => {
             rsvp();
             close();
