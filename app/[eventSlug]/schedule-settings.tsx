@@ -47,7 +47,7 @@ export function ScheduleSettings(props: {
       </div>
       <div className="flex flex-col gap-2">
         <span className="text-gray-500">Showing schedule for</span>
-        <UserSelect guests={guests} showOnlyWhenUserSet />
+        <UserSelect guests={guests} />
       </div>
     </div>
   );
