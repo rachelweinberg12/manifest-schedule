@@ -26,17 +26,19 @@ export function LocationCol(props: {
         )}
       >
         {sessionsWithBlanks.map((session) => {
-          const filteredRSVPs = rsvps.filter((rsvp) => rsvp.Session?.[0] === session.id)
-          const lowerOpacity = rsvps.length > 0 && filteredRSVPs.length === 0
-          return <SessionBlock
+          const filteredRSVPs = rsvps.filter(
+            (rsvp) => rsvp.Session?.[0] === session.id
+          );
+          return (
+            <SessionBlock
               day={day}
               key={session["Start time"]}
               session={session}
               location={location}
               guests={guests}
               rsvpsForEvent={filteredRSVPs}
-              rsvps={rsvps}
-          />
+            />
+          );
         })}
       </div>
     </div>

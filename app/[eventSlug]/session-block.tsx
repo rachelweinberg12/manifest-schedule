@@ -14,9 +14,8 @@ export function SessionBlock(props: {
   day: Day;
   guests: Guest[];
   rsvpsForEvent: RSVP[];
-  rsvps: RSVP[];
 }) {
-  const { session, location, day, guests, rsvps, rsvpsForEvent } = props;
+  const { session, location, day, guests, rsvpsForEvent } = props;
   const startTime = new Date(session["Start time"]).getTime();
   const endTime = new Date(session["End time"]).getTime();
   const sessionLength = endTime - startTime;
@@ -110,8 +109,8 @@ export function RealSessionCard(props: {
     optimisticRSVPResponse !== null
       ? optimisticRSVPResponse
       : rsvpsForEvent.length > 0;
-  const lowerOpacity = !rsvpStatus;
-
+  const hostStatus = currentUser && session.Hosts?.includes(currentUser);
+  const lowerOpacity = !rsvpStatus && !hostStatus;
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
   const [expandedRSVPs, setExpandedRSVPs] = useState(false);
 
