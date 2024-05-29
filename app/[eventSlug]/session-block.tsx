@@ -1,16 +1,21 @@
 import clsx from "clsx";
 import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
-import { Location, Day, Session } from "@/utils/db";
+import { Location, Day, Session, Guest, RSVP } from "@/utils/db";
 import { Tooltip } from "./tooltip";
 import { DateTime } from "luxon";
 import Link from "next/link";
+import { useContext, useState } from "react";
+import { CurrentUserModal } from "../modals";
+import { UserContext } from "../context";
 
 export function SessionBlock(props: {
   session: Session;
   location: Location;
   day: Day;
+  guests: Guest[];
+  rsvps: RSVP[];
 }) {
-  const { session, location, day } = props;
+  const { session, location, day, guests, rsvps } = props;
   const startTime = new Date(session["Start time"]).getTime();
   const endTime = new Date(session["End time"]).getTime();
   const sessionLength = endTime - startTime;
@@ -38,6 +43,8 @@ export function SessionBlock(props: {
           session={session}
           location={location}
           numHalfHours={numHalfHours}
+          guests={guests}
+          rsvps={rsvps}
         />
       )}
     </>
@@ -75,13 +82,38 @@ function BlankSessionCard(props: { numHalfHours: number }) {
   return <div className={`row-span-${numHalfHours} my-0.5 min-h-10`} />;
 }
 
+async function rsvp(guestId: string, sessionId: string, remove = false) {
+  await fetch("/api/add-rsvp", {
+    method: "POST",
+    body: JSON.stringify({
+      guestId, sessionId, remove
+    }),
+  });
+}
+
 export function RealSessionCard(props: {
   session: Session;
   numHalfHours: number;
   location: Location;
+  guests: Guest[];
+  rsvps: RSVP[];
 }) {
-  const { session, numHalfHours, location } = props;
+  const { session, numHalfHours, location, guests, rsvps } = props;
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
+  const [expandedRSVPs, setExpandedRSVPs] = useState(false);
+  const [optimisticRSVPResponse, setOptimisticRSVPResponse] = useState<boolean| null>(null);
+  const { user: currentUser } = useContext(UserContext);
+  const rsvpStatus = optimisticRSVPResponse !== null ? optimisticRSVPResponse : rsvps.length > 0
+  const handleClick = () => {
+    if (currentUser) {
+      rsvp(currentUser, session.id, !!rsvpStatus);
+      setOptimisticRSVPResponse(!rsvpStatus);
+    } else {
+      setExpandedRSVPs(true);
+    }
+  }
+  
+
   const TooltipContents = () => (
     <>
       <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
@@ -90,7 +122,7 @@ export function RealSessionCard(props: {
       <div className="flex justify-between mt-2 gap-4 text-xs text-gray-500">
         <div className="flex gap-1">
           <UserIcon className="h-4 w-4" />
-          <span>{session.Capacity}</span>
+          <span>{session.Capacity} ({session.NumRSVPs + (optimisticRSVPResponse ? 1 : 0)})</span>
         </div>
         <div className="flex gap-1">
           <ClockIcon className="h-4 w-4" />
@@ -112,11 +144,13 @@ export function RealSessionCard(props: {
       content={<TooltipContents />}
       className={`row-span-${numHalfHours} my-0.5 overflow-hidden`}
     >
+      <CurrentUserModal guests={guests} session={session} close={() => setExpandedRSVPs(false)} open={expandedRSVPs} />
       <div
         className={clsx(
-          "py-1 px-1.5 rounded font-roboto h-full min-h-10",
+          "py-1 px-1.5 rounded font-roboto h-full min-h-10 cursor-pointer",
           `bg-${location.Color}-200 border-2 border-${location.Color}-400`
         )}
+        onClick={handleClick}
       >
         <p
           className={clsx(
@@ -138,6 +172,11 @@ export function RealSessionCard(props: {
         >
           {formattedHostNames}
         </p>
+        {rsvpStatus && (
+          <div className="text-[10px] leading-tight text-left">
+            RSVP'd
+          </div>
+        )}
       </div>
     </Tooltip>
   );

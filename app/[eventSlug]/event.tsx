@@ -1,5 +1,5 @@
 "use client";
-import { Day, Location, Event } from "@/utils/db";
+import { Day, Location, Event, Guest, RSVP } from "@/utils/db";
 import { ScheduleSettings } from "./schedule-settings";
 import { DayGrid } from "./day-grid";
 import { CalendarIcon, LinkIcon } from "@heroicons/react/24/outline";
@@ -8,13 +8,16 @@ import { useSearchParams } from "next/navigation";
 import { DayText } from "./day-text";
 import { Input } from "./input";
 import { useState } from "react";
+import { UserSelect } from "../user-select";
 
 export function EventDisplay(props: {
   event: Event;
   days: Day[];
   locations: Location[];
+  guests: Guest[];
+  rsvps: RSVP[];
 }) {
-  const { event, days, locations } = props;
+  const { event, days, locations, guests, rsvps } = props;
   const daysForEvent = days.filter(
     (day) => day["Event name"][0] === event.Name
   );
@@ -57,6 +60,9 @@ export function EventDisplay(props: {
             event["Location names"].includes(loc.Name)
           )}
         />
+        <UserSelect guests={guests} showOnlyWhenUserSet>
+          <p>Showing schedule and registering RSVPs for: </p>
+        </UserSelect>
       </div>
       {view === "text" && (
         <Input
@@ -70,7 +76,7 @@ export function EventDisplay(props: {
         {daysForEvent.map((day) => (
           <div key={day.Start}>
             {view === "grid" ? (
-              <DayGrid day={day} locations={locationsForEvent} />
+              <DayGrid day={day} locations={locationsForEvent} guests={guests} rsvps={rsvps}/>
             ) : (
               <DayText
                 day={day}

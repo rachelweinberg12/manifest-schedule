@@ -6,6 +6,7 @@ Airtable.configure({
 const base = Airtable.base("appklVAIrAhkGj98d");
 
 export type Session = {
+  id: string; 
   Title: string;
   Description: string;
   "Start time": string;
@@ -17,6 +18,7 @@ export type Session = {
   "Location name": string[];
   Area: string[];
   Capacity: number;
+  NumRSVPs: number;
 };
 export async function getSessions() {
   const sessions: Session[] = [];
@@ -35,14 +37,16 @@ export async function getSessions() {
         "Location name",
         "Area",
         "Capacity",
+        "NumRSVPs",
       ],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        sessions.push(record.fields);
+        sessions.push({...record.fields, id: record.id});
       });
       fetchNextPage();
     });
+  console.log({sessions})
   return sessions;
 }
 
@@ -63,12 +67,13 @@ export async function getSessionsByEvent(eventName: string) {
         "Location name",
         "Area",
         "Capacity",
+        "NumRSVPs",
       ],
       filterByFormula: `{Event name} = "${eventName}"`,
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        sessions.push(record.fields);
+        sessions.push({...record.fields, id: record.id});
       });
       fetchNextPage();
     });
@@ -157,7 +162,7 @@ export async function getGuests() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        guests.push(record.fields);
+        guests.push({...record.fields});
       });
       fetchNextPage();
     });
@@ -292,4 +297,42 @@ export async function getEventByName(name: string) {
       fetchNextPage();
     });
   return events[0];
+}
+
+export type RSVP = {
+  Session: [string];
+  Guest: [string];
+}
+
+export async function getRSVPsByUser(guestId?: string): Promise<RSVP[]>{
+  if (!guestId) return [];
+  const rsvps: any[] = [];
+  await base("RSVPs")
+    .select({
+      fields: ["Session", "Guest"],
+      filterByFormula: `{GuestId} = "${guestId}"`,
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        rsvps.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return rsvps;
+}
+
+export async function getRSVPsBySession(sessionId: string): Promise<RSVP[]>{
+  const rsvps: any[] = [];
+  await base("RSVPs")
+    .select({
+      fields: ["Session", "Guest"],
+      filterByFormula: `{Session} = "${sessionId}"`,
+    })
+    .eachPage(function page(records: any, fetchNextPage: any) {
+      records.forEach(function (record: any) {
+        rsvps.push(record.fields);
+      });
+      fetchNextPage();
+    });
+  return rsvps;
 }

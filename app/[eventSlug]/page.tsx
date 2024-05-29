@@ -1,23 +1,31 @@
 import {
   getDaysByEvent,
   getEventByName,
+  getGuests,
   getLocations,
+  getRSVPsByUser,
   getSessionsByEvent,
 } from "@/utils/db";
 import { EventDisplay } from "./event";
 import { Suspense } from "react";
+import { cookies } from 'next/headers'
 
 export default async function EventSchedule(props: {
   params: { eventSlug: string };
 }) {
   const { eventSlug } = props.params;
   const eventName = eventSlug.replace(/-/g, " ");
-  const [event, days, sessions, locations] = await Promise.all([
+  const cookieStore = cookies()
+  const currentUser = cookieStore.get('user')?.value
+  const [event, days, sessions, locations, guests, rsvps] = await Promise.all([
     getEventByName(eventName),
     getDaysByEvent(eventName),
     getSessionsByEvent(eventName),
     getLocations(),
+    getGuests(),
+    getRSVPsByUser(currentUser),
   ]);
+  console.log({rsvps})
   days.forEach((day) => {
     const dayStartMillis = new Date(day.Start).getTime();
     const dayEndMillis = new Date(day.End).getTime();
@@ -31,7 +39,7 @@ export default async function EventSchedule(props: {
   });
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <EventDisplay event={event} days={days} locations={locations} />
+      <EventDisplay event={event} days={days} locations={locations} guests={guests} rsvps={rsvps} />
     </Suspense>
   );
 }

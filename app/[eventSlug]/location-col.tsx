@@ -1,4 +1,4 @@
-import { Session, Location, Day } from "@/utils/db";
+import { Session, Location, Day, Guest, RSVP } from "@/utils/db";
 import { SessionBlock } from "./session-block";
 import { getNumHalfHours } from "@/utils/utils";
 import clsx from "clsx";
@@ -7,8 +7,10 @@ export function LocationCol(props: {
   sessions: Session[];
   location: Location;
   day: Day;
+  guests: Guest[];
+  rsvps: RSVP[];
 }) {
-  const { sessions, location, day } = props;
+  const { sessions, location, day, guests, rsvps } = props;
   const sessionsWithBlanks = insertBlankSessions(
     sessions,
     new Date(day.Start),
@@ -29,6 +31,8 @@ export function LocationCol(props: {
             key={session["Start time"]}
             session={session}
             location={location}
+            guests={guests}
+            rsvps={rsvps.filter((rsvp) => rsvp.Session?.[0] === session.id)}
           />
         ))}
       </div>
@@ -71,6 +75,8 @@ function insertBlankSessions(
         "Location name": [""],
         Area: [],
         Capacity: 0,
+        NumRSVPs: 0,
+        id: "",
       });
     }
   }
