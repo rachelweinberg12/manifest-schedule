@@ -59,10 +59,8 @@ export function EventDisplay(props: {
           locations={locations.filter((loc) =>
             event["Location names"].includes(loc.Name)
           )}
+          guests={guests}
         />
-        <UserSelect guests={guests} showOnlyWhenUserSet>
-          <p>Showing schedule and registering RSVPs for: </p>
-        </UserSelect>
       </div>
       {view === "text" && (
         <Input
@@ -76,7 +74,12 @@ export function EventDisplay(props: {
         {daysForEvent.map((day) => (
           <div key={day.Start}>
             {view === "grid" ? (
-              <DayGrid day={day} locations={locationsForEvent} guests={guests} rsvps={rsvps}/>
+              <DayGrid
+                day={day}
+                locations={locationsForEvent}
+                guests={guests}
+                rsvps={rsvps}
+              />
             ) : (
               <DayText
                 day={day}

@@ -1,12 +1,16 @@
 "use client";
-import { Location } from "@/utils/db";
+import { Guest, Location } from "@/utils/db";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import clsx from "clsx";
 import { DocumentTextIcon, TableCellsIcon } from "@heroicons/react/24/outline";
+import { UserSelect } from "../user-select";
 
-export function ScheduleSettings(props: { locations: Location[] }) {
-  const { locations } = props;
+export function ScheduleSettings(props: {
+  locations: Location[];
+  guests: Guest[];
+}) {
+  const { locations, guests } = props;
   const searchParams = useSearchParams();
   const locationsFromParams = searchParams.getAll("loc");
   const [view, setView] = useState(searchParams.get("view") ?? "grid");
@@ -19,7 +23,7 @@ export function ScheduleSettings(props: { locations: Location[] }) {
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
-    <div className="flex flex-col gap-4 w-full rounded-md border border-gray-100 p-2">
+    <div className="flex flex-col gap-5 w-full rounded-md border border-gray-100 p-2">
       <div className="flex flex-col gap-2">
         <span className="text-gray-500">Locations</span>
         <SelectLocationsToShow
@@ -40,6 +44,10 @@ export function ScheduleSettings(props: { locations: Location[] }) {
           pathname={pathname}
           replace={replace}
         />
+      </div>
+      <div className="flex flex-col gap-2">
+        <span className="text-gray-500">Showing schedule for</span>
+        <UserSelect guests={guests} showOnlyWhenUserSet />
       </div>
     </div>
   );

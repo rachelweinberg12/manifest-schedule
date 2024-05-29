@@ -46,7 +46,6 @@ export function SessionBlock(props: {
           numHalfHours={numHalfHours}
           guests={guests}
           rsvpsForEvent={rsvpsForEvent}
-          rsvps={rsvps}
         />
       )}
     </>
@@ -101,10 +100,8 @@ export function RealSessionCard(props: {
   location: Location;
   guests: Guest[];
   rsvpsForEvent: RSVP[];
-  rsvps: RSVP[];
 }) {
-  const { session, numHalfHours, location, guests, rsvps, rsvpsForEvent } =
-    props;
+  const { session, numHalfHours, location, guests, rsvpsForEvent } = props;
   const { user: currentUser } = useContext(UserContext);
   const [optimisticRSVPResponse, setOptimisticRSVPResponse] = useState<
     boolean | null
