@@ -50,27 +50,41 @@ export function DayGrid(props: {
   const includePagination = includedLocations.length > numDisplayedLocations;
   const start = new Date(day.Start);
   const end = new Date(day.End);
-  const scrollableDivRef = useRef(null);
+  const scrollableDivRef = useRef<HTMLDivElement>(null);
+  const [scrolledToRightEnd, setScrolledToRightEnd] = useState(false);
+  const [scrolledToLeftEnd, setScrolledToLeftEnd] = useState(true);
+  console.log("scrolled to right end", scrolledToRightEnd);
+  console.log("scrolled to left end", scrolledToLeftEnd);
   useSafeLayoutEffect(() => {
     const handleScroll = () => {
       console.log("scrolling", scrollableDivRef);
       if (scrollableDivRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } =
           scrollableDivRef.current;
-        console.log(scrollLeft, scrollWidth, clientWidth);
         if (scrollLeft + clientWidth >= scrollWidth) {
-          console.log("Scrolled to the right end");
+          setScrolledToRightEnd(true);
           // Add your logic here
+        } else {
+          setScrolledToRightEnd(false);
+        }
+        if (scrollLeft === 0) {
+          setScrolledToLeftEnd(true);
+        } else {
+          setScrolledToLeftEnd(false);
         }
       }
     };
 
+    handleScroll();
+
     const div = scrollableDivRef.current;
     div?.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
 
     // Cleanup the event listener on component unmount
     return () => {
       div?.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
     };
   }, []);
   return (
@@ -104,7 +118,7 @@ export function DayGrid(props: {
           </span>
         )}
       </div>
-      <div className="flex items-end">
+      <div className="flex items-end relative">
         <TimestampCol start={start} end={end} />
         <div className="overflow-x-auto flex-shrink" ref={scrollableDivRef}>
           <div
@@ -170,6 +184,12 @@ export function DayGrid(props: {
             })}
           </div>
         </div>
+        {!scrolledToRightEnd && (
+          <div className="bg-gradient-to-r from-transparent to-white h-full absolute right-0 w-6" />
+        )}
+        {!scrolledToLeftEnd && (
+          <div className="bg-gradient-to-l from-transparent to-white h-full absolute left-14 w-6" />
+        )}
       </div>
     </div>
   );
