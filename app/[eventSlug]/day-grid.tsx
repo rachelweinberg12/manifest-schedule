@@ -86,7 +86,7 @@ export function DayGrid(props: {
           <div
             className={clsx(
               "grid divide-x divide-gray-100 h-5/6 w-full",
-              `grid-cols-[repeat(${numLocations},minmax(100px,2fr))]`
+              `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
             )}
           >
             {includedLocations.map((loc) => (
@@ -123,7 +123,7 @@ export function DayGrid(props: {
           <div
             className={clsx(
               "grid divide-x divide-gray-100 relative w-full",
-              `grid-cols-[repeat(${numLocations},minmax(100px,2fr))]`
+              `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
             )}
           >
             <NowBar start={start} end={end} />

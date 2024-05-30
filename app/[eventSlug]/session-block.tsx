@@ -1,5 +1,6 @@
 import clsx from "clsx";
-import { ClockIcon, PlusIcon, UserIcon } from "@heroicons/react/24/outline";
+import { ClockIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { UserIcon } from "@heroicons/react/24/solid";
 import { Location, Day, Session, Guest, RSVP } from "@/utils/db";
 import { Tooltip } from "./tooltip";
 import { DateTime } from "luxon";
@@ -123,6 +124,7 @@ export function RealSessionCard(props: {
     }
   };
 
+  const numRSVPs = session.NumRSVPs + (optimisticRSVPResponse ? 1 : 0);
   const TooltipContents = () => (
     <>
       <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
@@ -134,8 +136,7 @@ export function RealSessionCard(props: {
         <div className="flex gap-1">
           <UserIcon className="h-4 w-4" />
           <span>
-            {session.Capacity} (
-            {session.NumRSVPs + (optimisticRSVPResponse ? 1 : 0)} RSVPs)
+            {numRSVPs} RSVPs (max capacity {session.Capacity})
           </span>
         </div>
         <div className="flex gap-1">
@@ -167,7 +168,7 @@ export function RealSessionCard(props: {
       />
       <div
         className={clsx(
-          "py-1 px-1.5 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative",
+          "py-1 px-1 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative",
           lowerOpacity
             ? `bg-${location.Color}-${200} border-2 border-${
                 location.Color
@@ -181,7 +182,7 @@ export function RealSessionCard(props: {
       >
         <p
           className={clsx(
-            "font-medium text-xs leading-tight text-left",
+            "font-medium text-xs leading-[1.15] text-left",
             numHalfHours > 1 ? "line-clamp-2" : "line-clamp-1"
           )}
         >
@@ -199,6 +200,15 @@ export function RealSessionCard(props: {
         >
           {formattedHostNames}
         </p>
+        <div
+          className={clsx(
+            "absolute py-[1px] px-1 rounded-tl text-[10px] bottom-0 right-0 flex gap-0.5 items-center",
+            `bg-${location.Color}-400`
+          )}
+        >
+          <UserIcon className="h-.5 w-2.5" />
+          {numRSVPs}
+        </div>
       </div>
     </Tooltip>
   );
