@@ -31,33 +31,14 @@ export function DayGrid(props: {
   );
   const includedLocations =
     locationsFromParams.length === 0 ? locations : locationsFromParams;
-  const numIncludedLocations = includedLocations.length;
-  const screenWidth = useScreenWidth();
-  const numDisplayedLocations = getNumDisplayedLocations(
-    screenWidth,
-    includedLocations.length
-  );
-  const [displayStartIdx, setDisplayStartIdx] = useState(0);
-  useEffect(() => {
-    setDisplayStartIdx(
-      Math.min(displayStartIdx, numIncludedLocations - numDisplayedLocations)
-    );
-  }, [numDisplayedLocations]);
-  const displayedLocations = includedLocations.slice(
-    displayStartIdx,
-    displayStartIdx + numDisplayedLocations
-  );
-  const includePagination = includedLocations.length > numDisplayedLocations;
+  const numLocations = includedLocations.length;
   const start = new Date(day.Start);
   const end = new Date(day.End);
   const scrollableDivRef = useRef<HTMLDivElement>(null);
   const [scrolledToRightEnd, setScrolledToRightEnd] = useState(false);
   const [scrolledToLeftEnd, setScrolledToLeftEnd] = useState(true);
-  console.log("scrolled to right end", scrolledToRightEnd);
-  console.log("scrolled to left end", scrolledToLeftEnd);
   useSafeLayoutEffect(() => {
     const handleScroll = () => {
-      console.log("scrolling", scrollableDivRef);
       if (scrollableDivRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } =
           scrollableDivRef.current;
@@ -94,40 +75,18 @@ export function DayGrid(props: {
           <h2 className="text-2xl font-bold">
             {format(day.Start, "EEEE, MMMM d")}
           </h2>
-          {includePagination && (
-            <div className="flex items-center gap-3">
-              <span className="text-gray-500 text-xs hidden sm:block">
-                Showing locations {displayStartIdx + 1}-
-                {displayStartIdx + numDisplayedLocations} of{" "}
-                {includedLocations.length}
-              </span>
-              <PaginationButtons
-                setDisplayStartIdx={setDisplayStartIdx}
-                displayStartIdx={displayStartIdx}
-                numDisplayedLocations={numDisplayedLocations}
-                numIncludedLocations={includedLocations.length}
-              />
-            </div>
-          )}
         </div>
-        {includePagination && (
-          <span className="text-gray-500 text-xs sm:hidden text-right mt-1">
-            Showing locations {displayStartIdx + 1}-
-            {displayStartIdx + numDisplayedLocations} of{" "}
-            {includedLocations.length}
-          </span>
-        )}
       </div>
-      <div className="flex items-end relative">
+      <div className="flex items-end relative w-full">
         <TimestampCol start={start} end={end} />
         <div className="overflow-x-auto flex-shrink" ref={scrollableDivRef}>
           <div
             className={clsx(
               "grid divide-x divide-gray-100 h-5/6 w-full",
-              `grid-cols-[repeat(12,minmax(100px,2fr))]`
+              `grid-cols-[repeat(${numLocations},minmax(100px,2fr))]`
             )}
           >
-            {displayedLocations.map((loc) => (
+            {includedLocations.map((loc) => (
               <Tooltip
                 key={loc.Name}
                 content={<p className="text-sm p-2">{loc.Description}</p>}
@@ -160,12 +119,12 @@ export function DayGrid(props: {
           </div>
           <div
             className={clsx(
-              "grid divide-x divide-gray-100 relative",
-              `grid-cols-[repeat(12,minmax(100px,2fr))]`
+              "grid divide-x divide-gray-100 relative w-full",
+              `grid-cols-[repeat(${numLocations},minmax(100px,2fr))]`
             )}
           >
             <NowBar start={start} end={end} />
-            {displayedLocations.map((location) => {
+            {includedLocations.map((location) => {
               if (!location) {
                 return null;
               }
@@ -286,16 +245,6 @@ function PaginationButtons(props: {
   );
 }
 
-const MAX_COLS = {
-  xxs: 12,
-  xs: 12,
-  sm: 12,
-  md: 12,
-  lg: 12,
-  xl: 12,
-  "2xl": 12,
-};
-
 function getBreakpoint(screenWidth: number) {
   if (screenWidth < 400) {
     return "xxs";
@@ -312,9 +261,4 @@ function getBreakpoint(screenWidth: number) {
   } else {
     return "2xl";
   }
-}
-
-function getNumDisplayedLocations(screenWidth: number, numLocations: number) {
-  const breakpoint = getBreakpoint(screenWidth);
-  return Math.min(MAX_COLS[breakpoint], numLocations);
 }
