@@ -7,13 +7,22 @@ import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useScreenWidth } from "@/utils/hooks";
-import { useEffect, useState } from "react";
+import {
+  useElementPosition,
+  useSafeLayoutEffect,
+  useScreenWidth,
+} from "@/utils/hooks";
+import { createRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { DateTime } from "luxon";
 import { Tooltip } from "./tooltip";
 
-export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[], rsvps: RSVP[] }) {
+export function DayGrid(props: {
+  locations: Location[];
+  day: Day;
+  guests: Guest[];
+  rsvps: RSVP[];
+}) {
   const { day, locations, guests, rsvps } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams?.getAll("loc");
@@ -41,6 +50,29 @@ export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[
   const includePagination = includedLocations.length > numDisplayedLocations;
   const start = new Date(day.Start);
   const end = new Date(day.End);
+  const scrollableDivRef = useRef(null);
+  useSafeLayoutEffect(() => {
+    const handleScroll = () => {
+      console.log("scrolling", scrollableDivRef);
+      if (scrollableDivRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } =
+          scrollableDivRef.current;
+        console.log(scrollLeft, scrollWidth, clientWidth);
+        if (scrollLeft + clientWidth >= scrollWidth) {
+          console.log("Scrolled to the right end");
+          // Add your logic here
+        }
+      }
+    };
+
+    const div = scrollableDivRef.current;
+    div?.addEventListener("scroll", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      div?.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
   return (
     <div className="w-full">
       <div className="flex flex-col mb-5">
@@ -72,67 +104,72 @@ export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[
           </span>
         )}
       </div>
-      <div
-        className={clsx(
-          "grid divide-x divide-gray-100 h-5/6 w-full",
-          `grid-cols-[55px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
-        )}
-      >
-        <span className="p-1 border-b border-gray-100" />
-        {displayedLocations.map((loc) => (
-          <Tooltip
-            key={loc.Name}
-            content={<p className="text-sm p-2">{loc.Description}</p>}
-            placement="bottom-start"
-          >
-            <span
-              key={loc.Name}
-              className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
-            >
-              <div>
-                <h3 className="font-semibold text-xs sm:text-sm">{loc.Name}</h3>
-                <p className="text-xs text-gray-500">
-                  {loc.Capacity ? `max ${loc.Capacity}` : <br />}
-                </p>
-              </div>
-              <Image
-                key={loc.Name}
-                src={loc["Image url"]}
-                alt={loc.Name}
-                className="w-full mt-1 aspect-[4/3]"
-                style={{ maxHeight: 200 }}
-                width={500}
-                height={500}
-              />
-            </span>
-          </Tooltip>
-        ))}
-      </div>
-      <div
-        className={clsx(
-          "grid divide-x divide-gray-100 relative",
-          `grid-cols-[55px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
-        )}
-      >
-        <NowBar start={start} end={end} />
+      <div className="flex items-end">
         <TimestampCol start={start} end={end} />
-        {displayedLocations.map((location) => {
-          if (!location) {
-            return null;
-          }
-          return (
-            <LocationCol
-              key={location.Name}
-              sessions={day.Sessions.filter((session) =>
-                session["Location name"].includes(location.Name)
-              )}
-              guests={guests}
-              rsvps={rsvps}
-              day={day}
-              location={location}
-            />
-          );
-        })}
+        <div className="overflow-x-auto flex-shrink" ref={scrollableDivRef}>
+          <div
+            className={clsx(
+              "grid divide-x divide-gray-100 h-5/6 w-full",
+              `grid-cols-[repeat(12,minmax(100px,2fr))]`
+            )}
+          >
+            {displayedLocations.map((loc) => (
+              <Tooltip
+                key={loc.Name}
+                content={<p className="text-sm p-2">{loc.Description}</p>}
+                placement="bottom-start"
+              >
+                <span
+                  key={loc.Name}
+                  className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
+                >
+                  <div>
+                    <h3 className="font-semibold text-xs sm:text-sm">
+                      {loc.Name}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {loc.Capacity ? `max ${loc.Capacity}` : <br />}
+                    </p>
+                  </div>
+                  <Image
+                    key={loc.Name}
+                    src={loc["Image url"]}
+                    alt={loc.Name}
+                    className="w-full mt-1 aspect-[4/3]"
+                    style={{ maxHeight: 200 }}
+                    width={500}
+                    height={500}
+                  />
+                </span>
+              </Tooltip>
+            ))}
+          </div>
+          <div
+            className={clsx(
+              "grid divide-x divide-gray-100 relative",
+              `grid-cols-[repeat(12,minmax(100px,2fr))]`
+            )}
+          >
+            <NowBar start={start} end={end} />
+            {displayedLocations.map((location) => {
+              if (!location) {
+                return null;
+              }
+              return (
+                <LocationCol
+                  key={location.Name}
+                  sessions={day.Sessions.filter((session) =>
+                    session["Location name"].includes(location.Name)
+                  )}
+                  guests={guests}
+                  rsvps={rsvps}
+                  day={day}
+                  location={location}
+                />
+              );
+            })}
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -144,14 +181,14 @@ function TimestampCol(props: { start: Date; end: Date }) {
   return (
     <div
       className={clsx(
-        "grid h-full",
-        `grid-rows-[repeat(${numHalfHours},minmax(0,1fr))]`
+        "grid h-full min-w-14 border-r border-t border-gray-100",
+        `grid-rows-[repeat(${numHalfHours},minmax(40px,1fr))]`
       )}
     >
       {Array.from({ length: numHalfHours }).map((_, i) => (
         <div
           key={i}
-          className="border-b border-gray-100 text-[10px] p-1 text-right"
+          className="border-b border-gray-100 text-[10px] p-1 text-right h-[44px]"
         >
           {DateTime.fromMillis(start.getTime() + i * 30 * 60 * 1000)
             .setZone("America/Los_Angeles")
@@ -230,12 +267,12 @@ function PaginationButtons(props: {
 }
 
 const MAX_COLS = {
-  xxs: 3,
-  xs: 3,
-  sm: 5,
-  md: 6,
-  lg: 7,
-  xl: 9,
+  xxs: 12,
+  xs: 12,
+  sm: 12,
+  md: 12,
+  lg: 12,
+  xl: 12,
   "2xl": 12,
 };
 

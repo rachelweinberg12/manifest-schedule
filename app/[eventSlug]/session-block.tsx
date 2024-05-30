@@ -126,7 +126,9 @@ export function RealSessionCard(props: {
   const TooltipContents = () => (
     <>
       <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
-      <p className="text-xs text-gray-500 mb-2 mt-1">{formattedHostNames}</p>
+      <p className="text-xs text-gray-500 mb-2 mt-1">
+        Hosted by {formattedHostNames}
+      </p>
       <p className="text-sm whitespace-pre-line">{session.Description}</p>
       <div className="flex justify-between mt-2 gap-4 text-xs text-gray-500">
         <div className="flex gap-1">
@@ -154,7 +156,7 @@ export function RealSessionCard(props: {
   return (
     <Tooltip
       content={<TooltipContents />}
-      className={`row-span-${numHalfHours} my-0.5 overflow-hidden`}
+      className={`row-span-${numHalfHours} my-0.5 overflow-hidden group`}
     >
       <CurrentUserModal
         guests={guests}
@@ -165,10 +167,14 @@ export function RealSessionCard(props: {
       />
       <div
         className={clsx(
-          "py-1 px-1.5 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col",
-          `bg-${location.Color}-${lowerOpacity ? 200 : 500} border-2 border-${
-            location.Color
-          }-${lowerOpacity ? 400 : 600}`,
+          "py-1 px-1.5 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative",
+          lowerOpacity
+            ? `bg-${location.Color}-${200} border-2 border-${
+                location.Color
+              }-${400}`
+            : `bg-${location.Color}-${500} border-2 border-${
+                location.Color
+              }-${600}`,
           !lowerOpacity && "text-white"
         )}
         onClick={handleClick}
@@ -193,11 +199,6 @@ export function RealSessionCard(props: {
         >
           {formattedHostNames}
         </p>
-        {rsvpStatus && (
-          <div className="text-[10px] leading-tight text-left mt-auto font-bold">
-            RSVP&apos;d
-          </div>
-        )}
       </div>
     </Tooltip>
   );
