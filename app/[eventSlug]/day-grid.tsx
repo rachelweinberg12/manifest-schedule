@@ -7,13 +7,22 @@ import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import { useScreenWidth } from "@/utils/hooks";
-import { useEffect, useState } from "react";
+import {
+  useElementPosition,
+  useSafeLayoutEffect,
+  useScreenWidth,
+} from "@/utils/hooks";
+import { createRef, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { DateTime } from "luxon";
 import { Tooltip } from "./tooltip";
 
-export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[], rsvps: RSVP[] }) {
+export function DayGrid(props: {
+  locations: Location[];
+  day: Day;
+  guests: Guest[];
+  rsvps: RSVP[];
+}) {
   const { day, locations, guests, rsvps } = props;
   const searchParams = useSearchParams();
   const locParams = searchParams?.getAll("loc");
@@ -22,25 +31,43 @@ export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[
   );
   const includedLocations =
     locationsFromParams.length === 0 ? locations : locationsFromParams;
-  const numIncludedLocations = includedLocations.length;
-  const screenWidth = useScreenWidth();
-  const numDisplayedLocations = getNumDisplayedLocations(
-    screenWidth,
-    includedLocations.length
-  );
-  const [displayStartIdx, setDisplayStartIdx] = useState(0);
-  useEffect(() => {
-    setDisplayStartIdx(
-      Math.min(displayStartIdx, numIncludedLocations - numDisplayedLocations)
-    );
-  }, [numDisplayedLocations]);
-  const displayedLocations = includedLocations.slice(
-    displayStartIdx,
-    displayStartIdx + numDisplayedLocations
-  );
-  const includePagination = includedLocations.length > numDisplayedLocations;
+  const numLocations = includedLocations.length;
   const start = new Date(day.Start);
   const end = new Date(day.End);
+  const scrollableDivRef = useRef<HTMLDivElement>(null);
+  const [scrolledToRightEnd, setScrolledToRightEnd] = useState(false);
+  const [scrolledToLeftEnd, setScrolledToLeftEnd] = useState(true);
+  useSafeLayoutEffect(() => {
+    const handleScroll = () => {
+      if (scrollableDivRef.current) {
+        const { scrollLeft, scrollWidth, clientWidth } =
+          scrollableDivRef.current;
+        if (scrollLeft + clientWidth >= scrollWidth) {
+          setScrolledToRightEnd(true);
+          // Add your logic here
+        } else {
+          setScrolledToRightEnd(false);
+        }
+        if (scrollLeft === 0) {
+          setScrolledToLeftEnd(true);
+        } else {
+          setScrolledToLeftEnd(false);
+        }
+      }
+    };
+
+    handleScroll();
+
+    const div = scrollableDivRef.current;
+    div?.addEventListener("scroll", handleScroll);
+    window.addEventListener("resize", handleScroll);
+
+    // Cleanup the event listener on component unmount
+    return () => {
+      div?.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
+  }, []);
   return (
     <div className="w-full">
       <div className="flex flex-col mb-5">
@@ -48,91 +75,83 @@ export function DayGrid(props: { locations: Location[]; day: Day, guests: Guest[
           <h2 className="text-2xl font-bold">
             {format(day.Start, "EEEE, MMMM d")}
           </h2>
-          {includePagination && (
-            <div className="flex items-center gap-3">
-              <span className="text-gray-500 text-xs hidden sm:block">
-                Showing locations {displayStartIdx + 1}-
-                {displayStartIdx + numDisplayedLocations} of{" "}
-                {includedLocations.length}
-              </span>
-              <PaginationButtons
-                setDisplayStartIdx={setDisplayStartIdx}
-                displayStartIdx={displayStartIdx}
-                numDisplayedLocations={numDisplayedLocations}
-                numIncludedLocations={includedLocations.length}
-              />
-            </div>
-          )}
         </div>
-        {includePagination && (
-          <span className="text-gray-500 text-xs sm:hidden text-right mt-1">
-            Showing locations {displayStartIdx + 1}-
-            {displayStartIdx + numDisplayedLocations} of{" "}
-            {includedLocations.length}
-          </span>
-        )}
       </div>
-      <div
-        className={clsx(
-          "grid divide-x divide-gray-100 h-5/6 w-full",
-          `grid-cols-[55px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
-        )}
-      >
-        <span className="p-1 border-b border-gray-100" />
-        {displayedLocations.map((loc) => (
-          <Tooltip
-            key={loc.Name}
-            content={<p className="text-sm p-2">{loc.Description}</p>}
-            placement="bottom-start"
-          >
-            <span
-              key={loc.Name}
-              className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
-            >
-              <div>
-                <h3 className="font-semibold text-xs sm:text-sm">{loc.Name}</h3>
-                <p className="text-xs text-gray-500">
-                  {loc.Capacity ? `max ${loc.Capacity}` : <br />}
-                </p>
-              </div>
-              <Image
-                key={loc.Name}
-                src={loc["Image url"]}
-                alt={loc.Name}
-                className="w-full mt-1 aspect-[4/3]"
-                style={{ maxHeight: 200 }}
-                width={500}
-                height={500}
-              />
-            </span>
-          </Tooltip>
-        ))}
-      </div>
-      <div
-        className={clsx(
-          "grid divide-x divide-gray-100 relative",
-          `grid-cols-[55px_repeat(${numDisplayedLocations},minmax(0,2fr))]`
-        )}
-      >
-        <NowBar start={start} end={end} />
+      <div className="flex items-end relative w-full">
         <TimestampCol start={start} end={end} />
-        {displayedLocations.map((location) => {
-          if (!location) {
-            return null;
-          }
-          return (
-            <LocationCol
-              key={location.Name}
-              sessions={day.Sessions.filter((session) =>
-                session["Location name"].includes(location.Name)
-              )}
-              guests={guests}
-              rsvps={rsvps}
-              day={day}
-              location={location}
-            />
-          );
-        })}
+        <div
+          className="overflow-x-auto overflow-y-visible flex-shrink"
+          ref={scrollableDivRef}
+        >
+          <div
+            className={clsx(
+              "grid divide-x divide-gray-100 h-5/6 w-full",
+              `grid-cols-[repeat(${numLocations},minmax(100px,2fr))]`
+            )}
+          >
+            {includedLocations.map((loc) => (
+              <Tooltip
+                key={loc.Name}
+                content={<p className="text-sm p-2">{loc.Description}</p>}
+                placement="bottom-start"
+              >
+                <span
+                  key={loc.Name}
+                  className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
+                >
+                  <div>
+                    <h3 className="font-semibold text-xs sm:text-sm">
+                      {loc.Name}
+                    </h3>
+                    <p className="text-xs text-gray-500">
+                      {loc.Capacity ? `max ${loc.Capacity}` : <br />}
+                    </p>
+                  </div>
+                  <Image
+                    key={loc.Name}
+                    src={loc["Image url"]}
+                    alt={loc.Name}
+                    className="w-full mt-1 aspect-[4/3]"
+                    style={{ maxHeight: 200 }}
+                    width={500}
+                    height={500}
+                  />
+                </span>
+              </Tooltip>
+            ))}
+          </div>
+          <div
+            className={clsx(
+              "grid divide-x divide-gray-100 relative w-full",
+              `grid-cols-[repeat(${numLocations},minmax(100px,2fr))]`
+            )}
+          >
+            <NowBar start={start} end={end} />
+            {includedLocations.map((location) => {
+              if (!location) {
+                return null;
+              }
+              return (
+                <LocationCol
+                  key={location.Name}
+                  sessions={day.Sessions.filter((session) =>
+                    session["Location name"].includes(location.Name)
+                  )}
+                  guests={guests}
+                  rsvps={rsvps}
+                  day={day}
+                  location={location}
+                />
+              );
+            })}
+          </div>
+        </div>
+        {!scrolledToRightEnd && (
+          <div className="bg-gradient-to-r from-transparent to-white h-full absolute right-0 w-12" />
+        )}
+        {!scrolledToLeftEnd && (
+          <div className="bg-gradient-to-l from-transparent to-white h-full absolute left-14 w-12" />
+        )}
       </div>
     </div>
   );
@@ -144,14 +163,14 @@ function TimestampCol(props: { start: Date; end: Date }) {
   return (
     <div
       className={clsx(
-        "grid h-full",
-        `grid-rows-[repeat(${numHalfHours},minmax(0,1fr))]`
+        "grid h-full min-w-14 border-r border-t border-gray-100",
+        `grid-rows-[repeat(${numHalfHours},minmax(40px,1fr))]`
       )}
     >
       {Array.from({ length: numHalfHours }).map((_, i) => (
         <div
           key={i}
-          className="border-b border-gray-100 text-[10px] p-1 text-right"
+          className="border-b border-gray-100 text-[10px] p-1 text-right h-[44px]"
         >
           {DateTime.fromMillis(start.getTime() + i * 30 * 60 * 1000)
             .setZone("America/Los_Angeles")
@@ -229,16 +248,6 @@ function PaginationButtons(props: {
   );
 }
 
-const MAX_COLS = {
-  xxs: 3,
-  xs: 3,
-  sm: 5,
-  md: 6,
-  lg: 7,
-  xl: 9,
-  "2xl": 12,
-};
-
 function getBreakpoint(screenWidth: number) {
   if (screenWidth < 400) {
     return "xxs";
@@ -255,9 +264,4 @@ function getBreakpoint(screenWidth: number) {
   } else {
     return "2xl";
   }
-}
-
-function getNumDisplayedLocations(screenWidth: number, numLocations: number) {
-  const breakpoint = getBreakpoint(screenWidth);
-  return Math.min(MAX_COLS[breakpoint], numLocations);
 }
