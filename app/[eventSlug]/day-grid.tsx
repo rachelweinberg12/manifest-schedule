@@ -79,7 +79,10 @@ export function DayGrid(props: {
       </div>
       <div className="flex items-end relative w-full">
         <TimestampCol start={start} end={end} />
-        <div className="overflow-x-auto flex-shrink" ref={scrollableDivRef}>
+        <div
+          className="overflow-x-auto overflow-y-visible flex-shrink"
+          ref={scrollableDivRef}
+        >
           <div
             className={clsx(
               "grid divide-x divide-gray-100 h-5/6 w-full",
