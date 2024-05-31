@@ -1,21 +1,16 @@
 "use client";
 import { Location, Day, Guest, RSVP } from "@/utils/db";
 import { LocationCol } from "./location-col";
-import { format } from "date-fns";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
 import { ChevronLeftIcon } from "@heroicons/react/20/solid";
 import { ChevronRightIcon } from "@heroicons/react/20/solid";
-import {
-  useElementPosition,
-  useSafeLayoutEffect,
-  useScreenWidth,
-} from "@/utils/hooks";
-import { createRef, useEffect, useRef, useState } from "react";
+import { useSafeLayoutEffect } from "@/utils/hooks";
+import { useRef, useState } from "react";
 import Image from "next/image";
-import { DateTime } from "luxon";
 import { Tooltip } from "./tooltip";
+import { DateTime } from "luxon";
 
 export function DayGrid(props: {
   locations: Location[];
@@ -105,7 +100,10 @@ export function DayGrid(props: {
                     <h3 className="font-semibold text-xs sm:text-sm">
                       {loc.Name}
                     </h3>
-                    <p className="text-xs text-gray-500">
+                    <p className="text-[10px] text-gray-500">
+                      {loc["Area description"] ?? <br />}
+                    </p>
+                    <p className="text-[10px] text-gray-500">
                       {loc.Capacity ? `max ${loc.Capacity}` : <br />}
                     </p>
                   </div>

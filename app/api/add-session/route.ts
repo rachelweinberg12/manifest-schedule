@@ -35,7 +35,6 @@ export async function POST(req: Request) {
     startTimeString,
     duration,
   } = (await req.json()) as SessionParams;
-  console.log(1);
   const dayStartDT = DateTime.fromJSDate(new Date(day.Start));
   const dayISOFormatted = dayStartDT.toFormat("yyyy-MM-dd");
   console.log(2);

@@ -6,7 +6,7 @@ Airtable.configure({
 const base = Airtable.base("appklVAIrAhkGj98d");
 
 export type Session = {
-  id: string; 
+  id: string;
   Title: string;
   Description: string;
   "Start time": string;
@@ -42,11 +42,11 @@ export async function getSessions() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        sessions.push({...record.fields, id: record.id});
+        sessions.push({ ...record.fields, id: record.id });
       });
       fetchNextPage();
     });
-  console.log({sessions})
+  console.log({ sessions });
   return sessions;
 }
 
@@ -73,7 +73,7 @@ export async function getSessionsByEvent(eventName: string) {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        sessions.push({...record.fields, id: record.id});
+        sessions.push({ ...record.fields, id: record.id });
       });
       fetchNextPage();
     });
@@ -92,6 +92,7 @@ export type Location = {
   Hidden: boolean;
   Bookable: boolean;
   Index: number;
+  "Area description"?: string;
 };
 export async function getLocations() {
   const locations: Location[] = [];
@@ -109,6 +110,7 @@ export async function getLocations() {
         "Hidden",
         "Bookable",
         "Index",
+        "Area description",
       ],
       filterByFormula: `{Hidden} = FALSE()`,
       sort: [{ field: "Index", direction: "asc" }],
@@ -119,6 +121,7 @@ export async function getLocations() {
       });
       fetchNextPage();
     });
+  console.log(locations[0]["Area description"]);
   return locations;
 }
 
@@ -162,7 +165,7 @@ export async function getGuests() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        guests.push({...record.fields});
+        guests.push({ ...record.fields });
       });
       fetchNextPage();
     });
@@ -302,9 +305,9 @@ export async function getEventByName(name: string) {
 export type RSVP = {
   Session: [string];
   Guest: [string];
-}
+};
 
-export async function getRSVPsByUser(guestId?: string): Promise<RSVP[]>{
+export async function getRSVPsByUser(guestId?: string): Promise<RSVP[]> {
   if (!guestId) return [];
   const rsvps: any[] = [];
   await base("RSVPs")
@@ -321,7 +324,7 @@ export async function getRSVPsByUser(guestId?: string): Promise<RSVP[]>{
   return rsvps;
 }
 
-export async function getRSVPsBySession(sessionId: string): Promise<RSVP[]>{
+export async function getRSVPsBySession(sessionId: string): Promise<RSVP[]> {
   const rsvps: any[] = [];
   await base("RSVPs")
     .select({

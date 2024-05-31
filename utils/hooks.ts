@@ -31,8 +31,6 @@ export const useElementPosition = (elementRef: RefObject<HTMLDivElement>) => {
   });
 
   useSafeLayoutEffect(() => {
-    const element = elementRef.current;
-
     const handleScroll = () => {
       if (elementRef.current) {
         const { scrollLeft, scrollWidth, clientWidth } = elementRef.current;
@@ -49,7 +47,5 @@ export const useElementPosition = (elementRef: RefObject<HTMLDivElement>) => {
       elementRef.current?.removeEventListener("resize", handleScroll);
     };
   }, []);
-  console.log("pos", elementPosition);
-
   return elementPosition;
 };
