@@ -3,6 +3,7 @@ import { Location, Day, Session } from "@/utils/db";
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
 import { SessionText } from "./session-text";
+import { DateTime } from "luxon";
 
 export function DayText(props: {
   locations: Location[];
@@ -40,7 +41,9 @@ export function DayText(props: {
   return (
     <div className="flex flex-col max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold w-full text-left">
-        {format(day.Start, "EEEE, MMMM d")}
+        {DateTime.fromISO(day.Start)
+          .setZone("America/Los_Angeles")
+          .toFormat("EEEE, MMMM d")}{" "}
       </h2>
       <div className="flex flex-col divide-y divide-gray-300">
         {sessionsSortedByTime.length > 0 ? (

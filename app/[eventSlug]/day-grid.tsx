@@ -73,7 +73,9 @@ export function DayGrid(props: {
       <div className="flex flex-col mb-5">
         <div className="flex items-center justify-between">
           <h2 className="text-2xl font-bold">
-            {format(day.Start, "EEEE, MMMM d")}
+            {DateTime.fromISO(day.Start)
+              .setZone("America/Los_Angeles")
+              .toFormat("EEEE, MMMM d")}
           </h2>
         </div>
       </div>
