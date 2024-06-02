@@ -33,6 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={fontVars}>
+      <head>
+        <meta http-equiv="refresh" content="120" />
+      </head>
       <body className="font-monteserrat">
         <Context>
           <NavBar />
