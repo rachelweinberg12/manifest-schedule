@@ -126,7 +126,7 @@ export function DayGrid(props: {
               `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
             )}
           >
-            <NowBar start={start} end={end} />
+            {/* <NowBar start={start} end={end} /> */}
             {includedLocations.map((location) => {
               if (!location) {
                 return null;
