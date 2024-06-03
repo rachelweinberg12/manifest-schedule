@@ -82,7 +82,7 @@ export function DayGrid(props: {
         >
           <div
             className={clsx(
-              "grid divide-x divide-gray-100 h-5/6 w-full",
+              "grid divide-x divide-gray-100 w-full",
               `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
             )}
           >
@@ -164,7 +164,7 @@ function TimestampCol(props: { start: Date; end: Date }) {
     <div
       className={clsx(
         "grid h-full min-w-14 border-r border-t border-gray-100",
-        `grid-rows-[repeat(${numHalfHours},minmax(40px,1fr))]`
+        `grid-rows-[repeat(${numHalfHours},44px)]`
       )}
     >
       {Array.from({ length: numHalfHours }).map((_, i) => (

@@ -22,7 +22,7 @@ export function LocationCol(props: {
       <div
         className={clsx(
           "grid h-full",
-          `grid-rows-[repeat(${numHalfHours},minmax(0,1fr))]`
+          `grid-rows-[repeat(${numHalfHours},44px)]`
         )}
       >
         {sessionsWithBlanks.map((session) => {
