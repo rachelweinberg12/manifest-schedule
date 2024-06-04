@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import { CurrentUserModal } from "../modals";
 import { UserContext } from "../context";
+import { useScreenWidth } from "@/utils/hooks";
 
 export function SessionBlock(props: {
   session: Session;
@@ -80,7 +81,7 @@ export function BookableSessionCard(props: {
 
 function BlankSessionCard(props: { numHalfHours: number }) {
   const { numHalfHours } = props;
-  return <div className={`row-span-${numHalfHours} my-0.5 min-h-10`} />;
+  return <div className={`row-span-${numHalfHours} my-0.5 min-h-12`} />;
 }
 
 async function rsvp(guestId: string, sessionId: string, remove = false) {
@@ -114,6 +115,7 @@ export function RealSessionCard(props: {
   const lowerOpacity = !rsvpStatus && !hostStatus;
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
   const [expandedRSVPs, setExpandedRSVPs] = useState(false);
+  const screenWidth = useScreenWidth();
 
   const handleClick = () => {
     if (currentUser) {
@@ -156,7 +158,7 @@ export function RealSessionCard(props: {
   );
   return (
     <Tooltip
-      content={<TooltipContents />}
+      content={screenWidth > 640 ? <TooltipContents /> : undefined}
       className={`row-span-${numHalfHours} my-0.5 overflow-hidden group`}
     >
       <CurrentUserModal
