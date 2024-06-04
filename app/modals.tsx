@@ -1,6 +1,6 @@
 "use client";
 import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useContext, useState } from "react";
+import { Fragment, useContext, useRef, useState } from "react";
 import Image from "next/image";
 import {
   ArrowTopRightOnSquareIcon,
@@ -120,14 +120,17 @@ export function Modal(props: {
   hideClose?: boolean;
 }) {
   const { open, setOpen, children, hideClose } = props;
+  const fakeRef = useRef(null);
   return (
     <div>
       <Transition.Root show={open} as={Fragment}>
         <Dialog
           as="div"
+          initialFocus={fakeRef}
           className="fixed inset-0 z-10 overflow-y-auto"
           onClose={() => setOpen(false)}
         >
+          <button ref={fakeRef} className="hidden" />
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
