@@ -8,7 +8,6 @@ import { useSearchParams } from "next/navigation";
 import { DayText } from "./day-text";
 import { Input } from "./input";
 import { useState } from "react";
-import { UserSelect } from "../user-select";
 
 export function EventDisplay(props: {
   event: Event;
@@ -55,12 +54,7 @@ export function EventDisplay(props: {
       </div>
       <p className="text-gray-900 mt-3 mb-5">{event.Description}</p>
       <div className="mb-10 w-full">
-        <ScheduleSettings
-          locations={locations.filter((loc) =>
-            event["Location names"].includes(loc.Name)
-          )}
-          guests={guests}
-        />
+        <ScheduleSettings guests={guests} />
       </div>
       {view === "text" && (
         <Input

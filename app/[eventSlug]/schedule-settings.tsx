@@ -6,35 +6,15 @@ import clsx from "clsx";
 import { DocumentTextIcon, TableCellsIcon } from "@heroicons/react/24/outline";
 import { UserSelect } from "../user-select";
 
-export function ScheduleSettings(props: {
-  locations: Location[];
-  guests: Guest[];
-}) {
-  const { locations, guests } = props;
+export function ScheduleSettings(props: { guests: Guest[] }) {
+  const { guests } = props;
   const searchParams = useSearchParams();
-  const locationsFromParams = searchParams.getAll("loc");
   const [view, setView] = useState(searchParams.get("view") ?? "grid");
-  const [includedLocations, setIncludedLocations] = useState(
-    locationsFromParams.length === 0
-      ? locations.map((loc) => loc.Name)
-      : locationsFromParams
-  );
   const urlSearchParams = new URLSearchParams(searchParams);
   const pathname = usePathname();
   const { replace } = useRouter();
   return (
     <div className="flex flex-col gap-5 w-full rounded-md border border-gray-100 p-2">
-      <div className="flex flex-col gap-1">
-        <span className="text-gray-500">Locations</span>
-        <SelectLocationsToShow
-          locations={locations}
-          urlSearchParams={urlSearchParams}
-          includedLocations={includedLocations}
-          setIncludedLocations={setIncludedLocations}
-          pathname={pathname}
-          replace={replace}
-        />
-      </div>
       <div className="flex flex-col gap-1">
         <span className="text-gray-500">View</span>
         <SelectView
