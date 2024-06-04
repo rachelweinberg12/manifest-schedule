@@ -171,6 +171,7 @@ export function RealSessionCard(props: {
           rsvp(currentUser, session.id, !!rsvpStatus);
           setOptimisticRSVPResponse(!rsvpStatus);
         }}
+        guests={guests}
         rsvpd={rsvpStatus}
         sessionInfoDisplay={<SessionInfoDisplay />}
       />

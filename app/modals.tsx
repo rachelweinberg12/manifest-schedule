@@ -4,9 +4,7 @@ import { Fragment, useContext, useState } from "react";
 import Image from "next/image";
 import {
   ArrowTopRightOnSquareIcon,
-  ClockIcon,
   MapIcon,
-  UserIcon,
 } from "@heroicons/react/24/outline";
 import { UserSelect } from "./user-select";
 import { Guest, Session } from "@/utils/db";
@@ -37,17 +35,24 @@ export function MapModal() {
 }
 
 export function CurrentUserModal(props: {
+  guests: Guest[];
   open: boolean;
   close: () => void;
   rsvp: () => void;
   sessionInfoDisplay?: React.ReactNode;
   rsvpd: boolean;
 }) {
-  const { open, close, rsvp, sessionInfoDisplay, rsvpd } = props;
+  const { guests, open, close, rsvp, sessionInfoDisplay, rsvpd } = props;
   const { user } = useContext(UserContext);
   return (
     <Modal open={open} setOpen={close} hideClose={!!user}>
       {sessionInfoDisplay}
+      {
+        <div className="mt-2">
+          <span className="text-gray-500">RSVPing as...</span>
+          <UserSelect guests={guests} />
+        </div>
+      }
       {user && (
         <button
           type="button"
