@@ -272,9 +272,13 @@ export function SelectHosts(props: {
 }) {
   const { guests, hosts, setHosts } = props;
   const [query, setQuery] = useState("");
-  const filteredGuests = guests.filter((guest) =>
-    guest["Full name"].toLowerCase().includes(query.toLowerCase())
-  );
+  const filteredGuests = guests
+    .filter((guest) =>
+      guest["Full name"].toLowerCase().includes(query.toLowerCase())
+    )
+    .filter((guest) => guest["Full name"].trim().length > 0)
+    .sort((a, b) => a["Full name"].localeCompare(b["Full name"]))
+    .slice(0, 20);
   return (
     <div className="w-full">
       <Combobox
