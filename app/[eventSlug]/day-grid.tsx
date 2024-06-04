@@ -4,8 +4,6 @@ import { LocationCol } from "./location-col";
 import clsx from "clsx";
 import { useSearchParams } from "next/navigation";
 import { getNumHalfHours, getPercentThroughDay } from "@/utils/utils";
-import { ChevronLeftIcon } from "@heroicons/react/20/solid";
-import { ChevronRightIcon } from "@heroicons/react/20/solid";
 import { useSafeLayoutEffect } from "@/utils/hooks";
 import { useRef, useState } from "react";
 import Image from "next/image";
@@ -74,15 +72,15 @@ export function DayGrid(props: {
           </h2>
         </div>
       </div>
-      <div className="flex items-end relative w-full">
+      <div className="flex items-end relative w-full overflow-visible">
         <TimestampCol start={start} end={end} />
         <div
-          className="overflow-x-auto overflow-y-visible flex-shrink"
+          className="overflow-x-auto overflow-y-clip flex-shrink"
           ref={scrollableDivRef}
         >
           <div
             className={clsx(
-              "grid divide-x divide-gray-100 w-full",
+              "grid divide-x divide-gray-100 w-full overflow-visible",
               `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
             )}
           >
