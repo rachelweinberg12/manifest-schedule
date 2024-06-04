@@ -114,15 +114,16 @@ export function RealSessionCard(props: {
   const hostStatus = currentUser && session.Hosts?.includes(currentUser);
   const lowerOpacity = !rsvpStatus && !hostStatus;
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
-  const [expandedRSVPs, setExpandedRSVPs] = useState(false);
+  const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
   const screenWidth = useScreenWidth();
+  const onMobile = screenWidth < 640;
 
   const handleClick = () => {
-    if (currentUser) {
+    if (currentUser && !onMobile) {
       rsvp(currentUser, session.id, !!rsvpStatus);
       setOptimisticRSVPResponse(!rsvpStatus);
     } else {
-      setExpandedRSVPs(true);
+      setRsvpModalOpen(true);
     }
   };
 
@@ -158,19 +159,19 @@ export function RealSessionCard(props: {
   );
   return (
     <Tooltip
-      content={screenWidth > 640 ? <TooltipContents /> : undefined}
+      content={onMobile ? undefined : <TooltipContents />}
       className={`row-span-${numHalfHours} my-0.5 overflow-hidden group`}
     >
       <CurrentUserModal
         guests={guests}
         session={session}
-        close={() => setExpandedRSVPs(false)}
-        open={expandedRSVPs}
+        close={() => setRsvpModalOpen(false)}
+        open={rsvpModalOpen}
         rsvp={handleClick}
       />
-      <div
+      <button
         className={clsx(
-          "py-1 px-1 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative",
+          "py-1 px-1 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative w-full",
           lowerOpacity
             ? `bg-${location.Color}-${200} border-2 border-${
                 location.Color
@@ -211,7 +212,7 @@ export function RealSessionCard(props: {
           <UserIcon className="h-.5 w-2.5" />
           {numRSVPs}
         </div>
-      </div>
+      </button>
     </Tooltip>
   );
 }
