@@ -18,7 +18,7 @@ import { ReactNode, useRef, useState } from "react";
 // See https://floating-ui.com/docs/react-dom
 
 export function Tooltip(props: {
-  content: ReactNode;
+  content?: ReactNode;
   children: ReactNode;
   className?: string;
   placement?: Placement;

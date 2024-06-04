@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useContext, useState } from "react";
 import { CurrentUserModal } from "../modals";
 import { UserContext } from "../context";
+import { useScreenWidth } from "@/utils/hooks";
 
 export function SessionBlock(props: {
   session: Session;
@@ -80,7 +81,7 @@ export function BookableSessionCard(props: {
 
 function BlankSessionCard(props: { numHalfHours: number }) {
   const { numHalfHours } = props;
-  return <div className={`row-span-${numHalfHours} my-0.5 min-h-10`} />;
+  return <div className={`row-span-${numHalfHours} my-0.5 min-h-12`} />;
 }
 
 async function rsvp(guestId: string, sessionId: string, remove = false) {
@@ -113,19 +114,21 @@ export function RealSessionCard(props: {
   const hostStatus = currentUser && session.Hosts?.includes(currentUser);
   const lowerOpacity = !rsvpStatus && !hostStatus;
   const formattedHostNames = session["Host name"]?.join(", ") ?? "No hosts";
-  const [expandedRSVPs, setExpandedRSVPs] = useState(false);
+  const [rsvpModalOpen, setRsvpModalOpen] = useState(false);
+  const screenWidth = useScreenWidth();
+  const onMobile = screenWidth < 640;
 
   const handleClick = () => {
-    if (currentUser) {
+    if (currentUser && !onMobile) {
       rsvp(currentUser, session.id, !!rsvpStatus);
       setOptimisticRSVPResponse(!rsvpStatus);
     } else {
-      setExpandedRSVPs(true);
+      setRsvpModalOpen(true);
     }
   };
 
   const numRSVPs = session.NumRSVPs + (optimisticRSVPResponse ? 1 : 0);
-  const TooltipContents = () => (
+  const SessionInfoDisplay = () => (
     <>
       <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
       <p className="text-xs text-gray-500 mb-2 mt-1">
@@ -156,19 +159,25 @@ export function RealSessionCard(props: {
   );
   return (
     <Tooltip
-      content={<TooltipContents />}
+      content={onMobile ? undefined : <SessionInfoDisplay />}
       className={`row-span-${numHalfHours} my-0.5 overflow-hidden group`}
     >
       <CurrentUserModal
+        close={() => setRsvpModalOpen(false)}
+        open={rsvpModalOpen}
+        // rsvp here should actually be rsvp
+        rsvp={() => {
+          if (!currentUser) return;
+          rsvp(currentUser, session.id, !!rsvpStatus);
+          setOptimisticRSVPResponse(!rsvpStatus);
+        }}
         guests={guests}
-        session={session}
-        close={() => setExpandedRSVPs(false)}
-        open={expandedRSVPs}
-        rsvp={handleClick}
+        rsvpd={rsvpStatus}
+        sessionInfoDisplay={<SessionInfoDisplay />}
       />
-      <div
+      <button
         className={clsx(
-          "py-1 px-1 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative",
+          "py-1 px-1 rounded font-roboto h-full min-h-10 cursor-pointer flex flex-col relative w-full",
           lowerOpacity
             ? `bg-${location.Color}-${200} border-2 border-${
                 location.Color
@@ -209,7 +218,7 @@ export function RealSessionCard(props: {
           <UserIcon className="h-.5 w-2.5" />
           {numRSVPs}
         </div>
-      </div>
+      </button>
     </Tooltip>
   );
 }
