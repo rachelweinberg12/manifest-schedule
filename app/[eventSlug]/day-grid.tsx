@@ -200,3 +200,68 @@ function NowBar(props: { start: Date; end: Date }) {
     return null;
   }
 }
+
+function PaginationButtons(props: {
+  setDisplayStartIdx: (idx: number) => void;
+  displayStartIdx: number;
+  numDisplayedLocations: number;
+  numIncludedLocations: number;
+}) {
+  const {
+    setDisplayStartIdx,
+    displayStartIdx,
+    numDisplayedLocations,
+    numIncludedLocations,
+  } = props;
+  return (
+    <span className="isolate inline-flex rounded-md shadow-sm gap-0.5">
+      <button
+        type="button"
+        disabled={displayStartIdx === 0}
+        className="relative inline-flex items-center rounded-l-md bg-rose-400 ring-1 ring-rose-500 px-2 py-2 text-white hover:bg-rose-500 focus:z-10 disabled:cursor-default disabled:opacity-40"
+        onClick={() =>
+          setDisplayStartIdx(
+            Math.max(0, displayStartIdx - numDisplayedLocations)
+          )
+        }
+      >
+        <ChevronLeftIcon className="h-4 w-4 stroke-2" aria-hidden="true" />
+      </button>
+      <button
+        type="button"
+        disabled={
+          displayStartIdx + numDisplayedLocations >= numIncludedLocations
+        }
+        className="relative -ml-px inline-flex items-center rounded-r-md  bg-rose-400 ring-1 ring-rose-500  px-2 py-2 text-white hover:bg-rose-500 focus:z-10 disabled:cursor-default disabled:opacity-40"
+        onClick={() =>
+          setDisplayStartIdx(
+            Math.min(
+              numIncludedLocations - numDisplayedLocations,
+              displayStartIdx + numDisplayedLocations
+            )
+          )
+        }
+      >
+        <ChevronRightIcon className="h-4 w-4 stroke-2" aria-hidden="true" />
+      </button>
+    </span>
+  );
+}
+
+function getBreakpoint(screenWidth: number) {
+  if (screenWidth < 400) {
+    return "xxs";
+  } else if (screenWidth < 640) {
+    return "xs";
+  } else if (screenWidth < 768) {
+    return "sm";
+  } else if (screenWidth < 1024) {
+    return "md";
+  } else if (screenWidth < 1280) {
+    return "lg";
+  } else if (screenWidth < 1536) {
+    return "xl";
+  } else {
+    return "2xl";
+  }
+}
