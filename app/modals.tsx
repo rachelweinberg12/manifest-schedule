@@ -4,7 +4,9 @@ import { Fragment, useContext, useState } from "react";
 import Image from "next/image";
 import {
   ArrowTopRightOnSquareIcon,
+  ClockIcon,
   MapIcon,
+  UserIcon,
 } from "@heroicons/react/24/outline";
 import { UserSelect } from "./user-select";
 import { Guest, Session } from "@/utils/db";
@@ -34,39 +36,28 @@ export function MapModal() {
   );
 }
 
-export function CurrentUserModal({
-  open,
-  close,
-  guests,
-  session,
-  rsvp,
-}: {
+export function CurrentUserModal(props: {
   open: boolean;
   close: () => void;
-  guests: Guest[];
-  session: Session;
   rsvp: () => void;
+  sessionInfoDisplay?: React.ReactNode;
+  rsvpd: boolean;
 }) {
+  const { open, close, rsvp, sessionInfoDisplay, rsvpd } = props;
   const { user } = useContext(UserContext);
   return (
     <Modal open={open} setOpen={close} hideClose={!!user}>
-      <h1 className="text-2xl font-bold">
-        RSVP to &quot;{session.Title}&quot;
-      </h1>
-      <div className="mt-2">
-        <span className="text-gray-500">RSVPing as...</span>
-        <UserSelect guests={guests} />
-      </div>
+      {sessionInfoDisplay}
       {user && (
         <button
           type="button"
-          className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm mt-2"
+          className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-rose-400 text-base font-medium text-white hover:bg-rose-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-rose-400 sm:text-sm mt-4"
           onClick={() => {
             rsvp();
             close();
           }}
         >
-          RSVP
+          {rsvpd ? "Un-RSVP" : "RSVP"}
         </button>
       )}
     </Modal>

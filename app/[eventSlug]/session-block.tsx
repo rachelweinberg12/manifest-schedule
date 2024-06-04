@@ -128,7 +128,7 @@ export function RealSessionCard(props: {
   };
 
   const numRSVPs = session.NumRSVPs + (optimisticRSVPResponse ? 1 : 0);
-  const TooltipContents = () => (
+  const SessionInfoDisplay = () => (
     <>
       <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
       <p className="text-xs text-gray-500 mb-2 mt-1">
@@ -159,15 +159,20 @@ export function RealSessionCard(props: {
   );
   return (
     <Tooltip
-      content={onMobile ? undefined : <TooltipContents />}
+      content={onMobile ? undefined : <SessionInfoDisplay />}
       className={`row-span-${numHalfHours} my-0.5 overflow-hidden group`}
     >
       <CurrentUserModal
-        guests={guests}
-        session={session}
         close={() => setRsvpModalOpen(false)}
         open={rsvpModalOpen}
-        rsvp={handleClick}
+        // rsvp here should actually be rsvp
+        rsvp={() => {
+          if (!currentUser) return;
+          rsvp(currentUser, session.id, !!rsvpStatus);
+          setOptimisticRSVPResponse(!rsvpStatus);
+        }}
+        rsvpd={rsvpStatus}
+        sessionInfoDisplay={<SessionInfoDisplay />}
       />
       <button
         className={clsx(
