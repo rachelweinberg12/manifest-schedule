@@ -30,6 +30,8 @@ export function DayGrid(props: {
   const scrollableDivRef = useRef<HTMLDivElement>(null);
   const [scrolledToRightEnd, setScrolledToRightEnd] = useState(false);
   const [scrolledToLeftEnd, setScrolledToLeftEnd] = useState(true);
+  // Hide dates that have already ended, by default
+  const [expanded, setExpanded] = useState(end >= new Date());
   useSafeLayoutEffect(() => {
     const handleScroll = () => {
       if (scrollableDivRef.current) {
@@ -61,96 +63,105 @@ export function DayGrid(props: {
       window.removeEventListener("resize", handleScroll);
     };
   }, []);
+
   return (
     <div className="w-full">
-      <div className="flex flex-col mb-5">
-        <div className="flex items-center justify-between">
+      <div className="flex flex-col">
+        <div className="flex items-center gap-2">
           <h2 className="text-2xl font-bold">
             {DateTime.fromISO(day.Start)
               .setZone("America/Los_Angeles")
               .toFormat("EEEE, MMMM d")}
           </h2>
+          <button
+            onClick={() => setExpanded(!expanded)}
+            className="text-sm text-gray-500 underline"
+          >
+            ({expanded ? "hide" : "show"})
+          </button>
         </div>
       </div>
-      <div className="flex items-end relative w-full overflow-visible">
-        <TimestampCol start={start} end={end} />
-        <div
-          className="overflow-x-auto overflow-y-clip flex-shrink"
-          ref={scrollableDivRef}
-        >
+      {expanded && (
+        <div className="flex items-end relative w-full overflow-visible">
+          <TimestampCol start={start} end={end} />
           <div
-            className={clsx(
-              "grid divide-x divide-gray-100 w-full overflow-visible",
-              `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
-            )}
+            className="overflow-x-auto overflow-y-clip flex-shrink"
+            ref={scrollableDivRef}
           >
-            {includedLocations.map((loc) => (
-              <Tooltip
-                key={loc.Name}
-                content={<p className="text-sm p-2">{loc.Description}</p>}
-                placement="bottom-start"
-              >
-                <span
+            <div
+              className={clsx(
+                "grid divide-x divide-gray-100 w-full overflow-visible",
+                `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
+              )}
+            >
+              {includedLocations.map((loc) => (
+                <Tooltip
                   key={loc.Name}
-                  className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
+                  content={<p className="text-sm p-2">{loc.Description}</p>}
+                  placement="bottom-start"
                 >
-                  <div>
-                    <h3 className="font-semibold text-xs sm:text-sm">
-                      {loc.Name}
-                    </h3>
-                    <p className="text-[10px] text-gray-500">
-                      {loc["Area description"] ?? <br />}
-                    </p>
-                    <p className="text-[10px] text-gray-500">
-                      {loc.Capacity ? `max ${loc.Capacity}` : <br />}
-                    </p>
-                  </div>
-                  <Image
+                  <span
                     key={loc.Name}
-                    src={loc["Image url"]}
-                    alt={loc.Name}
-                    className="w-full mt-1 aspect-[4/3]"
-                    style={{ maxHeight: 200 }}
-                    width={500}
-                    height={500}
+                    className="p-1 border-b border-gray-100 flex flex-col justify-between h-full"
+                  >
+                    <div>
+                      <h3 className="font-semibold text-xs sm:text-sm">
+                        {loc.Name}
+                      </h3>
+                      <p className="text-[10px] text-gray-500">
+                        {loc["Area description"] ?? <br />}
+                      </p>
+                      <p className="text-[10px] text-gray-500">
+                        {loc.Capacity ? `max ${loc.Capacity}` : <br />}
+                      </p>
+                    </div>
+                    <Image
+                      key={loc.Name}
+                      src={loc["Image url"]}
+                      alt={loc.Name}
+                      className="w-full mt-1 aspect-[4/3]"
+                      style={{ maxHeight: 200 }}
+                      width={500}
+                      height={500}
+                    />
+                  </span>
+                </Tooltip>
+              ))}
+            </div>
+            <div
+              className={clsx(
+                "grid divide-x divide-gray-100 relative w-full",
+                `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
+              )}
+            >
+              {/* <NowBar start={start} end={end} /> */}
+              {includedLocations.map((location) => {
+                if (!location) {
+                  return null;
+                }
+                return (
+                  <LocationCol
+                    key={location.Name}
+                    sessions={day.Sessions.filter((session) =>
+                      session["Location name"].includes(location.Name)
+                    )}
+                    guests={guests}
+                    rsvps={rsvps}
+                    day={day}
+                    location={location}
                   />
-                </span>
-              </Tooltip>
-            ))}
+                );
+              })}
+            </div>
           </div>
-          <div
-            className={clsx(
-              "grid divide-x divide-gray-100 relative w-full",
-              `grid-cols-[repeat(${numLocations},minmax(120px,2fr))]`
-            )}
-          >
-            {/* <NowBar start={start} end={end} /> */}
-            {includedLocations.map((location) => {
-              if (!location) {
-                return null;
-              }
-              return (
-                <LocationCol
-                  key={location.Name}
-                  sessions={day.Sessions.filter((session) =>
-                    session["Location name"].includes(location.Name)
-                  )}
-                  guests={guests}
-                  rsvps={rsvps}
-                  day={day}
-                  location={location}
-                />
-              );
-            })}
-          </div>
+          {!scrolledToRightEnd && (
+            <div className="bg-gradient-to-r from-transparent to-white h-full absolute right-0 w-12" />
+          )}
+          {!scrolledToLeftEnd && (
+            <div className="bg-gradient-to-l from-transparent to-white h-full absolute left-14 w-12" />
+          )}
         </div>
-        {!scrolledToRightEnd && (
-          <div className="bg-gradient-to-r from-transparent to-white h-full absolute right-0 w-12" />
-        )}
-        {!scrolledToLeftEnd && (
-          <div className="bg-gradient-to-l from-transparent to-white h-full absolute left-14 w-12" />
-        )}
-      </div>
+      )}
     </div>
   );
 }
