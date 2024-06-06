@@ -1,17 +1,20 @@
 "use client";
-import { Location, Day, Session } from "@/utils/db";
-import { format } from "date-fns";
+import { Location, Day, Session, RSVP } from "@/utils/db";
 import { useSearchParams } from "next/navigation";
 import { SessionText } from "./session-text";
 import { DateTime } from "luxon";
+import { useContext } from "react";
+import { UserContext } from "../context";
 
 export function DayText(props: {
   locations: Location[];
   day: Day;
   search: string;
+  rsvps: RSVP[];
 }) {
-  const { day, locations, search } = props;
+  const { day, locations, search, rsvps } = props;
   const searchParams = useSearchParams();
+  const { user: currentUser } = useContext(UserContext);
   const locParams = searchParams?.getAll("loc");
   const locationsFromParams = locations.filter((loc) =>
     locParams?.includes(loc.Name)
@@ -37,6 +40,17 @@ export function DayText(props: {
       new Date(a["Start time"]).getTime() - new Date(b["Start time"]).getTime()
     );
   });
+
+  // If RSVPs are present, only show sessions that the user has RSVP'd to
+  let sessions = sessionsSortedByTime;
+  if (rsvps.length > 0) {
+    const rsvpSet = new Set(rsvps.map((rsvp) => rsvp.Session[0]));
+    sessions = sessions.filter(
+      (session) =>
+        rsvpSet.has(session.id) ||
+        (currentUser && session.Hosts?.includes(currentUser))
+    );
+  }
   return (
     <div className="flex flex-col max-w-3xl mx-auto">
       <h2 className="text-2xl font-bold w-full text-left">
@@ -45,9 +59,9 @@ export function DayText(props: {
           .toFormat("EEEE, MMMM d")}{" "}
       </h2>
       <div className="flex flex-col divide-y divide-gray-300">
-        {sessionsSortedByTime.length > 0 ? (
+        {sessions.length > 0 ? (
           <>
-            {sessionsSortedByTime.map((session) => (
+            {sessions.map((session) => (
               <SessionText
                 key={`${session["Title"]} + ${session["Start time"]} + ${session["End time"]}`}
                 session={session}

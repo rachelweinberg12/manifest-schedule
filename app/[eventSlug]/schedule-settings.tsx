@@ -3,7 +3,11 @@ import { Guest, Location } from "@/utils/db";
 import { useSearchParams, usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import clsx from "clsx";
-import { DocumentTextIcon, TableCellsIcon } from "@heroicons/react/24/outline";
+import {
+  DocumentTextIcon,
+  FlagIcon,
+  TableCellsIcon,
+} from "@heroicons/react/24/outline";
 import { UserSelect } from "../user-select";
 
 export function ScheduleSettings(props: { guests: Guest[] }) {
@@ -41,42 +45,45 @@ function SelectView(props: {
   replace: (url: string) => void;
 }) {
   const { urlSearchParams, view, setView, pathname, replace } = props;
+  const VIEWS = [
+    {
+      name: "grid",
+      label: "Grid",
+      icon: TableCellsIcon,
+    },
+    {
+      name: "text",
+      label: "Text",
+      icon: DocumentTextIcon,
+    },
+    {
+      name: "rsvp",
+      label: "RSVP'd",
+      icon: FlagIcon,
+    },
+  ];
   return (
     <div className="flex items-center gap-3">
-      <button
-        className={clsx(
-          "flex gap-1 items-center rounded-md text-sm py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400",
-          view === "grid"
-            ? "bg-rose-400 text-white"
-            : "text-gray-400 hover:bg-gray-50 ring-1 ring-inset ring-gray-300"
-        )}
-        onClick={() => {
-          if (view === "grid") return;
-          setView("grid");
-          urlSearchParams.set("view", "grid");
-          replace(`${pathname}?${urlSearchParams.toString()}`);
-        }}
-      >
-        <TableCellsIcon className="h-4 w-4 stroke-2" />
-        Grid
-      </button>
-      <button
-        className={clsx(
-          "flex gap-1 items-center rounded-md text-sm py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400",
-          view === "text"
-            ? "bg-rose-400 text-white"
-            : "text-gray-400 hover:bg-gray-50 ring-1 ring-inset ring-gray-300"
-        )}
-        onClick={() => {
-          if (view === "text") return;
-          setView("text");
-          urlSearchParams.set("view", "text");
-          replace(`${pathname}?${urlSearchParams.toString()}`);
-        }}
-      >
-        <DocumentTextIcon className="h-4 w-4 stroke-2" />
-        Text
-      </button>
+      {VIEWS.map((v) => (
+        <button
+          key={v.name}
+          className={clsx(
+            "flex gap-1 items-center rounded-md text-sm py-1.5 px-3 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-rose-400",
+            view === v.name
+              ? "bg-rose-400 text-white"
+              : "text-gray-400 hover:bg-gray-50 ring-1 ring-inset ring-gray-300"
+          )}
+          onClick={() => {
+            if (view === v.name) return;
+            setView(v.name);
+            urlSearchParams.set("view", v.name);
+            replace(`${pathname}?${urlSearchParams.toString()}`);
+          }}
+        >
+          <v.icon className="h-4 w-4 stroke-2" />
+          {v.label}
+        </button>
+      ))}
     </div>
   );
 }

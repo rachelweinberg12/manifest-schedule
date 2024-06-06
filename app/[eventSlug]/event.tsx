@@ -56,7 +56,7 @@ export function EventDisplay(props: {
       <div className="mb-10 w-full">
         <ScheduleSettings guests={guests} />
       </div>
-      {view === "text" && (
+      {view !== "grid" && (
         <Input
           className="max-w-3xl w-full mb-5 mx-auto"
           placeholder="Search sessions"
@@ -79,6 +79,7 @@ export function EventDisplay(props: {
                 day={day}
                 search={search}
                 locations={locationsForEvent}
+                rsvps={view === "rsvp" ? rsvps : []}
               />
             )}
           </div>
