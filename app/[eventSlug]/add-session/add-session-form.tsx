@@ -64,7 +64,6 @@ export function AddSessionForm(props: {
   }, [startTime, maxDuration, duration, startTimes]);
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const Submit = async () => {
     setIsSubmitting(true);
     const res = await fetch("/api/add-session", {
