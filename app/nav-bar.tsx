@@ -6,6 +6,7 @@ import {
   PencilIcon,
   SunIcon,
   XMarkIcon,
+  PaperAirplaneIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
 import { usePathname } from "next/navigation";
@@ -18,9 +19,7 @@ type NavItem = {
   icon: any;
 };
 const navigation = [
-  { name: "LessOnline", href: "/LessOnline", icon: PencilIcon },
-  { name: "Summer Camp", href: "/Summer-Camp", icon: SunIcon },
-  { name: "Manifest", href: "/Manifest", icon: ArrowTrendingUpIcon },
+  { name: "ILIAD", href: "/iliad", icon: PaperAirplaneIcon },
 ] as NavItem[];
 
 export default function Example() {

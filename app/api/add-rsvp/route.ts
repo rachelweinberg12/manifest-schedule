@@ -1,4 +1,4 @@
-import Airtable from 'airtable'
+import Airtable from "airtable";
 
 type RSVPParams = {
   sessionId: string;
@@ -12,20 +12,17 @@ Airtable.configure({
   endpointUrl: "https://api.airtable.com",
   apiKey: process.env.AIRTABLE_API_KEY,
 });
-const base = Airtable.base("appklVAIrAhkGj98d");
+// @ts-ignore
+const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
 
 export async function POST(req: Request) {
-  const {
-    sessionId,
-    guestId,
-    remove
-  } = (await req.json()) as RSVPParams;
+  const { sessionId, guestId, remove } = (await req.json()) as RSVPParams;
 
   if (!remove) {
     await base("RSVPs").create(
       [
         {
-          fields: {Session: [sessionId], Guest: [guestId]},
+          fields: { Session: [sessionId], Guest: [guestId] },
         },
       ],
       function (err: string, records: any) {
@@ -44,7 +41,7 @@ export async function POST(req: Request) {
         filterByFormula: `AND({SessionId} = "${sessionId}", {GuestId} = "${guestId}")`,
       })
       .eachPage(function page(records: any, fetchNextPage: any) {
-        console.log({records})
+        console.log({ records });
         records.forEach(function (record: any) {
           base("RSVPs").destroy([record.getId()], function (err: string) {
             if (err) {
@@ -56,6 +53,6 @@ export async function POST(req: Request) {
         fetchNextPage();
       });
   }
-  
+
   return Response.json({ success: true });
 }

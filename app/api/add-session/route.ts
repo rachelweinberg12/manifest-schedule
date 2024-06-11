@@ -67,14 +67,14 @@ export async function POST(req: Request) {
   };
   const existingSessions = await getSessions();
   const sessionValid = validateSession(session, existingSessions);
-  console.log("valid", sessionValid);
+
   if (sessionValid) {
     const Airtable = require("airtable");
     Airtable.configure({
       endpointUrl: "https://api.airtable.com",
       apiKey: process.env.AIRTABLE_API_KEY,
     });
-    const base = Airtable.base("appklVAIrAhkGj98d");
+    const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
     await base("Sessions").create(
       [
         {
@@ -122,16 +122,7 @@ const validateSession = (
       (sStart > sessionStart && sEnd < sessionEnd)
     );
   });
-  console.log(
-    "CONDITIONS",
-    concurrentSessions,
-    sessionStartsBeforeEnds,
-    sessionStartsAfterNow,
-    concurrentSessions.length === 0,
-    session["Title"],
-    session["Location"][0],
-    session["Hosts"]
-  );
+
   const sessionValid =
     sessionStartsBeforeEnds &&
     sessionStartsAfterNow &&

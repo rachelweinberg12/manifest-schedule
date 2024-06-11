@@ -3,7 +3,7 @@ Airtable.configure({
   endpointUrl: "https://api.airtable.com",
   apiKey: process.env.AIRTABLE_API_KEY,
 });
-const base = Airtable.base("appklVAIrAhkGj98d");
+const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
 
 export type Session = {
   id: string;
@@ -46,7 +46,7 @@ export async function getSessions() {
       });
       fetchNextPage();
     });
-  console.log({ sessions });
+
   return sessions;
 }
 
