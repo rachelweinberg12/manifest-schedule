@@ -66,7 +66,6 @@ export function AddSessionForm(props: {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const Submit = async () => {
-    console.log("\n\n\n\n\n\nsubmitting event.... ");
     setIsSubmitting(true);
     const res = await fetch("/api/add-session", {
       method: "POST",

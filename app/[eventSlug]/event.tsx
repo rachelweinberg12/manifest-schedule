@@ -21,7 +21,6 @@ export function EventDisplay(props: {
   const daysForEvent = days.filter(
     (day) => day["Event name"][0] === event.Name
   );
-  console.log(event);
   const locationsForEvent = locations.filter((loc) =>
     event["Location names"].includes(loc.Name)
   );
