@@ -158,8 +158,8 @@ export async function getGuestsByEvent(eventName: string) {
   const guests: Guest[] = [];
   await base("Guest list")
     .select({
-      view: eventName,
       fields: ["Full name", "Email"],
+      filterByFormula: `SEARCH("${eventName}", {Events}) != 0`,
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
