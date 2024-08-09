@@ -1,9 +1,10 @@
 "use client";
 import { Disclosure } from "@headlessui/react";
 import {
+  ArrowTrendingUpIcon,
   Bars3Icon,
-  UserGroupIcon,
-  CakeIcon,
+  PencilIcon,
+  SunIcon,
   XMarkIcon,
 } from "@heroicons/react/24/outline";
 import clsx from "clsx";
@@ -16,12 +17,10 @@ type NavItem = {
   href: string;
   icon: any;
 };
-
-// Add your events to the nav bar here
-// Find available icons at https://heroicons.com/
 const navigation = [
-  { name: "Conference", href: "/Conference", icon: UserGroupIcon },
-  { name: "After Party", href: "/After-Party", icon: CakeIcon },
+  { name: "LessOnline", href: "/LessOnline", icon: PencilIcon },
+  { name: "Summer Camp", href: "/Summer-Camp", icon: SunIcon },
+  { name: "Manifest", href: "/Manifest", icon: ArrowTrendingUpIcon },
 ] as NavItem[];
 
 export default function Example() {

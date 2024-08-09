@@ -27,7 +27,7 @@ export function LocationCol(props: {
       >
         {sessionsWithBlanks.map((session) => {
           const filteredRSVPs = rsvps.filter(
-            (rsvp) => rsvp.Session?.[0] === session.ID
+            (rsvp) => rsvp.Session?.[0] === session.id
           );
           return (
             <SessionBlock
@@ -78,9 +78,10 @@ function insertBlankSessions(
         "Host email": "",
         Location: [],
         "Location name": [""],
+        Area: [],
         Capacity: 0,
-        "Num RSVPs": 0,
-        ID: "",
+        NumRSVPs: 0,
+        id: "",
       });
     }
   }

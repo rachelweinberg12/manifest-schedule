@@ -120,14 +120,14 @@ export function RealSessionCard(props: {
 
   const handleClick = () => {
     if (currentUser && !onMobile) {
-      rsvp(currentUser, session.ID, !!rsvpStatus);
+      rsvp(currentUser, session.id, !!rsvpStatus);
       setOptimisticRSVPResponse(!rsvpStatus);
     } else {
       setRsvpModalOpen(true);
     }
   };
 
-  const numRSVPs = session["Num RSVPs"] + (optimisticRSVPResponse ? 1 : 0);
+  const numRSVPs = session.NumRSVPs + (optimisticRSVPResponse ? 1 : 0);
   const SessionInfoDisplay = () => (
     <>
       <h1 className="text-lg font-bold leading-tight">{session.Title}</h1>
@@ -168,7 +168,7 @@ export function RealSessionCard(props: {
         // rsvp here should actually be rsvp
         rsvp={() => {
           if (!currentUser) return;
-          rsvp(currentUser, session.ID, !!rsvpStatus);
+          rsvp(currentUser, session.id, !!rsvpStatus);
           setOptimisticRSVPResponse(!rsvpStatus);
         }}
         guests={guests}
