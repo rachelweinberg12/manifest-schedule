@@ -44,7 +44,6 @@ export async function getSessions() {
       });
       fetchNextPage();
     });
-  console.log({ sessions });
   return sessions;
 }
 
