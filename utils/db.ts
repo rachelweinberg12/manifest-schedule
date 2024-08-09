@@ -3,10 +3,10 @@ Airtable.configure({
   endpointUrl: "https://api.airtable.com",
   apiKey: process.env.AIRTABLE_API_KEY,
 });
-const base = Airtable.base("appklVAIrAhkGj98d");
+const base = Airtable.base(process.env.AIRTABLE_BASE_ID);
 
 export type Session = {
-  id: string;
+  ID: string;
   Title: string;
   Description: string;
   "Start time": string;
@@ -18,7 +18,7 @@ export type Session = {
   "Location name": string[];
   Area: string[];
   Capacity: number;
-  NumRSVPs: number;
+  "Num RSVPs": number;
 };
 export async function getSessions() {
   const sessions: Session[] = [];
@@ -42,7 +42,7 @@ export async function getSessions() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        sessions.push({ ...record.fields, id: record.id });
+        sessions.push({ ...record.fields, ID: record.id });
       });
       fetchNextPage();
     });
@@ -67,13 +67,13 @@ export async function getSessionsByEvent(eventName: string) {
         "Location name",
         "Area",
         "Capacity",
-        "NumRSVPs",
+        "Num RSVPs",
       ],
       filterByFormula: `{Event name} = "${eventName}"`,
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        sessions.push({ ...record.fields, id: record.id });
+        sessions.push({ ...record.fields, ID: record.id });
       });
       fetchNextPage();
     });
@@ -105,7 +105,6 @@ export async function getLocations() {
         "Description",
         "Capacity",
         "Type",
-        "ID",
         "Color",
         "Hidden",
         "Bookable",
@@ -117,7 +116,7 @@ export async function getLocations() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        locations.push(record.fields);
+        locations.push({ ...record.fields, ID: record.id });
       });
       fetchNextPage();
     });
@@ -134,7 +133,6 @@ export async function getBookableLocations() {
         "Area",
         "Capacity",
         "Type",
-        "ID",
         "Color",
         "Hidden",
         "Bookable",
@@ -144,7 +142,7 @@ export async function getBookableLocations() {
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        locations.push(record.fields);
+        locations.push({ ...record.fields, ID: record.id });
       });
       fetchNextPage();
     });
@@ -154,18 +152,17 @@ export async function getBookableLocations() {
 export type Guest = {
   "Full name": string;
   Email: string;
-  "Manifest ticket type": string;
   ID: string;
 };
 export async function getGuests() {
   const guests: Guest[] = [];
   await base("Guest list")
     .select({
-      fields: ["Full name", "Email", "Manifest ticket type", "ID"],
+      fields: ["Full name", "Email"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        guests.push({ ...record.fields });
+        guests.push({ ...record.fields, ID: record.id });
       });
       fetchNextPage();
     });
@@ -177,11 +174,11 @@ export async function getGuestsByEvent(eventName: string) {
   await base("Guest list")
     .select({
       view: eventName,
-      fields: ["Full name", "Email", "Manifest ticket type", "ID"],
+      fields: ["Full name", "Email"],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        guests.push(record.fields);
+        guests.push({ ...record.fields, ID: record.id });
       });
       fetchNextPage();
     });
@@ -209,19 +206,17 @@ export async function getDays() {
         "End bookings",
         "Event name",
         "Event",
-        "ID",
       ],
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        days.push({ ...record.fields, Sessions: [] });
+        days.push({ ...record.fields, Sessions: [], ID: record.id });
       });
       fetchNextPage();
     });
   const sortedDays = days.sort((a, b) => {
     return new Date(a.Start).getTime() - new Date(b.Start).getTime();
   });
-  console.log("sortedDays", sortedDays);
   return sortedDays;
 }
 
@@ -236,13 +231,12 @@ export async function getDaysByEvent(eventName: string) {
         "End bookings",
         "Event name",
         "Event",
-        "ID",
       ],
       filterByFormula: `{Event name} = "${eventName}"`,
     })
     .eachPage(function page(records: any, fetchNextPage: any) {
       records.forEach(function (record: any) {
-        days.push({ ...record.fields, Sessions: [] });
+        days.push({ ...record.fields, Sessions: [], ID: record.id });
       });
       fetchNextPage();
     });
