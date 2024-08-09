@@ -26,6 +26,7 @@ export function EventDisplay(props: {
   const searchParams = useSearchParams();
   const view = searchParams.get("view") ?? "grid";
   const [search, setSearch] = useState("");
+  const multipleDays = event["Start"] !== event["End"];
   return (
     <div className="flex flex-col items-start w-full">
       <h1 className="sm:text-4xl text-3xl font-bold mt-5">
@@ -38,10 +39,14 @@ export function EventDisplay(props: {
             {DateTime.fromFormat(event.Start, "yyyy-MM-dd", {
               zone: "America/Los_Angeles",
             }).toFormat("LLL d")}
-            {" - "}
-            {DateTime.fromFormat(event.End, "yyyy-MM-dd", {
-              zone: "America/Los_Angeles",
-            }).toFormat("LLL d")}
+            {multipleDays && (
+              <>
+                {" - "}
+                {DateTime.fromFormat(event.End, "yyyy-MM-dd", {
+                  zone: "America/Los_Angeles",
+                }).toFormat("LLL d")}
+              </>
+            )}
           </span>
         </span>
         <a
