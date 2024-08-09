@@ -16,7 +16,6 @@ export type Session = {
   "Host email"?: string;
   Location: string[];
   "Location name": string[];
-  Area: string[];
   Capacity: number;
   "Num RSVPs": number;
 };
@@ -35,7 +34,6 @@ export async function getSessions() {
         "Host email",
         "Location",
         "Location name",
-        "Area",
         "Capacity",
         "NumRSVPs",
       ],
@@ -65,7 +63,6 @@ export async function getSessionsByEvent(eventName: string) {
         "Host email",
         "Location",
         "Location name",
-        "Area",
         "Capacity",
         "Num RSVPs",
       ],
@@ -82,11 +79,9 @@ export async function getSessionsByEvent(eventName: string) {
 
 export type Location = {
   Name: string;
-  Area: string;
   "Image url": string;
   Description: string;
   Capacity: number;
-  Type: "main" | "side";
   ID: string;
   Color: string;
   Hidden: boolean;
@@ -96,15 +91,13 @@ export type Location = {
 };
 export async function getLocations() {
   const locations: Location[] = [];
-  await base("Spaces")
+  await base("Locations")
     .select({
       fields: [
         "Name",
-        "Area",
         "Image url",
         "Description",
         "Capacity",
-        "Type",
         "Color",
         "Hidden",
         "Bookable",
@@ -126,17 +119,9 @@ export async function getLocations() {
 
 export async function getBookableLocations() {
   const locations: Location[] = [];
-  await base("Spaces")
+  await base("Locations")
     .select({
-      fields: [
-        "Name",
-        "Area",
-        "Capacity",
-        "Type",
-        "Color",
-        "Hidden",
-        "Bookable",
-      ],
+      fields: ["Name", "Capacity", "Color", "Hidden", "Bookable"],
       filterByFormula: `AND({Hidden} = FALSE(), {Bookable} = TRUE())`,
       sort: [{ field: "Index", direction: "asc" }],
     })

@@ -78,7 +78,6 @@ function insertBlankSessions(
         "Host email": "",
         Location: [],
         "Location name": [""],
-        Area: [],
         Capacity: 0,
         "Num RSVPs": 0,
         ID: "",
